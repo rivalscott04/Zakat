@@ -15,7 +15,7 @@ class CollectionPayment extends Model
 
     protected function casts(): array
     {
-        return ['status' => CollectionPaymentStatus::class, 'amount' => 'decimal:8', 'payment_date' => 'datetime', 'verified_at' => 'datetime', 'metadata' => 'array'];
+        return ['status' => CollectionPaymentStatus::class, 'amount' => 'decimal:2', 'payment_date' => 'datetime', 'verified_at' => 'datetime', 'metadata' => 'array'];
     }
 
     public function collection()

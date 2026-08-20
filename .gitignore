@@ -3,6 +3,13 @@
 /.pnp
 .pnp.js
 
+# Proyek ini memakai Bun. Lockfile package manager lain jangan ikut ter-commit
+# supaya node_modules tidak dipasang dua manajer sekaligus.
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npmrc
+
 # build output
 /dist/
 /build/

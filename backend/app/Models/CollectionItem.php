@@ -13,7 +13,7 @@ class CollectionItem extends Model
 
     protected function casts(): array
     {
-        return ['quantity' => 'decimal:8', 'expected_amount' => 'decimal:8', 'paid_amount' => 'decimal:8', 'remaining_amount' => 'decimal:8'];
+        return ['quantity' => 'decimal:8', 'expected_amount' => 'decimal:2', 'paid_amount' => 'decimal:2', 'remaining_amount' => 'decimal:2'];
     }
 
     public function collection()

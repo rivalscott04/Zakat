@@ -6,23 +6,26 @@ import * as Yup from "yup";
 import AuthShell from "./AuthShell";
 import { useAuth } from "../AuthProvider";
 import { ApiError } from "../../api/client";
+import { landingPath } from "../../layout/menu";
 import { APP_NAME, formatPageTitle } from "../../../shared/config/branding";
 
 /** PRD 01 §9 / §43 — halaman login (email atau username). */
 const Login = () => {
-  const { login, user, initialising } = useAuth();
+  const { login, user, initialising, can } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [passwordShow, setPasswordShow] = useState(false);
 
-  const from = (location.state as { from?: string } | null)?.from ?? "/dashboard";
+  // Halaman tujuan ditentukan dari permission user, bukan dipatok ke /dashboard
+  // yang membutuhkan `muzaki.view` dan tidak dimiliki sebagian besar role.
+  const target = (location.state as { from?: string } | null)?.from ?? landingPath(can) ?? "/dashboard";
 
   useEffect(() => {
     if (!initialising && user) {
-      navigate(from, { replace: true });
+      navigate(target, { replace: true });
     }
-  }, [user, initialising, navigate, from]);
+  }, [user, initialising, navigate, target]);
 
   const validation = useFormik({
     initialValues: { login: "", password: "", remember: false },
@@ -45,7 +48,7 @@ const Login = () => {
       setError(null);
       try {
         await login(values.login, values.password, values.remember);
-        navigate(from, { replace: true });
+        navigate(target, { replace: true });
       } catch (caught) {
         const apiError = caught as ApiError;
         setError(apiError.message);

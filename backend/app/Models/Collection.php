@@ -19,7 +19,7 @@ class Collection extends Model
 
     protected function casts(): array
     {
-        return ['status' => CollectionStatus::class, 'source' => CollectionSource::class, 'collection_date' => 'date', 'due_date' => 'date', 'expected_amount' => 'decimal:8', 'paid_amount' => 'decimal:8', 'remaining_amount' => 'decimal:8', 'source_snapshot' => 'array'];
+        return ['status' => CollectionStatus::class, 'source' => CollectionSource::class, 'collection_date' => 'date', 'due_date' => 'date', 'expected_amount' => 'decimal:2', 'paid_amount' => 'decimal:2', 'remaining_amount' => 'decimal:2', 'source_snapshot' => 'array'];
     }
 
     public function muzaki(): BelongsTo

@@ -28,7 +28,7 @@ class MustahikService
             throw ZakatException::conflict('MUSTAHIK_POSSIBLE_DUPLICATE', ['matches' => $duplicate]);
         }
 
-return DB::transaction(function () use ($data, $identity) {
+        return DB::transaction(function () use ($data, $identity) {
             $mustahik = Mustahik::create(['mustahik_number' => app(BusinessNumberService::class)->next('MSH'), 'mustahik_type' => $data['mustahik_type'] ?? 'individual', 'full_name' => $data['full_name'], 'display_name' => $data['display_name'] ?? $data['full_name'], 'gender' => $data['gender'] ?? null, 'birth_date' => $data['birth_date'] ?? null, 'marital_status' => $data['marital_status'] ?? null, 'phone' => $data['phone'] ?? null, 'email' => $data['email'] ?? null, 'identity_type' => $data['identity_type'] ?? null, 'identity_number_hash' => $identity ? hash('sha256', $identity) : null, 'registered_at' => now()->toDateString(), 'registered_by' => auth()->id()]);
             if ($identity) {
                 $this->identity($mustahik, ['identity_type' => $data['identity_type'] ?? 'other', 'identity_number' => $identity, 'identity_name' => $data['full_name']]);
@@ -63,9 +63,25 @@ return DB::transaction(function () use ($data, $identity) {
     public function identity(Mustahik $mustahik, array $data): MustahikIdentity
     {
         $hash = hash('sha256', $data['identity_number']);
-        if (MustahikIdentity::where('identity_number_hash', $hash)->where('mustahik_id', '!=', $mustahik->id)->exists()) {
+
+        // F-08 — pengecekan duplikat dibatasi ke organisasi pemilik mustahik.
+        // Tanpa batasan ini, organisasi lain bisa memakai pesan duplikat untuk
+        // memastikan sebuah NIK sudah terdaftar di tempat lain.
+        $duplicate = MustahikIdentity::query()
+            ->acrossOrganizations()
+            ->where('organization_id', $mustahik->organization_id)
+            ->where('identity_number_hash', $hash)
+            ->where('mustahik_id', '!=', $mustahik->id)
+            ->exists();
+
+        if ($duplicate) {
             throw ZakatException::conflict('IDENTITY_DUPLICATE');
-        } $identity = MustahikIdentity::create(['mustahik_id' => $mustahik->id, 'identity_type' => $data['identity_type'], 'identity_number_encrypted' => $data['identity_number'], 'identity_number_hash' => $hash, 'identity_name' => $data['identity_name'] ?? null]);
+        }
+
+        $identity = new MustahikIdentity;
+        $identity->fill(['mustahik_id' => $mustahik->id, 'identity_type' => $data['identity_type'], 'identity_number_encrypted' => $data['identity_number'], 'identity_number_hash' => $hash, 'identity_name' => $data['identity_name'] ?? null]);
+        $identity->organization_id = $mustahik->organization_id;
+        $identity->save();
 
         return $identity;
     }
@@ -76,7 +92,7 @@ return DB::transaction(function () use ($data, $identity) {
             $mustahik->addresses()->update(['is_primary' => false]);
         }
 
-return MustahikAddress::create($data + ['mustahik_id' => $mustahik->id, 'address_type' => $data['address_type'] ?? 'home']);
+        return MustahikAddress::create($data + ['mustahik_id' => $mustahik->id, 'address_type' => $data['address_type'] ?? 'home']);
     }
 
     public function asnaf(Mustahik $mustahik, array $data): MustahikAsnaf
@@ -104,6 +120,6 @@ return MustahikAddress::create($data + ['mustahik_id' => $mustahik->id, 'address
             $query->orWhere('identity_number_hash', hash('sha256', $data['identity_number']));
         }
 
-return $query->limit(10)->get(['id', 'mustahik_number', 'display_name', 'verification_status'])->toArray();
+        return $query->limit(10)->get(['id', 'mustahik_number', 'display_name', 'verification_status'])->toArray();
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +35,14 @@ class AppServiceProvider extends ServiceProvider
 
         // PRD 00 §14 — penyimpanan selalu UTC, serialisasi selalu ISO 8601.
         Date::useDefault();
+
+        // CLAUDE.md §36 — batasi endpoint yang rawan disalahgunakan. Kunci per
+        // user supaya beberapa amil dalam satu kantor tidak saling menghabiskan
+        // jatah lewat satu alamat IP.
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(120)->by($request->user()?->getKey() ?: $request->ip()));
+
+        // Operasi yang menggerakkan uang atau menghasilkan dokumen berat.
+        RateLimiter::for('financial', fn (Request $request) => Limit::perMinute(30)->by($request->user()?->getKey() ?: $request->ip()));
 
         // PRD 01 §16 dan §45 — tautan reset mengarah ke SPA, bukan ke API.
         ResetPassword::createUrlUsing(fn ($notifiable, string $token) => rtrim((string) config('app.frontend_url'), '/')

@@ -97,9 +97,8 @@
   },
   "scripts": {
     "start": "vite",
-    "dev": "./node_modules/.bin/vite --config vite.config.mjs",
-    "build": "bun build index.html --outdir=build --target=browser --minify",
-    "build:vite": "NODE_OPTIONS='--max-old-space-size=8192' vite build",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "echo \"CRA tests removed with react-scripts; use vitest if needed\""
   },

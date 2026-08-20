@@ -65,6 +65,14 @@ class FundService
             throw ZakatException::invalidTransition('Collection harus completed sebelum menjadi fund inflow.');
         }
 
+        // Idempoten (CLAUDE.md §29). Retry jaringan atau klik ganda tidak boleh
+        // menambah saldo; movement yang sudah ada dikembalikan apa adanya.
+        $existing = FundMovement::where('source_type', 'collection')->where('source_id', $collection->id)->first();
+
+        if ($existing !== null) {
+            return $existing;
+        }
+
         return $this->inflow($this->find($data['fund_id']), ['amount' => $collection->paid_amount, 'source_type' => 'collection', 'source_id' => $collection->id, 'description' => 'Collection '.$collection->collection_number]);
     }
 
@@ -79,9 +87,8 @@ class FundService
 
     public function allocation(Fund $fund, array $data): FundAllocation
     {
-        $this->assertAvailable($fund, (string) $data['amount']);
-
         return DB::transaction(function () use ($fund, $data) {
+            $this->assertAvailable($fund, (string) $data['amount']);
             $allocation = FundAllocation::create(['allocation_number' => app(BusinessNumberService::class)->next('ALC'), 'fund_id' => $fund->id, 'target_type' => $data['target_type'], 'target_id' => $data['target_id'] ?? null, 'amount' => $data['amount'], 'currency' => $fund->currency, 'status' => 'pending_approval', 'allocated_at' => now(), 'reason' => $data['reason'], 'created_by' => auth()->id()]);
             $this->refresh($fund);
             $this->audit->record('fund_allocation_created', $allocation);
@@ -99,12 +106,15 @@ class FundService
             throw ZakatException::forbidden('Maker tidak dapat menyetujui allocation sendiri.');
         }
         $fund = $allocation->fund;
-        $this->assertAvailable($fund, (string) $allocation->amount);
-        $allocation->forceFill(['status' => 'active', 'approved_by' => auth()->id(), 'approved_at' => now()])->saveQuietly();
-        $this->refresh($fund);
-        $this->audit->record('fund_allocation_approved', $allocation);
 
-        return $allocation;
+        return DB::transaction(function () use ($allocation, $fund) {
+            $this->assertAvailable($fund, (string) $allocation->amount);
+            $allocation->forceFill(['status' => 'active', 'approved_by' => auth()->id(), 'approved_at' => now()])->saveQuietly();
+            $this->refresh($fund);
+            $this->audit->record('fund_allocation_approved', $allocation);
+
+            return $allocation;
+        });
     }
 
     public function reservation(Fund $fund, array $data): FundReservation
@@ -136,9 +146,13 @@ class FundService
         $destination = $this->find($data['destination_fund_id']);
         if ($source->id === $destination->id) {
             throw ZakatException::conflict('Fund sumber dan tujuan harus berbeda.');
-        } $this->assertAvailable($source, (string) $data['amount']);
+        }
 
-        return DB::transaction(fn () => FundTransfer::create(['transfer_number' => app(BusinessNumberService::class)->next('FTR'), 'source_fund_id' => $source->id, 'destination_fund_id' => $destination->id, 'amount' => $data['amount'], 'currency' => $source->currency, 'reason' => $data['reason'], 'status' => 'pending_approval', 'requested_by' => auth()->id()]));
+        return DB::transaction(function () use ($source, $destination, $data) {
+            $this->assertAvailable($source, (string) $data['amount']);
+
+            return FundTransfer::create(['transfer_number' => app(BusinessNumberService::class)->next('FTR'), 'source_fund_id' => $source->id, 'destination_fund_id' => $destination->id, 'amount' => $data['amount'], 'currency' => $source->currency, 'reason' => $data['reason'], 'status' => 'pending_approval', 'requested_by' => auth()->id()]);
+        });
     }
 
     public function approveTransfer(FundTransfer $transfer): FundTransfer
@@ -147,9 +161,9 @@ class FundService
             throw ZakatException::invalidTransition('Transfer tidak menunggu approval.');
         } $source = $this->find($transfer->source_fund_id);
         $destination = $this->find($transfer->destination_fund_id);
-        $this->assertAvailable($source, (string) $transfer->amount);
 
         return DB::transaction(function () use ($transfer, $source, $destination) {
+            $this->assertAvailable($source, (string) $transfer->amount);
             $this->movement($source, 'transfer_out', 'out', (string) $transfer->amount, 'fund_transfer', $transfer->id, $transfer->reason);
             $this->movement($destination, 'transfer_in', 'in', (string) $transfer->amount, 'fund_transfer', $transfer->id, $transfer->reason);
             $transfer->forceFill(['status' => 'completed', 'approved_by' => auth()->id(), 'transferred_at' => now()])->saveQuietly();
@@ -162,11 +176,14 @@ class FundService
     public function adjust(array $data): FundMovement
     {
         $fund = $this->find($data['fund_id']);
-        if ($data['adjustment_type'] === 'decrease') {
-            $this->assertAvailable($fund, (string) $data['amount']);
-        }
 
-        return DB::transaction(fn () => $this->movement($fund, 'adjustment', $data['adjustment_type'] === 'increase' ? 'in' : 'out', (string) $data['amount'], 'fund_adjustment', null, $data['reason']));
+        return DB::transaction(function () use ($fund, $data) {
+            if ($data['adjustment_type'] === 'decrease') {
+                $this->assertAvailable($fund, (string) $data['amount']);
+            }
+
+            return $this->movement($fund, 'adjustment', $data['adjustment_type'] === 'increase' ? 'in' : 'out', (string) $data['amount'], 'fund_adjustment', null, $data['reason']);
+        });
     }
 
     public function reconcile(Fund $fund, array $data): FundReconciliation
@@ -185,9 +202,23 @@ class FundService
         return ['available' => bccomp((string) $fund->available_balance, $amount, 2) >= 0, 'current_balance' => $fund->current_balance, 'available_balance' => $fund->available_balance, 'reserved_balance' => $fund->reserved_balance, 'allocated_balance' => $fund->allocated_balance, 'requested_amount' => $amount];
     }
 
+    /**
+     * CLAUDE.md §30 — cek saldo dan penulisan movement harus terjadi sebagai satu
+     * satuan. Baris fund dikunci lebih dulu supaya dua request bersamaan tidak
+     * sama-sama lolos pengecekan dan menghabiskan dana yang sama.
+     */
     private function assertAvailable(Fund $fund, string $amount): void
     {
+        if (DB::transactionLevel() === 0) {
+            // Di luar transaksi, lock langsung dilepas dan pengecekan ini jadi
+            // tidak ada gunanya. Gagalkan keras supaya tidak diam-diam regresi.
+            throw new \RuntimeException('assertAvailable() harus dipanggil di dalam database transaction.');
+        }
+
+        DB::table('funds')->where('id', $fund->getKey())->lockForUpdate()->first();
+
         $this->refresh($fund);
+
         if (bccomp((string) $fund->available_balance, $amount, 2) < 0) {
             throw ZakatException::conflict('INSUFFICIENT_FUND_BALANCE');
         }
@@ -210,9 +241,9 @@ class FundService
         $allocated = (string) $fund->allocations()->whereIn('status', ['approved', 'active', 'partially_used'])->sum('amount');
         $distributed = (string) $fund->movements()->where('movement_type', 'distribution')->where('direction', 'out')->sum('amount');
         $current = bcsub($in, $out, 2);
+        // F-05 — nilai negatif tidak dibulatkan ke nol. Membulatkannya menyembunyikan
+        // over-reservation dari laporan dan rekonsiliasi.
         $available = bcsub(bcsub($current, $reserved, 2), $allocated, 2);
-        if (bccomp($available, '0', 2) < 0) {
-            $available = '0.00';
-        } $fund->forceFill(['current_balance' => $current, 'reserved_balance' => $reserved, 'allocated_balance' => $allocated, 'distributed_balance' => $distributed, 'available_balance' => $available])->saveQuietly();
+        $fund->forceFill(['current_balance' => $current, 'reserved_balance' => $reserved, 'allocated_balance' => $allocated, 'distributed_balance' => $distributed, 'available_balance' => $available])->saveQuietly();
     }
 }

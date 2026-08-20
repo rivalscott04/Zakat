@@ -11,6 +11,7 @@ use App\Http\Requests\StoreAccountingPeriodRequest;
 use App\Http\Requests\StoreJournalRequest;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\JournalResource;
+use App\Http\Resources\LedgerLineResource;
 use App\Models\AccountingPeriod;
 use App\Services\AccountingService;
 use App\Support\ApiResponse;
@@ -88,7 +89,9 @@ class AccountingController extends Controller
 
     public function ledger(Request $request): JsonResponse
     {
-        return ApiResponse::data($this->accounting->ledger($request->only(['account_id', 'date_from', 'date_to'])));
+        return ApiResponse::data(LedgerLineResource::collection(
+            $this->accounting->ledger($request->only(['account_id', 'date_from', 'date_to', 'per_page', 'page']))
+        ));
     }
 
     public function trialBalance(Request $request): JsonResponse

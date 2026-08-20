@@ -24,7 +24,16 @@ export default defineConfig({
     },
     dedupe: ["ckeditor5", "@ckeditor/ckeditor5-react"],
   },
-  optimizeDeps: { noDiscovery: true },
+  // Dependency discovery sengaja dibiarkan aktif (bawaan Vite).
+  //
+  // `noDiscovery: true` sempat dipakai untuk mempercepat startup (commit be8a9b9),
+  // tetapi itu membuat paket CommonJS tidak dikonversi ke ESM. react-router
+  // mengimpor `cookie` dan `set-cookie-parser` dengan named import, keduanya CJS
+  // murni, sehingga aplikasi gagal dimuat sama sekali dan layar jadi putih.
+  //
+  // Biayanya hanya sekali: cold start pertama sekitar 7 detik untuk memindai dan
+  // mem-prebundle, sesudah itu warm start di bawah setengah detik karena hasilnya
+  // di-cache pada node_modules/.vite.
   server: {
     host: "127.0.0.1",
     port: 3000,

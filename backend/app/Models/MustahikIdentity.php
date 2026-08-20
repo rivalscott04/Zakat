@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToOrganization;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['mustahik_id', 'identity_type', 'identity_number_encrypted', 'identity_number_hash', 'identity_name', 'verification_status', 'verified_at', 'verified_by'])]
 class MustahikIdentity extends Model
 {
-    use HasUlids;
+    use BelongsToOrganization, HasUlids;
 
     protected $hidden = ['identity_number_encrypted', 'identity_number_hash'];
 

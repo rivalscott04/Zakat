@@ -13,7 +13,7 @@ class PaymentAllocation extends Model
 
     protected function casts(): array
     {
-        return ['allocated_amount' => 'decimal:8'];
+        return ['allocated_amount' => 'decimal:2'];
     }
 
     public function payment()

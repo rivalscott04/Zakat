@@ -61,6 +61,8 @@ class PermissionSeeder extends Seeder
         'distribution' => [
             'distribution' => ['view', 'create', 'update', 'submit', 'approve', 'reject', 'reserve', 'schedule', 'process', 'complete', 'cancel', 'reverse', 'confirm', 'export', 'audit.view'],
             'distribution.request' => ['view', 'create', 'approve', 'reject'],
+            'distribution.batch' => ['view', 'create', 'update', 'approve', 'process'],
+            'distribution.proof' => ['view', 'upload', 'verify'],
         ],
     ];
 

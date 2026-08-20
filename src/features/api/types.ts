@@ -36,7 +36,108 @@ export interface AssessmentRequest { id: string; request_number: string; mustahi
 export interface Assessment { id: string; assessment_number: string; assessment_request_id: string; mustahik_id: string; assessment_type: string; status: string; total_score: string | null; recommendation: string | null; mustahik?: Mustahik | null; }
 export interface Program { id: string; program_code: string; name: string; program_type: string; status: string; target_beneficiary: number | null; capacity_limit: number | null; waitlist_enabled?: boolean; }
 export interface ProgramDashboard { active_programs: number; completed_programs: number; total_budget: string; committed_budget: string; disbursed_amount: string; remaining_budget: string; target_beneficiaries: number; active_beneficiaries: number; }
-export interface Distribution { id: string; distribution_number: string; distribution_type: string; source_type: string; mustahik_id: string; fund_id: string; requested_amount: string; approved_amount: string; distributed_amount: string; status: string; mustahik?: Mustahik | null; }
+export type DistributionStatus =
+  | "draft"
+  | "pending_approval"
+  | "approved"
+  | "reserved"
+  | "scheduled"
+  | "processing"
+  | "completed"
+  | "partially_completed"
+  | "failed"
+  | "cancelled"
+  | "reversed";
+
+export interface DistributionBankTransfer {
+  id: string;
+  bank_name: string;
+  account_holder_name: string;
+  account_number_masked: string;
+  transfer_reference: string | null;
+  transfer_amount: string;
+  transfer_date: string | null;
+  status: string;
+  failure_reason: string | null;
+}
+
+export interface DistributionProof {
+  id: string;
+  distribution_id: string;
+  proof_type: string;
+  file_id: string | null;
+  reference_number: string | null;
+  note: string | null;
+  verified_by: string | null;
+  verified_at: string | null;
+  created_at: string | null;
+}
+
+export interface Distribution {
+  id: string;
+  distribution_number: string;
+  distribution_type: string;
+  source_type: string;
+  status: DistributionStatus;
+  priority: string;
+  mustahik_id: string;
+  program_id: string | null;
+  fund_id: string;
+  batch_id: string | null;
+  currency: string;
+  requested_amount: string;
+  approved_amount: string;
+  distributed_amount: string;
+  remaining_amount: string;
+  distribution_date: string | null;
+  scheduled_date: string | null;
+  description: string | null;
+  rejection_reason: string | null;
+  cancellation_reason: string | null;
+  reversal_reason: string | null;
+  failure_reason: string | null;
+  failure_note: string | null;
+  retry_count: number;
+  allowed_transitions: DistributionStatus[];
+  mustahik?: Mustahik | null;
+  fund?: { id: string; name: string } | null;
+  bank_transfers?: DistributionBankTransfer[];
+  proofs?: DistributionProof[];
+  confirmation?: { id: string; confirmation_method: string; confirmed_at: string } | null;
+}
+
+export interface DistributionSummary {
+  by_status: Record<DistributionStatus, { total: number; distributed_amount: string }>;
+}
+
+export interface DistributionBeneficiary {
+  id: string;
+  batch_id: string;
+  distribution_id: string | null;
+  mustahik_id: string;
+  approved_amount: string;
+  distributed_amount: string;
+  status: string;
+  failure_reason: string | null;
+  failure_note: string | null;
+  mustahik?: Mustahik | null;
+}
+
+export interface DistributionBatch {
+  id: string;
+  batch_number: string;
+  name: string;
+  program_id: string | null;
+  fund_id: string;
+  distribution_type: string;
+  total_amount: string;
+  total_beneficiary: number;
+  status: string;
+  approved_at: string | null;
+  allowed_transitions: string[];
+  fund?: { id: string; name: string } | null;
+  beneficiaries?: DistributionBeneficiary[];
+}
 
 export interface OrganizationSummary {
   id: string;

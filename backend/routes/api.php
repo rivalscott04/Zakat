@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AssessmentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CollectionController;
+use App\Http\Controllers\Api\V1\DistributionBatchController;
 use App\Http\Controllers\Api\V1\DistributionController;
 use App\Http\Controllers\Api\V1\FundController;
 use App\Http\Controllers\Api\V1\MustahikController;
@@ -43,7 +44,7 @@ Route::middleware('throttle:10,1')->prefix('auth')->group(function () {
 
 // --------------------------------------------------------------- terproteksi
 
-Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
+Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->group(function () {
 
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -183,7 +184,7 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::post('/rules/{ruleId}/archive', [ZakatController::class, 'archive'])->middleware('permission:zakat.rule.archive');
     });
 
-    Route::prefix('collections')->group(function () {
+    Route::prefix('collections')->middleware('throttle:financial')->group(function () {
         Route::get('/summary', [CollectionController::class, 'summary'])->middleware('permission:collection.view');
         Route::get('/', [CollectionController::class, 'index'])->middleware('permission:collection.view');
         Route::post('/', [CollectionController::class, 'store'])->middleware('permission:collection.create_manual');
@@ -196,7 +197,7 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::post('/payments/{paymentId}/verify', [CollectionController::class, 'verifyPayment'])->middleware('permission:collection.verify');
     });
 
-    Route::prefix('funds')->group(function () {
+    Route::prefix('funds')->middleware('throttle:financial')->group(function () {
         Route::get('/', [FundController::class, 'index'])->middleware('permission:fund.view');
         Route::post('/', [FundController::class, 'store'])->middleware('permission:fund.create');
         Route::get('/{id}', [FundController::class, 'show'])->middleware('permission:fund.view');
@@ -216,7 +217,7 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
     Route::post('/fund-transfers', [FundController::class, 'transfer'])->middleware('permission:fund.transfer.create');
     Route::post('/fund-transfers/{id}/approve', [FundController::class, 'approveTransfer'])->middleware('permission:fund.transfer.approve');
 
-    Route::prefix('accounting')->group(function () {
+    Route::prefix('accounting')->middleware('throttle:financial')->group(function () {
         Route::get('/accounts', [AccountingController::class, 'accounts'])->middleware('permission:accounting.account.view');
         Route::post('/accounts', [AccountingController::class, 'createAccount'])->middleware('permission:accounting.account.create');
         Route::get('/periods', [AccountingController::class, 'periods'])->middleware('permission:accounting.period.view');
@@ -316,23 +317,46 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
     Route::patch('/program-outcomes/{id}', [ProgramController::class, 'updateOutcome'])->middleware('permission:program.outcome.manage');
     Route::post('/programs/{id}/commitments', [ProgramController::class, 'commitment'])->middleware('permission:program.budget.create');
     Route::post('/program-commitments/{id}/disburse', [ProgramController::class, 'disburseCommitment'])->middleware('permission:program.budget.update');
-    Route::prefix('distributions')->group(function () {
+    Route::prefix('distributions')->middleware('throttle:financial')->group(function () {
         Route::get('/', [DistributionController::class, 'index'])->middleware('permission:distribution.view');
+        Route::get('/summary', [DistributionController::class, 'summary'])->middleware('permission:distribution.view');
         Route::post('/', [DistributionController::class, 'store'])->middleware('permission:distribution.create');
         Route::get('/{id}', [DistributionController::class, 'show'])->middleware('permission:distribution.view');
         Route::patch('/{id}', [DistributionController::class, 'update'])->middleware('permission:distribution.update');
-        Route::post('/{id}/submit', fn (string $id, DistributionController $controller) => $controller->action('submit', $id))->middleware('permission:distribution.submit');
-        Route::post('/{id}/approve', fn (string $id, DistributionController $controller) => $controller->action('approve', $id))->middleware('permission:distribution.approve');
-        Route::post('/{id}/reserve', fn (string $id, DistributionController $controller) => $controller->action('reserve', $id))->middleware('permission:distribution.reserve');
-        Route::post('/{id}/schedule', fn (string $id, DistributionController $controller) => $controller->action('schedule', $id))->middleware('permission:distribution.schedule');
-        Route::post('/{id}/process', fn (string $id, DistributionController $controller) => $controller->action('process', $id))->middleware('permission:distribution.process');
+
+        Route::post('/{id}/submit', [DistributionController::class, 'submit'])->middleware('permission:distribution.submit');
+        Route::post('/{id}/approve', [DistributionController::class, 'approve'])->middleware('permission:distribution.approve');
+        Route::post('/{id}/reject', [DistributionController::class, 'reject'])->middleware('permission:distribution.reject');
+        Route::post('/{id}/reserve', [DistributionController::class, 'reserve'])->middleware('permission:distribution.reserve');
+        Route::post('/{id}/schedule', [DistributionController::class, 'schedule'])->middleware('permission:distribution.schedule');
+        Route::post('/{id}/process', [DistributionController::class, 'process'])->middleware('permission:distribution.process');
+        Route::post('/{id}/fail', [DistributionController::class, 'fail'])->middleware('permission:distribution.process');
         Route::post('/{id}/complete', [DistributionController::class, 'complete'])->middleware('permission:distribution.complete');
         Route::post('/{id}/cancel', [DistributionController::class, 'cancel'])->middleware('permission:distribution.cancel');
         Route::post('/{id}/reverse', [DistributionController::class, 'reverse'])->middleware('permission:distribution.reverse');
+
+        Route::get('/{id}/proofs', [DistributionController::class, 'proofs'])->middleware('permission:distribution.proof.view');
+        Route::post('/{id}/proofs', [DistributionController::class, 'storeProof'])->middleware('permission:distribution.proof.upload');
+        Route::post('/{id}/proofs/{proofId}/verify', [DistributionController::class, 'verifyProof'])->middleware('permission:distribution.proof.verify');
+        Route::post('/{id}/confirm', [DistributionController::class, 'confirm'])->middleware('permission:distribution.confirm');
+    });
+    Route::prefix('distribution-batches')->middleware('throttle:financial')->group(function () {
+        Route::get('/', [DistributionBatchController::class, 'index'])->middleware('permission:distribution.batch.view');
+        Route::post('/', [DistributionBatchController::class, 'store'])->middleware('permission:distribution.batch.create');
+        Route::get('/{id}', [DistributionBatchController::class, 'show'])->middleware('permission:distribution.batch.view');
+        Route::post('/{id}/beneficiaries', [DistributionBatchController::class, 'storeBeneficiary'])->middleware('permission:distribution.batch.update');
+        Route::delete('/{id}/beneficiaries/{beneficiaryId}', [DistributionBatchController::class, 'destroyBeneficiary'])->middleware('permission:distribution.batch.update');
+        Route::post('/{id}/validate', [DistributionBatchController::class, 'validateBatch'])->middleware('permission:distribution.batch.update');
+        Route::post('/{id}/submit', [DistributionBatchController::class, 'submit'])->middleware('permission:distribution.batch.update');
+        Route::post('/{id}/approve', [DistributionBatchController::class, 'approve'])->middleware('permission:distribution.batch.approve');
+        Route::post('/{id}/process', [DistributionBatchController::class, 'process'])->middleware('permission:distribution.batch.process');
+        Route::post('/{id}/cancel', [DistributionBatchController::class, 'cancel'])->middleware('permission:distribution.batch.update');
     });
     Route::prefix('distribution-requests')->group(function () {
         Route::get('/', [DistributionController::class, 'requests'])->middleware('permission:distribution.request.view');
         Route::post('/', [DistributionController::class, 'storeRequest'])->middleware('permission:distribution.request.create');
+        Route::get('/{id}', [DistributionController::class, 'showRequest'])->middleware('permission:distribution.request.view');
         Route::post('/{id}/approve', [DistributionController::class, 'approveRequest'])->middleware('permission:distribution.request.approve');
+        Route::post('/{id}/reject', [DistributionController::class, 'rejectRequest'])->middleware('permission:distribution.request.reject');
     });
 });

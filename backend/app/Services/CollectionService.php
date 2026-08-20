@@ -22,7 +22,6 @@ class CollectionService
 
     public function list(array $filters): LengthAwarePaginator
     {
-        $this->expireDueCollections();
 
         return Collection::with(['muzaki:id,display_name,business_number', 'type:id,code,name'])->when($filters['muzaki_id'] ?? null, fn ($q, $v) => $q->where('muzaki_id', $v))->when($filters['zakat_type_id'] ?? null, fn ($q, $v) => $q->where('zakat_type_id', $v))->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))->when($filters['source'] ?? null, fn ($q, $v) => $q->where('source', $v))->when($filters['date_from'] ?? null, fn ($q, $v) => $q->whereDate('collection_date', '>=', $v))->when($filters['date_to'] ?? null, fn ($q, $v) => $q->whereDate('collection_date', '<=', $v))->latest()->paginate(min((int) ($filters['per_page'] ?? 15), (int) config('zakat.pagination.max_per_page')));
     }
@@ -98,7 +97,7 @@ class CollectionService
             throw ZakatException::invalidTransition('Collection tidak menerima pembayaran pada status ini.');
         }
 
-return CollectionPayment::create(['collection_id' => $collection->id, 'payment_reference' => $data['payment_reference'], 'status' => CollectionPaymentStatus::Pending, 'payment_method' => $data['payment_method'], 'payment_instrument' => $data['payment_instrument'] ?? null, 'amount' => $data['amount'], 'currency' => $data['currency'] ?? $collection->currency, 'payment_date' => $data['payment_date'] ?? now(), 'metadata' => $data['metadata'] ?? null]);
+        return CollectionPayment::create(['collection_id' => $collection->id, 'payment_reference' => $data['payment_reference'], 'status' => CollectionPaymentStatus::Pending, 'payment_method' => $data['payment_method'], 'payment_instrument' => $data['payment_instrument'] ?? null, 'amount' => $data['amount'], 'currency' => $data['currency'] ?? $collection->currency, 'payment_date' => $data['payment_date'] ?? now(), 'metadata' => $data['metadata'] ?? null]);
     }
 
     public function verifyPayment(CollectionPayment $payment, string $status): Collection
@@ -114,43 +113,73 @@ return CollectionPayment::create(['collection_id' => $collection->id, 'payment_r
 
     public function summary(): array
     {
-        $this->expireDueCollections();
         $q = Collection::query();
 
         return ['total_collections' => (clone $q)->count(), 'total_expected' => (string) (clone $q)->sum('expected_amount'), 'total_paid' => (string) (clone $q)->sum('paid_amount'), 'total_remaining' => (string) (clone $q)->sum('remaining_amount'), 'pending_count' => (clone $q)->where('status', CollectionStatus::Pending)->count(), 'partially_paid_count' => (clone $q)->where('status', CollectionStatus::PartiallyPaid)->count(), 'completed_count' => (clone $q)->where('status', CollectionStatus::Completed)->count()];
     }
 
+    /**
+     * F-06 — seluruh aritmetika uang memakai bcmath skala 2 (Core PRD §12).
+     * Sebelumnya bagian ini memakai float, satu-satunya jalur uang yang begitu.
+     */
     private function settle(CollectionPayment $payment): Collection
     {
         return DB::transaction(function () use ($payment) {
             $collection = Collection::lockForUpdate()->findOrFail($payment->collection_id);
-            $already = (float) PaymentAllocation::where('payment_id', $payment->id)->sum('allocated_amount');
-            $available = (float) $payment->amount - $already;
-            $remaining = max(0, (float) $collection->expected_amount - (float) $collection->paid_amount);
-            $allocation = min($available, $remaining);
-            if ($allocation > 0) {
-                PaymentAllocation::create(['payment_id' => $payment->id, 'collection_id' => $collection->id, 'collection_item_id' => $collection->items()->value('id'), 'allocated_amount' => $allocation, 'currency' => $collection->currency]);
-            } $paid = (float) $collection->paid_amount + $allocation;
-            $status = $paid > (float) $collection->expected_amount ? CollectionStatus::Paid : ($paid >= (float) $collection->expected_amount ? CollectionStatus::Paid : ($paid > 0 ? CollectionStatus::PartiallyPaid : CollectionStatus::Pending));
-            $collection->forceFill(['paid_amount' => $paid, 'remaining_amount' => max(0, (float) $collection->expected_amount - $paid), 'payment_count' => $collection->payments()->whereIn('status', [CollectionPaymentStatus::Verified, CollectionPaymentStatus::Settled])->count(), 'status' => $status, 'overpayment_status' => $available > $allocation ? 'detected' : 'none'])->saveQuietly();
-            $collection->items()->update(['paid_amount' => $paid, 'remaining_amount' => max(0, (float) $collection->expected_amount - $paid), 'status' => $status->value]);
+
+            $already = (string) PaymentAllocation::where('payment_id', $payment->id)->sum('allocated_amount');
+            $available = bcsub((string) $payment->amount, $already, 2);
+            $remaining = $this->atLeastZero(bcsub((string) $collection->expected_amount, (string) $collection->paid_amount, 2));
+            $allocation = bccomp($available, $remaining, 2) < 0 ? $available : $remaining;
+
+            if (bccomp($allocation, '0', 2) > 0) {
+                PaymentAllocation::create([
+                    'payment_id' => $payment->id,
+                    'collection_id' => $collection->id,
+                    'collection_item_id' => $collection->items()->value('id'),
+                    'allocated_amount' => $allocation,
+                    'currency' => $collection->currency,
+                ]);
+            }
+
+            $paid = bcadd((string) $collection->paid_amount, $allocation, 2);
+            $newRemaining = $this->atLeastZero(bcsub((string) $collection->expected_amount, $paid, 2));
+
+            $status = match (true) {
+                bccomp($paid, (string) $collection->expected_amount, 2) >= 0 => CollectionStatus::Paid,
+                bccomp($paid, '0', 2) > 0 => CollectionStatus::PartiallyPaid,
+                default => CollectionStatus::Pending,
+            };
+
+            $collection->forceFill([
+                'paid_amount' => $paid,
+                'remaining_amount' => $newRemaining,
+                'payment_count' => $collection->payments()->whereIn('status', [CollectionPaymentStatus::Verified, CollectionPaymentStatus::Settled])->count(),
+                'status' => $status,
+                // Sisa nominal pembayaran yang tidak terserap tagihan.
+                'overpayment_status' => bccomp($available, $allocation, 2) > 0 ? 'detected' : 'none',
+            ])->saveQuietly();
+
+            $collection->items()->update(['paid_amount' => $paid, 'remaining_amount' => $newRemaining, 'status' => $status->value]);
+
             $this->audit->record('collection_payment_received', $collection, context: ['payment_id' => $payment->id, 'allocated_amount' => $allocation]);
+
             if ($status === CollectionStatus::Paid) {
                 $collection->forceFill(['status' => CollectionStatus::Completed])->saveQuietly();
                 $this->audit->record('collection_completed', $collection);
             }
 
-return $this->find($collection->id);
+            return $this->find($collection->id);
         });
+    }
+
+    private function atLeastZero(string $amount): string
+    {
+        return bccomp($amount, '0', 2) < 0 ? '0.00' : $amount;
     }
 
     private function item(Collection $collection, ZakatType $type, float|string $amount, ?string $calculationId, string $description): void
     {
         CollectionItem::create(['collection_id' => $collection->id, 'zakat_type_id' => $type->id, 'calculation_id' => $calculationId, 'description' => $description, 'expected_amount' => $amount, 'remaining_amount' => $amount]);
-    }
-
-    private function expireDueCollections(): void
-    {
-        Collection::whereIn('status', [CollectionStatus::Draft, CollectionStatus::Pending, CollectionStatus::PartiallyPaid])->whereDate('due_date', '<', today())->whereColumn('remaining_amount', '>', '0')->update(['status' => CollectionStatus::Expired, 'updated_at' => now()]);
     }
 }

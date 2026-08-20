@@ -250,6 +250,12 @@ class DistributionService
 
         return DB::transaction(function () use ($distribution, $data, $amount, $total) {
             $isFinal = bccomp($total, (string) $distribution->approved_amount, 2) === 0;
+            $remaining = bcsub((string) $distribution->approved_amount, $total, 2);
+
+            // Reservation dilepas lebih dulu: dana yang ditahan untuk distribution
+            // ini tidak boleh menghalangi outflow-nya sendiri. Sisa yang belum
+            // direalisasikan langsung ditahan kembali.
+            $this->consumeReservation($distribution, $remaining);
 
             $this->funds->outflow($distribution->fund, [
                 'amount' => $amount,
@@ -262,8 +268,6 @@ class DistributionService
             $this->recordRealisationDetail($distribution, $data, $amount);
 
             if ($isFinal) {
-                $this->consumeReservation($distribution);
-
                 $commitment = ProgramBudgetCommitment::where('distribution_id', $distribution->id)->where('status', 'committed')->first();
 
                 if ($commitment !== null) {
@@ -590,22 +594,32 @@ class DistributionService
         if ($distribution->distribution_type === DistributionType::BankTransfer) {
             $bank = $data['bank_transfer'];
 
-            DistributionBankTransfer::create([
+            $transfer = new DistributionBankTransfer;
+            $transfer->fill([
                 'distribution_id' => $distribution->id,
                 'bank_name' => $bank['bank_name'],
                 'account_holder_name' => $bank['account_holder_name'],
-                'account_number_encrypted' => $bank['account_number'],
-                'account_number_masked' => DistributionBankTransfer::mask($bank['account_number']),
                 'transfer_reference' => $bank['transfer_reference'] ?? null,
                 'transfer_amount' => $amount,
                 'transfer_date' => $data['distribution_date'] ?? today(),
                 'status' => BankTransferStatus::Success,
             ]);
+            // Nomor rekening sengaja tidak fillable: hanya boleh diisi di sini,
+            // tidak pernah lewat mass assignment dari payload.
+            $transfer->account_number_encrypted = $bank['account_number'];
+            $transfer->account_number_masked = DistributionBankTransfer::mask($bank['account_number']);
+            $transfer->save();
         }
     }
 
-    /** PRD 12W §54 — reservation berubah menjadi konsumsi saat dana benar keluar. */
-    private function consumeReservation(Distribution $distribution): void
+    /**
+     * PRD 12W §54 — reservation dikonsumsi saat dana benar keluar.
+     *
+     * Dipanggil sebelum outflow. Bila masih ada sisa approved amount yang belum
+     * direalisasikan (PRD 12O), sisa itu ditahan kembali lewat reservation baru
+     * supaya dana tidak bisa dipakai distribution lain.
+     */
+    private function consumeReservation(Distribution $distribution, string $remaining): void
     {
         $reservation = $distribution->activeReservation()->first();
 
@@ -622,6 +636,25 @@ class DistributionService
         }
 
         $reservation->forceFill(['status' => DistributionReservationStatus::Consumed, 'released_at' => now()])->save();
+
+        if (bccomp($remaining, '0', 2) > 0) {
+            $next = $this->funds->reservation($distribution->fund, [
+                'amount' => $remaining,
+                'target_type' => 'distribution',
+                'target_id' => $distribution->id,
+                'reason' => 'Sisa reservation '.$distribution->distribution_number,
+            ]);
+
+            DistributionReservation::create([
+                'distribution_id' => $distribution->id,
+                'fund_id' => $distribution->fund_id,
+                'fund_reservation_id' => $next->id,
+                'reserved_amount' => $remaining,
+                'currency' => $distribution->currency,
+                'reserved_at' => now(),
+                'status' => DistributionReservationStatus::Active,
+            ]);
+        }
     }
 
     private function releaseReservation(Distribution $distribution, string $reason): void

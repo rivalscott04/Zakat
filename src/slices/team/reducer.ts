@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTeamData, addTeamData, updateTeamData, deleteTeamData } from './thunk';
+import { getTeamData, addTeamData, updateTeamData, deleteTeamData } from "./thunk";
 export const initialState :any= {
     teamData: [],
     error: {},

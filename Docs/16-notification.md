@@ -1,6 +1,6 @@
 # PRD MODULE 16 — NOTIFICATION
 
-Project: Zakat OS
+Project: ZETRA
 Module: Notification
 Module Code: NTF
 Version: 0.1.0
@@ -22,7 +22,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Notification bertanggung jawab untuk mengirim, mengelola, mencatat, dan memantau notifikasi dalam Zakat OS.
+Modul Notification bertanggung jawab untuk mengirim, mengelola, mencatat, dan memantau notifikasi dalam ZETRA.
 
 Notification merupakan centralized service.
 
@@ -500,7 +500,7 @@ Webhook digunakan untuk integrasi dengan sistem eksternal.
 
 Contoh:
 
-Zakat OS
+ZETRA
 
 ↓
 
@@ -1278,7 +1278,7 @@ notification_email_config_updated
 
 ## 50. Notification Bell
 
-Diletakkan pada Navbar Velzon.
+Diletakkan pada Navbar ZETRA.
 
 Features:
 
@@ -1294,7 +1294,7 @@ View All.
 
 ## 51. Notification List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

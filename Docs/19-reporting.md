@@ -1,6 +1,6 @@
 # PRD MODULE 19 — REPORTING
 
-Project: Zakat OS
+Project: ZETRA
 Module: Reporting
 Module Code: RPT
 Version: 0.1.0
@@ -39,7 +39,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Reporting bertanggung jawab untuk menyediakan sistem pembuatan, pengelolaan, penyimpanan, export, dan distribusi laporan dalam Zakat OS.
+Modul Reporting bertanggung jawab untuk menyediakan sistem pembuatan, pengelolaan, penyimpanan, export, dan distribusi laporan dalam ZETRA.
 
 Reporting Module menjadi centralized reporting layer.
 
@@ -1369,7 +1369,7 @@ report.favorite.removed.
 
 ## 51. Reporting Dashboard
 
-Gunakan Velzon Dashboard.
+Gunakan ZETRA Dashboard.
 
 Sections:
 
@@ -1487,7 +1487,7 @@ Save Template jika memiliki permission.
 
 ## 55. Report Run History
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

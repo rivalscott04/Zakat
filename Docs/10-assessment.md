@@ -1,6 +1,6 @@
 # PRD MODULE 10 — ASSESSMENT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Assessment
 Module Code: ASM
 Version: 0.1.0
@@ -1602,7 +1602,7 @@ Urgent Assessment
 
 ## 63. Assessment Request List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

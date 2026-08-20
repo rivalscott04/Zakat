@@ -1,6 +1,6 @@
 # PRD MODULE 17 — AUDIT TRAIL
 
-Project: Zakat OS
+Project: ZETRA
 Module: Audit Trail
 Module Code: AUD
 Version: 0.1.0
@@ -22,7 +22,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Audit Trail bertanggung jawab untuk mencatat aktivitas penting yang terjadi di dalam Zakat OS.
+Modul Audit Trail bertanggung jawab untuk mencatat aktivitas penting yang terjadi di dalam ZETRA.
 
 Audit Trail menjadi centralized audit system.
 
@@ -1132,7 +1132,7 @@ Financial Events.
 
 ## 41. Audit Log List
 
-Gunakan Velzon DataTable.
+Gunakan ZETRA DataTable.
 
 Columns:
 

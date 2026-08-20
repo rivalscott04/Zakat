@@ -9,7 +9,7 @@ import {
   getMonthMarketData as getMonthMarketDataApi,
   getWeekMarketData as getWeekMarketDataApi,
   getHourMarketData as getHourMarketDataApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getPortfolioChartsData = createAsyncThunk("dashboardCrypto/getPortfolioChartsData", async (data:any) => {
   try {

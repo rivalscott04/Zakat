@@ -11,6 +11,7 @@ use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Resources\OrganizationSummaryResource;
 use App\Http\Resources\RoleResource;
 use App\Services\AuthService;
+use App\Services\ImpersonationService;
 use App\Services\UserService;
 use App\Support\ApiResponse;
 use App\Support\OrganizationContext;
@@ -22,6 +23,7 @@ class AuthController extends Controller
 {
     public function __construct(
         private readonly AuthService $auth,
+        private readonly ImpersonationService $impersonation,
         private readonly UserService $users,
     ) {}
 
@@ -29,7 +31,8 @@ class AuthController extends Controller
     {
         $data = $request->validated();
 
-        $this->auth->login($request, $data['email'], $data['password'], (bool) ($data['remember'] ?? false));
+        // PRD 01 §9 — login menerima email atau username.
+        $this->auth->login($request, $data['login'], $data['password'], (bool) ($data['remember'] ?? false));
 
         return ApiResponse::data(['authenticated' => true]);
     }
@@ -64,7 +67,15 @@ class AuthController extends Controller
             ),
             // Permission dikirim hanya untuk kebutuhan UX frontend (PRD 01 §27).
             'permissions' => $user->permissionsFor($organization?->getKey()),
+            'impersonation' => $this->impersonation->statusFor($user),
         ]);
+    }
+
+    public function leaveImpersonation(Request $request): JsonResponse
+    {
+        $this->impersonation->leave($request);
+
+        return ApiResponse::data(['message' => 'Impersonate diakhiri.']);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse

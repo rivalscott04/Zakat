@@ -14,7 +14,7 @@ class PermissionSeeder extends Seeder
     /** @var array<string, array<string, array<int, string>>> */
     public const CATALOG = [
         'auth' => [
-            'users' => ['view', 'create', 'update'],
+            'users' => ['view', 'create', 'update', 'impersonate'],
             'roles' => ['view', 'create', 'update'],
             'permissions' => ['view'],
         ],
@@ -24,8 +24,19 @@ class PermissionSeeder extends Seeder
             'amils' => ['view', 'create', 'update'],
             'assignments' => ['view', 'create', 'update'],
         ],
+        'muzaki' => [
+            'muzaki' => [
+                'view', 'create', 'update', 'activate', 'deactivate', 'archive',
+                'view_sensitive', 'verify_identity', 'manage_contacts', 'manage_addresses',
+                'manage_family', 'manage_preferences', 'manage_tags', 'manage_notes',
+                'merge', 'export', 'view_audit',
+            ],
+        ],
         'audit' => [
             'audit' => ['view'],
+        ],
+        'zakat' => [
+            'zakat' => ['view', 'category.manage', 'type.create', 'type.update', 'type.activate', 'type.deactivate', 'rule.create', 'rule.update', 'rule.activate', 'rule.expire', 'rule.archive', 'nisab.manage', 'haul.manage', 'rate.manage', 'rule.resolve'],
         ],
     ];
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTicketsList, addNewTicket, updateTicket, deleteTicket } from './thunk';
+import { getTicketsList, addNewTicket, updateTicket, deleteTicket } from "./thunk";
 
 export const initialState :any= {
     ticketsList: [],

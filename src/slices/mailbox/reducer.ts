@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMailDetails, unreadMail, staredMail, labelMail, trashMail, deleteMail } from './thunk';
+import { getMailDetails, unreadMail, staredMail, labelMail, trashMail, deleteMail } from "./thunk";
 
 export const initialState: any = {
   mailDetails: [],

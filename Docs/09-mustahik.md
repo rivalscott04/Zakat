@@ -1,6 +1,6 @@
 # PRD MODULE 09 — MUSTAHIK
 
-Project: Zakat OS
+Project: ZETRA
 Module: Mustahik
 Module Code: MSH
 Version: 0.1.0
@@ -29,7 +29,7 @@ Related Modules:
 
 Modul Mustahik bertanggung jawab untuk mengelola data individu, keluarga, kelompok, atau entitas penerima manfaat yang memenuhi kriteria sebagai penerima zakat atau bantuan sosial lainnya.
 
-Mustahik merupakan salah satu master entity utama dalam Zakat OS.
+Mustahik merupakan salah satu master entity utama dalam ZETRA.
 
 Modul ini menjadi sumber data untuk:
 
@@ -1699,7 +1699,7 @@ Potential Duplicate
 
 ## 71. Mustahik List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

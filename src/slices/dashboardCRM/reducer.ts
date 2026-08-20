@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getBalanceChartsData, getDialChartsData, getSalesChartsData } from './thunk';
+import { getBalanceChartsData, getDialChartsData, getSalesChartsData } from "./thunk";
 export const initialState :any= {
   balanceOverviewData: [],
   dialTypeData: [],

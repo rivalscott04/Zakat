@@ -1,6 +1,6 @@
 # PRD MODULE 13 — PAYMENT GATEWAY
 
-Project: Zakat OS
+Project: ZETRA
 Module: Payment Gateway
 Module Code: PAY
 Version: 0.1.0
@@ -1075,7 +1075,7 @@ Provider Status
 
 ## 38. Payment List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

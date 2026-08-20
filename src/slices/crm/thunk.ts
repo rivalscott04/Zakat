@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Include Both Helper File with needed methods
 import {
@@ -17,7 +17,7 @@ import {
   addNewLead as addNewLeadApi,
   updateLead as updateLeadApi,
   deleteLead as deleteLeadApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getContacts = createAsyncThunk("crm/getContacts" , async () => {
   try{

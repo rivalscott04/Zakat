@@ -1,51 +1,69 @@
 //Include Both Helper File with needed methods
-import { getFirebaseBackend } from "../../../helpers/firebase_helper";
+import { getFirebaseBackend } from "../../../shared/helpers/firebase_helper";
 import {
   postFakeLogin,
   postJwtLogin,
-} from "../../../helpers/fakebackend_helper";
+} from "../../../shared/helpers/fakebackend_helper";
 
-import { loginSuccess, logoutUserSuccess, apiError, reset_login_flag } from './reducer';
+import { setAuthorization } from "../../../shared/helpers/api_helper";
+import { loginSuccess, logoutUserSuccess, apiError, reset_login_flag } from "./reducer";
+
+const persistAuthUser = (data: any) => {
+  const authUser = {
+    ...data,
+    token: data.token ?? data.accessToken,
+  };
+
+  sessionStorage.setItem("authUser", JSON.stringify(authUser));
+
+  if (authUser.token) {
+    setAuthorization(authUser.token);
+  }
+
+  return authUser;
+};
 
 export const loginUser = (user:any, history:any) => async (dispatch:any) => {
 
   try {
     let response;
-    if (import.meta.env.VITE_DEFAULTAUTH === "firebase") {
+    const authMode = import.meta.env.VITE_DEFAULTAUTH;
+
+    if (authMode === "firebase") {
       let fireBaseBackend :any= getFirebaseBackend();
       response = fireBaseBackend.loginUser(
         user.email,
         user.password
       );
-    } else if (import.meta.env.VITE_DEFAULTAUTH === "jwt") {
+    } else if (authMode === "jwt" || authMode === "fake") {
       response = postJwtLogin({
         email: user.email,
         password: user.password
       });
-
     } else if (import.meta.env.VITE_API_URL) {
       response = postFakeLogin({
         email: user.email,
         password: user.password,
       });
+    } else {
+      throw new Error("Auth is not configured");
     }
 
     var data :any= await response;
 
     if (data) {
-      sessionStorage.setItem("authUser", JSON.stringify(data));
-      if (import.meta.env.VITE_DEFAULTAUTH === "fake") {
+      if (authMode === "fake" && import.meta.env.VITE_API_URL) {
         var finallogin :any= JSON.stringify(data);
         finallogin = JSON.parse(finallogin)
         data = finallogin.data;
         if (finallogin.status === "success") {
-          dispatch(loginSuccess(data));
+          dispatch(loginSuccess(persistAuthUser(data)));
           history('/dashboard')
         } else {
           dispatch(apiError(finallogin));
         }
       } else {
-        dispatch(loginSuccess(data));
+        dispatch(loginSuccess(persistAuthUser(data)));
         history('/dashboard')
       }
     }

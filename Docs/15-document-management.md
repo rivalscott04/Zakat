@@ -1,6 +1,6 @@
 # PRD MODULE 15 — DOCUMENT MANAGEMENT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Document Management
 Module Code: DOC
 Version: 0.1.0
@@ -30,7 +30,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Document Management bertanggung jawab untuk penyimpanan, pengelolaan, pengamanan, dan penghubungan dokumen dengan entity lain di dalam Zakat OS.
+Modul Document Management bertanggung jawab untuk penyimpanan, pengelolaan, pengamanan, dan penghubungan dokumen dengan entity lain di dalam ZETRA.
 
 Modul ini menjadi centralized document system.
 
@@ -1242,7 +1242,7 @@ Storage Usage.
 
 ## 52. Document List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

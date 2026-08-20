@@ -7,7 +7,7 @@ import {
   getChannels as getChannelsApi,
   addMessage as addMessageApi,
   deleteMessage as deleteMessageApi,
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getDirectContact = createAsyncThunk("chat/getDirectContact", async () => {
   try {

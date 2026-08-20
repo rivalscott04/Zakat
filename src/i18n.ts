@@ -2,14 +2,14 @@ import i18n from "i18next";
 import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
-import translationGr from "./locales/gr.json";
-import translationIT from "./locales/it.json";
-import translationRS from "./locales/ru.json";
-import translationSP from "./locales/sp.json";
-import translationENG from "./locales/en.json";
-import translationCN from "./locales/ch.json";
-import translationFR from "./locales/fr.json";
-import translationAR from "./locales/ar.json";
+import translationGr from "./shared/locales/gr.json";
+import translationIT from "./shared/locales/it.json";
+import translationRS from "./shared/locales/ru.json";
+import translationSP from "./shared/locales/sp.json";
+import translationENG from "./shared/locales/en.json";
+import translationCN from "./shared/locales/ch.json";
+import translationFR from "./shared/locales/fr.json";
+import translationAR from "./shared/locales/ar.json";
 
 
 // the translations

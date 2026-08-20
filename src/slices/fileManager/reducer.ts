@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFolders, addNewFolder, updateFolder, deleteFolder, getFiles, addNewFile, updateFile, deleteFile } from './thunk';
+import { getFolders, addNewFolder, updateFolder, deleteFolder, getFiles, addNewFile, updateFile, deleteFile } from "./thunk";
 export const initialState :any= {
   folders: [],
   files: [],

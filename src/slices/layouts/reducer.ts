@@ -12,7 +12,7 @@ import {
   LEFT_SIDEBAR_IMAGE_TYPES,
   PERLOADER_TYPES,
   SIDEBAR_VISIBILITY_TYPES
-} from "../../Components/constants/layout"
+} from "../../shared/components/constants/layout"
 
 
 export interface LayoutState {

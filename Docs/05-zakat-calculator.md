@@ -1,6 +1,6 @@
 # PRD MODULE 05 — ZAKAT CALCULATOR
 
-Project: Zakat OS
+Project: ZETRA
 Module: Zakat Calculator
 Module Code: ZKC
 Version: 0.1.0

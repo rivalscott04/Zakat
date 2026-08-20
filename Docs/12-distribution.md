@@ -1,6 +1,6 @@
 # PRD MODULE 12 — DISTRIBUTION
 
-Project: Zakat OS
+Project: ZETRA
 Module: Distribution
 Module Code: DST
 Version: 0.1.0
@@ -1739,7 +1739,7 @@ Batch Distribution
 
 ## 68. Distribution List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

@@ -1,6 +1,6 @@
 # PRD MODULE 18 — TRANSPARENCY
 
-Project: Zakat OS
+Project: ZETRA
 Module: Transparency
 Module Code: TRP
 Version: 0.1.0
@@ -1167,7 +1167,7 @@ transparency.settings.updated.
 
 ## 42. Transparency Dashboard
 
-Gunakan Velzon Dashboard.
+Gunakan ZETRA Dashboard.
 
 Cards:
 
@@ -1205,7 +1205,7 @@ Period Trend.
 
 ## 44. Snapshot List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 
@@ -1263,7 +1263,7 @@ Audit.
 
 ## 46. Public Dashboard UI
 
-Public UI tidak harus mengikuti tampilan internal Velzon.
+Public UI tidak harus mengikuti tampilan internal ZETRA.
 
 Public UI harus:
 

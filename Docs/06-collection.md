@@ -1,6 +1,6 @@
 # PRD MODULE 06 — COLLECTION
 
-Project: Zakat OS
+Project: ZETRA
 Module: Collection
 Module Code: COL
 Version: 0.1.0
@@ -1397,7 +1397,7 @@ after
 
 ## 61. Collection List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

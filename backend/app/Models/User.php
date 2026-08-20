@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Lab404\Impersonate\Models\Impersonate;
 
 /** PRD 01 §5 — user entity. */
 // organization_id dan status sengaja tidak fillable (CLAUDE.md §34): keduanya
@@ -26,7 +28,7 @@ use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use Auditable, HasFactory, HasUlids, Notifiable, SoftDeletes;
+    use Auditable, HasFactory, HasUlids, Impersonate, Notifiable, SoftDeletes;
 
     /** @var array<string, array<int, string>>|null */
     private ?array $permissionCache = null;
@@ -81,6 +83,31 @@ class User extends Authenticatable
     public function canLogin(): bool
     {
         return $this->status->canLogin();
+    }
+
+    /** PRD 01 §9 — cari user berdasarkan email atau username (case-insensitive). */
+    public static function findByLoginIdentifier(string $identifier): ?static
+    {
+        $lower = Str::lower($identifier);
+
+        return static::query()
+            ->where(function ($query) use ($lower) {
+                $query->whereRaw('lower(email) = ?', [$lower])
+                    ->orWhereRaw('lower(username) = ?', [$lower]);
+            })
+            ->first();
+    }
+
+    /** Hanya platform admin yang boleh impersonate user lain. */
+    public function canImpersonate(): bool
+    {
+        return $this->isPlatformAdmin();
+    }
+
+    /** Super admin dan akun non-aktif tidak boleh di-impersonate. */
+    public function canBeImpersonated(): bool
+    {
+        return $this->canLogin() && ! $this->isPlatformAdmin();
     }
 
     // --------------------------------------------------------- authorization

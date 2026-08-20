@@ -21,6 +21,9 @@ class AuditService
         'password', 'password_confirmation', 'current_password', 'new_password',
         'remember_token', 'token', 'token_hash', 'secret', 'api_key', 'otp',
         'access_token', 'refresh_token', 'private_key', 'webhook_secret',
+        // PRD 03 §16, §67 — ciphertext, hash identity, dan nilai contact
+        // tidak boleh menjadi payload audit yang dapat diexport/dibaca ulang.
+        'identity_number_encrypted', 'identity_number_hash', 'value_encrypted', 'value_hash',
     ];
 
     /**

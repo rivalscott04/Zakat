@@ -19,7 +19,7 @@ TBD
 TBD
 # PRD MODULE 14 — BANK RECONCILIATION
 
-Project: Zakat OS
+Project: ZETRA
 Module: Bank Reconciliation
 Module Code: BRC
 Version: 0.1.0
@@ -47,7 +47,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Bank Reconciliation bertanggung jawab untuk mencocokkan transaksi internal Zakat OS dengan transaksi yang tercatat pada rekening bank.
+Modul Bank Reconciliation bertanggung jawab untuk mencocokkan transaksi internal ZETRA dengan transaksi yang tercatat pada rekening bank.
 
 Tujuan utama modul:
 
@@ -1531,7 +1531,7 @@ reconciliation_adjustment_rejected
 
 ## 61. Bank Account List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

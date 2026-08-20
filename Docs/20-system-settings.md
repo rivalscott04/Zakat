@@ -1,6 +1,6 @@
 # PRD MODULE 21 — CODING STANDARD & BEST PRACTICE
 
-Project: Zakat OS
+Project: ZETRA
 Module: Coding Standard
 Module Code: CST
 Version: 0.1.0
@@ -22,7 +22,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Dokumen ini mendefinisikan standar coding untuk seluruh Zakat OS.
+Dokumen ini mendefinisikan standar coding untuk seluruh ZETRA.
 
 Tujuan:
 

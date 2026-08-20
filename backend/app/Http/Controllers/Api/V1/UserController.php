@@ -9,6 +9,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\SyncRolesRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Services\ImpersonationService;
 use App\Services\UserService;
 use App\Support\ApiResponse;
 use App\Support\OrganizationContext;
@@ -18,7 +19,10 @@ use Illuminate\Http\Request;
 /** PRD 01 §37 — user endpoints. */
 class UserController extends Controller
 {
-    public function __construct(private readonly UserService $users) {}
+    public function __construct(
+        private readonly UserService $users,
+        private readonly ImpersonationService $impersonation,
+    ) {}
 
     public function index(ListRequest $request): JsonResponse
     {
@@ -75,6 +79,15 @@ class UserController extends Controller
     public function unlock(Request $request, string $userId): JsonResponse
     {
         return $this->transition($request, $userId, UserStatus::Active);
+    }
+
+    public function impersonate(Request $request, string $userId): JsonResponse
+    {
+        $target = $this->users->findForImpersonation($userId);
+
+        $this->impersonation->start($request, $request->user(), $target);
+
+        return ApiResponse::data(['message' => 'Impersonate dimulai.']);
     }
 
     private function transition(Request $request, string $userId, UserStatus $status): JsonResponse

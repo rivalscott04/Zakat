@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Include Both Helper File with needed methods
 import {
@@ -8,7 +8,7 @@ import {
     addTeamData as addTeamDataApi,
     updateTeamData as updateTeamDataApi,
     deleteTeamData as deleteTeamDataApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getTeamData = createAsyncThunk("team/getTeamData", async () => {
     try {

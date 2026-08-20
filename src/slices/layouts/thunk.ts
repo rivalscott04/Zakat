@@ -1,4 +1,4 @@
-import { changeHTMLAttribute } from './utils';
+import { changeHTMLAttribute } from "./utils";
 import {
     changeLayoutAction,
     changeLayoutModeAction,
@@ -11,7 +11,7 @@ import {
     changeSidebarImageTypeAction,
     changePreLoaderAction,
     changeSidebarVisibilityAction
-} from './reducer';
+} from "./reducer";
 
 /**
  * Changes the layout type

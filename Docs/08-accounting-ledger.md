@@ -1,6 +1,6 @@
 # PRD MODULE 08 — ACCOUNTING & LEDGER
 
-Project: Zakat OS
+Project: ZETRA
 Module: Accounting & Ledger
 Module Code: ACC
 Version: 0.1.0
@@ -23,7 +23,7 @@ Dependencies:
 
 ## 1. Purpose
 
-Modul Accounting & Ledger bertanggung jawab untuk menyediakan pencatatan keuangan yang terstruktur, dapat ditelusuri, immutable, dan dapat direkonsiliasi terhadap seluruh transaksi dalam Zakat OS.
+Modul Accounting & Ledger bertanggung jawab untuk menyediakan pencatatan keuangan yang terstruktur, dapat ditelusuri, immutable, dan dapat direkonsiliasi terhadap seluruh transaksi dalam ZETRA.
 
 Modul ini menjadi financial record layer.
 
@@ -939,7 +939,7 @@ calculated_at
 
 ## 39. Purpose
 
-Opening Balance digunakan ketika organisasi mulai menggunakan Zakat OS.
+Opening Balance digunakan ketika organisasi mulai menggunakan ZETRA.
 
 Opening Balance harus memiliki:
 
@@ -1479,7 +1479,7 @@ Reconciliation Difference
 
 ## 64. Chart of Accounts
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

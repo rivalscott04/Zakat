@@ -1,6 +1,6 @@
 # PRD MODULE 04 — ZAKAT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Zakat Management
 Module Code: ZKT
 Version: 0.1.0
@@ -1573,7 +1573,7 @@ reason
 
 ## 71. Zakat Type List
 
-Menggunakan Velzon DataTable.
+Menggunakan ZETRA DataTable.
 
 Columns:
 

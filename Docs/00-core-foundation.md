@@ -10,11 +10,11 @@ Oke, gue copas ulang **clean version tanpa noise, tanpa penjelasan tambahan, lan
 
 ## 1. Project Info
 
-Project: Zakat OS
+Project: ZETRA
 Module: Core & Foundation
 Code: SYS
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Backend)
 Stack: React + TypeScript + Laravel 13 + PostgreSQL
 Architecture: Modular Monolith / API First
 License: AGPL-3.0
@@ -466,26 +466,26 @@ DUPLICATE_RESOURCE
 
 ## 37. Acceptance Criteria
 
-* ULID aktif
-* numbering jalan
-* audit jalan
-* API standard
-* money safe
-* multi-tenant safe
-* auth jalan
-* logging jalan
+* [x] ULID aktif
+* [x] numbering jalan
+* [x] audit jalan
+* [x] API standard
+* [x] money safe
+* [x] multi-tenant safe
+* [x] auth jalan
+* [x] logging jalan
 
 ---
 
 ## 38. Definition of Done
 
-* test pass
-* migration clean
-* seeder ready
-* API usable
-* no secret leak
-* audit traceable
-* concurrency safe
+* [x] test pass
+* [x] migration clean
+* [x] seeder ready
+* [x] API usable
+* [x] no secret leak
+* [x] audit traceable
+* [x] concurrency safe
 
 ---
 

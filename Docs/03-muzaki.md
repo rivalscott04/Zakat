@@ -1,6 +1,6 @@
 # PRD MODULE 03 — MUZAKI MANAGEMENT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Muzaki Management
 Module Code: MZK
 Version: 0.1.0
@@ -1434,7 +1434,7 @@ Nilai sensitif tidak boleh disimpan plaintext dalam audit log.
 
 ## 71. Muzaki List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

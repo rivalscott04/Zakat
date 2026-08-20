@@ -1,9 +1,9 @@
 //Include Both Helper File with needed methods
-import { getFirebaseBackend } from "../../../helpers/firebase_helper";
+import { getFirebaseBackend } from "../../../shared/helpers/firebase_helper";
 import {
   postFakeRegister,
   postJwtRegister,
-} from "../../../helpers/fakebackend_helper";
+} from "../../../shared/helpers/fakebackend_helper";
 
 // action
 import {
@@ -23,9 +23,13 @@ export const registerUser = (user:any) => async (dispatch:any) => {
     if (import.meta.env.VITE_DEFAULTAUTH === "firebase") {
       response = fireBaseBackend.registerUser(user.email, user.password);
       // yield put(registerUserSuccessful(response));
-    } else if (import.meta.env.VITE_DEFAULTAUTH === "jwt") {
+    } else if (
+      import.meta.env.VITE_DEFAULTAUTH === "jwt" ||
+      import.meta.env.VITE_DEFAULTAUTH === "fake"
+    ) {
       response = postJwtRegister('/post-jwt-register', user);
-      // yield put(registerUserSuccessful(response));
+      const data: any = await response;
+      dispatch(registerUserSuccessful(data));
     } else if (import.meta.env.VITE_API_URL) {
       response = postFakeRegister(user);
       const data :any= await response;

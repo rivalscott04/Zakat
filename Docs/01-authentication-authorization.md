@@ -1,10 +1,10 @@
 # PRD MODULE 01 — AUTHENTICATION & AUTHORIZATION
 
-Project: Zakat OS
+Project: ZETRA
 Module: Authentication & Authorization
 Module Code: AUTH
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Backend)
 Dependencies: PRD 00 — Core & Foundation
 
 ---
@@ -28,7 +28,7 @@ Modul Authentication & Authorization bertanggung jawab untuk:
 * Account security
 * User activation dan deactivation
 
-Modul ini menjadi gerbang utama akses ke seluruh Zakat OS.
+Modul ini menjadi gerbang utama akses ke seluruh ZETRA.
 
 ---
 
@@ -964,7 +964,7 @@ Channel notification mengikuti konfigurasi sistem.
 
 ## 43. Login Page
 
-Frontend menggunakan template Velzon.
+Frontend menggunakan branding ZETRA di atas komponen ZETRA yang sudah ada.
 
 Halaman login minimal:
 
@@ -1079,26 +1079,26 @@ Role:
 
 # PRD 01K — ACCEPTANCE CRITERIA
 
-* [ ] User dapat login.
-* [ ] User dapat logout.
-* [ ] User dapat meminta reset password.
-* [ ] User dapat mengganti password.
-* [ ] Password tersimpan dalam hash.
-* [ ] Login memiliki rate limiting.
-* [ ] Account lock berfungsi.
-* [ ] User status diterapkan.
-* [ ] RBAC berfungsi.
-* [ ] Permission diverifikasi backend.
-* [ ] Organization isolation diterapkan.
-* [ ] Role assignment tercatat.
-* [ ] Security event tercatat.
-* [ ] Session dapat direvoke.
-* [ ] API `/auth/me` berfungsi.
-* [ ] User management tersedia.
-* [ ] Role management tersedia.
-* [ ] Audit trail tersedia.
-* [ ] Sensitive credential tidak masuk log.
-* [ ] Automated test tersedia.
+* [x] User dapat login.
+* [x] User dapat logout.
+* [x] User dapat meminta reset password.
+* [x] User dapat mengganti password.
+* [x] Password tersimpan dalam hash.
+* [x] Login memiliki rate limiting.
+* [x] Account lock berfungsi.
+* [x] User status diterapkan.
+* [x] RBAC berfungsi.
+* [x] Permission diverifikasi backend.
+* [x] Organization isolation diterapkan.
+* [x] Role assignment tercatat.
+* [x] Security event tercatat.
+* [x] Session dapat direvoke.
+* [x] API `/auth/me` berfungsi.
+* [x] User management tersedia.
+* [x] Role management tersedia.
+* [x] Audit trail tersedia.
+* [x] Sensitive credential tidak masuk log.
+* [x] Automated test tersedia.
 
 ---
 

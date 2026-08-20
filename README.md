@@ -1,12 +1,14 @@
-# Zakat OS
+# ZETRA
 
-Open source platform buat ngelola zakat.
+ZETRA adalah singkatan dari **Zakat Ecosystem for Transparency, Reporting & Accountability**.
+
+Open source zakat management platform yang transparan, akuntabel, modular, dan siap diaudit.
 
 Dari pengumpulan, penyaluran, sampai laporan dan transparansi. Cocok buat lembaga amil, organisasi zakat, atau komunitas yang mau sistemnya rapi, bisa diaudit, dan tetap sesuai aturan syariah.
 
 ## Kenapa dibuat?
 
-Pengelolaan zakat sering berantakan di Excel, chat grup, atau aplikasi yang susah dilacak. Zakat OS dibuat biar semuanya lebih jelas:
+Pengelolaan zakat sering berantakan di Excel, chat grup, atau aplikasi yang susah dilacak. ZETRA dibuat biar semuanya lebih jelas:
 
 - Publik bisa lihat data yang memang boleh dipublikasikan
 - Setiap aksi bisa dilacak: siapa melakukan apa, kapan, dan apa yang berubah
@@ -29,9 +31,17 @@ Nggak harus jago banget. Yang penting niatnya bantu:
 - Perjelas dokumentasi
 - Laporkan bug
 - Usulkan perbaikan
-- Bantu orang lain pakai dan kembangkan Zakat OS
+- Bantu orang lain pakai dan kembangkan ZETRA
 
 Sedikit tapi konsisten, itu juga amal jariyah.
+
+Kalau mau berdonasi juga boleh. Bisa lewat rekening atau e-wallet. Atas nama **Rival Biasrori**.
+
+| Metode | Nomor |
+| --- | --- |
+| <img src="./public/donasi/bca.svg" alt="BCA" height="20" /> BCA | `0561876265` |
+| DANA | `087772666911` |
+| GoPay | `087772666911` |
 
 ## Teknologi
 

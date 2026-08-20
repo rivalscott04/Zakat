@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 228 34" role="img" aria-labelledby="title desc">
+  <title id="title">ZETRA dark logo</title>
+  <desc id="desc">ZETRA wordmark with abstract Z icon.</desc>
+  <rect x="0" y="1" width="32" height="32" rx="8" fill="#405189" />
+  <path d="M8 8h16v4L13 23h11v4H8v-4l11-11H8z" fill="#fff" />
+  <text
+    x="44"
+    y="23"
+    fill="#495057"
+    font-family="Inter, Arial, Helvetica, sans-serif"
+    font-size="18"
+    font-weight="700"
+    letter-spacing="1.6"
+  >
+    ZETRA
+  </text>
+</svg>

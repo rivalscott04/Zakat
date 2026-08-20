@@ -20,20 +20,20 @@ class AuthService
 {
     public function __construct(private readonly AuditService $audit) {}
 
-    /** PRD 01 §10 — login flow. */
-    public function login(Request $request, string $email, string $password, bool $remember = false): User
+    /** PRD 01 §9–§10 — login dengan email atau username. */
+    public function login(Request $request, string $identifier, string $password, bool $remember = false): User
     {
-        $throttleKey = Str::lower($email).'|'.$request->ip();
+        $throttleKey = Str::lower($identifier).'|'.$request->ip();
         $this->assertNotThrottled($throttleKey);
 
-        $user = User::query()->whereRaw('lower(email) = ?', [Str::lower($email)])->first();
+        $user = User::findByLoginIdentifier($identifier);
 
         // PRD 01 §21 — lock yang sudah lewat masa berlakunya dilepas sebelum dicek.
         $user?->releaseExpiredLock();
 
         if ($user === null || ! Hash::check($password, $user->password)) {
             RateLimiter::hit($throttleKey, config('zakat.login.decay_seconds'));
-            $this->registerFailedAttempt($user, $email, $request);
+            $this->registerFailedAttempt($user, $identifier, $request);
 
             // PRD 01 §10 — jangan bocorkan apakah email atau password yang salah.
             throw new ZakatException(ErrorCode::Unauthorized, 'Kredensial tidak valid.');
@@ -41,7 +41,7 @@ class AuthService
 
         if (! $user->canLogin()) {
             $this->audit->record('login_failed', $user, context: [
-                'email' => $email,
+                'identifier' => $identifier,
                 'reason' => 'status_'.$user->status->value,
             ], actorId: $user->getKey());
 
@@ -182,10 +182,13 @@ class AuthService
     }
 
     /** PRD 01 §20 dan §21 — hitung kegagalan dan kunci akun bila melewati ambang. */
-    private function registerFailedAttempt(?User $user, string $email, Request $request): void
+    private function registerFailedAttempt(?User $user, string $identifier, Request $request): void
     {
         if ($user === null) {
-            $this->audit->record('login_failed', context: ['email' => $email, 'reason' => 'unknown_email']);
+            $this->audit->record('login_failed', context: [
+                'identifier' => $identifier,
+                'reason' => 'unknown_identifier',
+            ]);
 
             return;
         }
@@ -203,7 +206,7 @@ class AuthService
         $user->saveQuietly();
 
         $this->audit->record('login_failed', $user, context: [
-            'email' => $email,
+            'identifier' => $identifier,
             'reason' => 'invalid_password',
             'attempts' => $attempts,
         ], actorId: $user->getKey());

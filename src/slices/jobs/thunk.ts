@@ -16,7 +16,7 @@ import {
 
     getcategoryList as getcategoryListApi,
     addcategoryList as addcategoryListApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 import { toast } from "react-toastify";
 
 // job application

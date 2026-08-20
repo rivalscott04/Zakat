@@ -25,7 +25,7 @@ class AuthenticationTest extends TestCase
         $user = $this->member($organization);
 
         $response = $this->postJson('/api/v1/auth/login', [
-            'email' => $user->email,
+            'login' => $user->email,
             'password' => 'password',
         ]);
 
@@ -34,23 +34,46 @@ class AuthenticationTest extends TestCase
         $this->assertNotNull($user->fresh()->last_login_at);
     }
 
-    public function test_login_gagal_tidak_membocorkan_apakah_email_terdaftar(): void
+    public function test_user_aktif_dapat_login_dengan_username(): void
+    {
+        $organization = $this->organization();
+        $user = $this->member($organization, 'ADMIN', ['username' => 'amil_zetra']);
+
+        $this->postJson('/api/v1/auth/login', [
+            'login' => 'amil_zetra',
+            'password' => 'password',
+        ])->assertOk()->assertJsonPath('data.authenticated', true);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_payload_email_lama_masih_diterima_sebagai_login(): void
+    {
+        $user = $this->member($this->organization());
+
+        $this->postJson('/api/v1/auth/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertOk()->assertJsonPath('data.authenticated', true);
+    }
+
+    public function test_login_gagal_tidak_membocorkan_apakah_identifier_terdaftar(): void
     {
         $user = $this->member($this->organization());
 
         $salahPassword = $this->postJson('/api/v1/auth/login', [
-            'email' => $user->email,
+            'login' => $user->email,
             'password' => 'password-salah',
         ]);
 
-        $emailTidakAda = $this->postJson('/api/v1/auth/login', [
-            'email' => 'tidak-ada@example.test',
+        $identifierTidakAda = $this->postJson('/api/v1/auth/login', [
+            'login' => 'tidak-ada@example.test',
             'password' => 'password-salah',
         ]);
 
         $salahPassword->assertStatus(401);
-        $emailTidakAda->assertStatus(401);
-        $this->assertSame($salahPassword->json('message'), $emailTidakAda->json('message'));
+        $identifierTidakAda->assertStatus(401);
+        $this->assertSame($salahPassword->json('message'), $identifierTidakAda->json('message'));
         $this->assertGuest();
     }
 
@@ -58,7 +81,7 @@ class AuthenticationTest extends TestCase
     {
         $user = $this->member($this->organization(), 'ADMIN', ['status' => UserStatus::Suspended]);
 
-        $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'password'])
+        $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'password'])
             ->assertStatus(403);
 
         $this->assertGuest();
@@ -70,10 +93,10 @@ class AuthenticationTest extends TestCase
         $max = (int) config('zakat.login.max_attempts');
 
         for ($i = 0; $i < $max; $i++) {
-            $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'salah']);
+            $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'salah']);
         }
 
-        $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'password'])
+        $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'password'])
             ->assertStatus(429);
     }
 
@@ -86,7 +109,7 @@ class AuthenticationTest extends TestCase
             // Rate limiter dibersihkan agar yang diuji adalah penguncian akun,
             // bukan throttle per IP.
             RateLimiter::clear(strtolower($user->email).'|127.0.0.1');
-            $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'salah']);
+            $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'salah']);
         }
 
         $user->refresh();
@@ -105,7 +128,7 @@ class AuthenticationTest extends TestCase
             'failed_login_attempts' => 10,
         ])->saveQuietly();
 
-        $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'password'])
+        $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'password'])
             ->assertOk();
 
         $this->assertSame(UserStatus::Active, $user->fresh()->status);
@@ -199,7 +222,7 @@ class AuthenticationTest extends TestCase
     {
         $user = $this->member($this->organization());
 
-        $this->postJson('/api/v1/auth/login', ['email' => $user->email, 'password' => 'password'])->assertOk();
+        $this->postJson('/api/v1/auth/login', ['login' => $user->email, 'password' => 'password'])->assertOk();
         $this->postJson('/api/v1/auth/logout')->assertOk();
 
         // Session sudah di-invalidate, jadi request berikutnya kembali sebagai tamu.

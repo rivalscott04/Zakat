@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProjectChartsData, getProjectStatusChartsData } from './thunk';
+import { getProjectChartsData, getProjectStatusChartsData } from "./thunk";
 
 export const initialState :any= {
   projectData: [],

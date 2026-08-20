@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getInvoices, addNewInvoice, updateInvoice, deleteInvoice } from './thunk';
+import { getInvoices, addNewInvoice, updateInvoice, deleteInvoice } from "./thunk";
 export const initialState :any= {
   invoices: [],
   error: {},

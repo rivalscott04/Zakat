@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getPortfolioChartsData, getMarketChartsData } from './thunk';
+import { getPortfolioChartsData, getMarketChartsData } from "./thunk";
 export const initialState :any= {
   portfolioData: [],
   marketData: [],

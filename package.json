@@ -98,7 +98,8 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "NODE_OPTIONS='--max-old-space-size=8192' vite build",
+    "build": "bun build index.html --outdir=build --target=browser --minify",
+    "build:vite": "NODE_OPTIONS='--max-old-space-size=8192' vite build",
     "preview": "vite preview",
     "test": "echo \"CRA tests removed with react-scripts; use vitest if needed\""
   },

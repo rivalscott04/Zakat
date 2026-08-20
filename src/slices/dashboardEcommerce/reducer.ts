@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getRevenueChartsData } from './thunk';
+import { getRevenueChartsData } from "./thunk";
 
 export const initialState :any= {
   revenueData: [],

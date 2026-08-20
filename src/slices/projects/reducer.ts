@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProjectList, addProjectList, updateProjectList, deleteProjectList } from './thunk';
+import { getProjectList, addProjectList, updateProjectList, deleteProjectList } from "./thunk";
 export const initialState :any= {
     projectLists: [],
     error: {},

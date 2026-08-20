@@ -16,7 +16,7 @@ import {
   getLastWeekSessionData as getLastWeekSessionDataApi,
   getLastMonthSessionData as getLastMonthSessionDataApi,
   getCurrentYearSessionData as getCurrentYearSessionDataApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getAllData = createAsyncThunk("dashboardAnalytics/getAllData", async (data:any) => {
   try {

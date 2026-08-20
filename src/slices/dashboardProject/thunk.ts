@@ -9,7 +9,7 @@ import {
   getWeekProjectStatusData as getWeekProjectStatusDataApi,
   getMonthProjectStatusData as getMonthProjectStatusDataApi,
   getQuarterProjectStatusData as getQuarterProjectStatusDataApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getProjectChartsData = createAsyncThunk("dashboardProject/getProjectChartsData", async (data:any) => {
   try {

@@ -20,10 +20,11 @@ class RoleSeeder extends Seeder
     {
         $all = Permission::query()->pluck('id', 'name');
         $readOnly = $all->filter(fn ($id, $name) => str_ends_with($name, '.view'))->values()->all();
+        $adminPermissions = $all->except(['users.impersonate'])->values()->all();
 
         $definitions = [
             'SUPER_ADMIN' => ['Super Admin', 'Akses penuh terhadap platform.', $all->values()->all()],
-            'ADMIN' => ['Administrator', 'Mengelola konfigurasi organisasi dan user.', $all->values()->all()],
+            'ADMIN' => ['Administrator', 'Mengelola konfigurasi organisasi dan user.', $adminPermissions],
             'AMIL' => ['Amil', 'Menjalankan operasional pengelolaan zakat.', $all->only([
                 'organizations.view', 'members.view', 'amils.view', 'assignments.view',
             ])->values()->all()],

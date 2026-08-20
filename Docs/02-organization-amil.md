@@ -1,10 +1,10 @@
 # PRD MODULE 02 — ORGANIZATION & AMIL
 
-Project: Zakat OS
+Project: ZETRA
 Module: Organization & Amil
 Module Code: ORG
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Backend)
 Dependencies:
 
 * PRD 00 — Core & Foundation
@@ -16,7 +16,7 @@ Dependencies:
 
 ## 1. Purpose
 
-Modul Organization & Amil bertanggung jawab untuk mengelola struktur organisasi yang menggunakan Zakat OS.
+Modul Organization & Amil bertanggung jawab untuk mengelola struktur organisasi yang menggunakan ZETRA.
 
 Modul ini menjadi foundation untuk:
 
@@ -47,7 +47,7 @@ Organization Unit
 Members / Amil
 ```
 
-Zakat OS harus mendukung penggunaan oleh:
+ZETRA harus mendukung penggunaan oleh:
 
 * Lembaga pengelola zakat
 * Organisasi zakat
@@ -184,7 +184,7 @@ Level pengelola sistem.
 
 ### organization
 
-Lembaga utama pengguna Zakat OS.
+Lembaga utama pengguna ZETRA.
 
 ### branch
 
@@ -1040,7 +1040,7 @@ Organization Settings
 Organization Members
 ```
 
-Menggunakan Velzon table, form, modal, dan card components.
+Menggunakan table, form, modal, dan card components ZETRA berbasis ZETRA.
 
 ---
 
@@ -1105,23 +1105,23 @@ Action:
 
 # PRD 02L — ACCEPTANCE CRITERIA
 
-* [ ] Organization dapat dibuat.
-* [ ] Organization memiliki ULID.
-* [ ] Organization memiliki business number.
-* [ ] Organization code unique.
-* [ ] Organization hierarchy berfungsi.
-* [ ] Circular hierarchy dicegah.
-* [ ] Multiple organization membership berfungsi.
-* [ ] Active organization context berfungsi.
-* [ ] Backend memvalidasi organization access.
-* [ ] Organization switcher berfungsi.
-* [ ] Amil dapat dibuat tanpa user account.
-* [ ] Amil dapat dikaitkan dengan user.
-* [ ] Amil assignment berfungsi.
-* [ ] Organization suspended tidak dapat membuat transaksi baru.
-* [ ] Audit trail tersedia.
-* [ ] Historical Amil data tetap tersedia.
-* [ ] Automated test tersedia.
+* [x] Organization dapat dibuat.
+* [x] Organization memiliki ULID.
+* [x] Organization memiliki business number.
+* [x] Organization code unique.
+* [x] Organization hierarchy berfungsi.
+* [x] Circular hierarchy dicegah.
+* [x] Multiple organization membership berfungsi.
+* [x] Active organization context berfungsi.
+* [x] Backend memvalidasi organization access.
+* [x] Organization switcher berfungsi.
+* [x] Amil dapat dibuat tanpa user account.
+* [x] Amil dapat dikaitkan dengan user.
+* [x] Amil assignment berfungsi.
+* [x] Organization suspended tidak dapat membuat transaksi baru.
+* [x] Audit trail tersedia.
+* [x] Historical Amil data tetap tersedia.
+* [x] Automated test tersedia.
 
 ---
 

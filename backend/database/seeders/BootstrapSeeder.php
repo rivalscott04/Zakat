@@ -23,7 +23,8 @@ use Illuminate\Support\Str;
  *   php artisan db:seed --class=Database\\Seeders\\BootstrapSeeder
  *
  * Password diambil dari ZAKAT_BOOTSTRAP_PASSWORD; bila kosong, password acak
- * dicetak ke konsol dan tidak disimpan di mana pun.
+ * dicetak ke konsol dan tidak disimpan di mana pun. Login Super Admin bisa
+ * memakai ZAKAT_BOOTSTRAP_EMAIL atau ZAKAT_BOOTSTRAP_USERNAME (PRD 01 §9).
  */
 class BootstrapSeeder extends Seeder
 {
@@ -31,13 +32,13 @@ class BootstrapSeeder extends Seeder
     {
         $this->call([CodeRegistrySeeder::class, PermissionSeeder::class, RoleSeeder::class]);
 
-        $organization = Organization::query()->where('code', env('ZAKAT_BOOTSTRAP_ORG_CODE', 'ZAKATOS'))->first();
+        $organization = Organization::query()->where('code', env('ZAKAT_BOOTSTRAP_ORG_CODE', 'ZETRA'))->first();
 
         if ($organization === null) {
             $organization = new Organization;
             $organization->fill([
-                'code' => env('ZAKAT_BOOTSTRAP_ORG_CODE', 'ZAKATOS'),
-                'name' => env('ZAKAT_BOOTSTRAP_ORG_NAME', 'Zakat OS'),
+                'code' => env('ZAKAT_BOOTSTRAP_ORG_CODE', 'ZETRA'),
+                'name' => env('ZAKAT_BOOTSTRAP_ORG_NAME', 'ZETRA'),
                 'organization_type' => OrganizationType::Platform->value,
             ]);
             $organization->status = OrganizationStatus::Active;
@@ -45,19 +46,28 @@ class BootstrapSeeder extends Seeder
         }
 
         $email = env('ZAKAT_BOOTSTRAP_EMAIL', 'admin@zakat.test');
+        $username = env('ZAKAT_BOOTSTRAP_USERNAME', 'superadmin');
         $password = env('ZAKAT_BOOTSTRAP_PASSWORD') ?: Str::password(16);
 
-        $user = User::query()->whereRaw('lower(email) = ?', [Str::lower($email)])->first();
+        $user = User::findByLoginIdentifier($email) ?? User::findByLoginIdentifier($username);
 
         if ($user === null) {
             $user = new User;
-            $user->fill(['name' => 'Super Admin', 'email' => $email, 'password' => $password]);
+            $user->fill([
+                'name' => 'Super Admin',
+                'email' => $email,
+                'username' => $username,
+                'password' => $password,
+            ]);
             $user->organization_id = $organization->getKey();
             $user->status = UserStatus::Active;
             $user->email_verified_at = now();
             $user->saveQuietly();
 
-            $this->command?->warn("Super Admin dibuat: {$email} / {$password}");
+            $this->command?->warn("Super Admin dibuat: {$email} atau {$username} / {$password}");
+        } elseif ($user->username === null) {
+            $user->forceFill(['username' => $username])->saveQuietly();
+            $this->command?->info("Username Super Admin dilengkapi: {$username}");
         }
 
         $membership = OrganizationMember::query()->acrossOrganizations()

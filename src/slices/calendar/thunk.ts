@@ -8,7 +8,7 @@ import {
   deleteEvent as deleteEventApi,
   getCategories as getCategoriesApi,
   getUpCommingEvent as getUpCommingEventApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getEvents = createAsyncThunk("calendar/getEvents", async () => {
   try {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getApplicationList, addNewJobApplicationList, updateJobApplicationList, deleteJobApplicationList, getCategoryList, addcategoryList, getCandidateList, addCandidate, updateCandidate, deleteCandidate, addCandidateGrid, getCandidateGrid } from './thunk';
+import { getApplicationList, addNewJobApplicationList, updateJobApplicationList, deleteJobApplicationList, getCategoryList, addcategoryList, getCandidateList, addCandidate, updateCandidate, deleteCandidate, addCandidateGrid, getCandidateGrid } from "./thunk";
 
 export const initialState = {
     appList: [],

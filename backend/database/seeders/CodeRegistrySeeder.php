@@ -13,6 +13,7 @@ class CodeRegistrySeeder extends Seeder
         $codes = [
             ['code' => 'ORG', 'name' => 'Organization', 'entity_type' => 'organizations', 'module' => 'organization'],
             ['code' => 'AML', 'name' => 'Amil', 'entity_type' => 'amils', 'module' => 'organization'],
+            ['code' => 'MZK', 'name' => 'Muzaki', 'entity_type' => 'muzakis', 'module' => 'muzaki'],
         ];
 
         foreach ($codes as $code) {

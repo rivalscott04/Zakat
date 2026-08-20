@@ -1,7 +1,7 @@
 <?php
 
 /*
- | Zakat OS runtime policy.
+ | ZETRA runtime policy.
  |
  | PRD 01 §14 dan §20 menyatakan password policy, login threshold, dan lock
  | duration harus configurable melalui System Settings (PRD 20). Modul System

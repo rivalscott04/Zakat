@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTransationList, getOrderList } from './thunk';
+import { getTransationList, getOrderList } from "./thunk";
 
 export const initialState :any= {
     transationList: [],

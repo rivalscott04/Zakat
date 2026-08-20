@@ -1,6 +1,6 @@
 # PRD MODULE 07 — FUND MANAGEMENT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Fund Management
 Module Code: FND
 Version: 0.1.0
@@ -152,7 +152,7 @@ NON_HALAL
 
 OTHER
 
-Versi awal Zakat OS dapat fokus pada:
+Versi awal ZETRA dapat fokus pada:
 
 ZAKAT
 
@@ -1834,7 +1834,7 @@ Recent Movement
 
 ## 73. Fund List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

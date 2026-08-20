@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAPIKey } from './thunk';
+import { getAPIKey } from "./thunk";
 
 export const initialState :any= {
     apiKey: [],

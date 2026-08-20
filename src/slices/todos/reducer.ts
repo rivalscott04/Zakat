@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTodos, addNewTodo, updateTodo, deleteTodo, getProjects, addNewProject } from './thunk';
+import { getTodos, addNewTodo, updateTodo, deleteTodo, getProjects, addNewProject } from "./thunk";
 export const initialState :any= {
   todos: [],
   projects: [],

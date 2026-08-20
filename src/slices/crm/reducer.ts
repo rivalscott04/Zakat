@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getContacts, getCompanies, getDeals, getLeads, addNewContact, updateContact, deleteContact, addNewCompanies, updateCompanies, deleteCompanies, addNewLead, updateLead, deleteLead } from './thunk';
+import { getContacts, getCompanies, getDeals, getLeads, addNewContact, updateContact, deleteContact, addNewCompanies, updateCompanies, deleteCompanies, addNewLead, updateLead, deleteLead } from "./thunk";
 
 export const initialState:any = {
   crmcontacts: [],

@@ -1,6 +1,6 @@
 # PRD MODULE 11 — PROGRAM MANAGEMENT
 
-Project: Zakat OS
+Project: ZETRA
 Module: Program Management
 Module Code: PRG
 Version: 0.1.0
@@ -28,7 +28,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul Program Management bertanggung jawab untuk mengelola seluruh program penyaluran dan pemberdayaan dalam Zakat OS.
+Modul Program Management bertanggung jawab untuk mengelola seluruh program penyaluran dan pemberdayaan dalam ZETRA.
 
 Program menjadi wadah atau struktur utama untuk mengorganisasi kegiatan penyaluran dana kepada Mustahik.
 
@@ -1646,7 +1646,7 @@ program_outcome_updated
 
 ## 67. Program List
 
-Velzon DataTable.
+ZETRA DataTable.
 
 Columns:
 

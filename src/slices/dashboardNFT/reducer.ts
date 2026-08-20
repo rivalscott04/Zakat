@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMarketChartsDatas } from './thunk';
+import { getMarketChartsDatas } from "./thunk";
 export const initialState :any= {
   marketplaceData: [],
   error: {}

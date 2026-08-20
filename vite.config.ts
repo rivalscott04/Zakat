@@ -1,16 +1,23 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import path from "node:path";
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
   define: {
     global: "globalThis",
   },
   resolve: {
     alias: {
       src: path.resolve(__dirname, "src"),
+      "@app": path.resolve(__dirname, "src/app"),
+      "@features": path.resolve(__dirname, "src/features"),
+      "@shared": path.resolve(__dirname, "src/shared"),
+      "@template": path.resolve(__dirname, "src/template"),
+      pages: path.resolve(__dirname, "src/template/pages"),
+      common: path.resolve(__dirname, "src/template"),
+      Components: path.resolve(__dirname, "src/shared/components"),
+      Layouts: path.resolve(__dirname, "src/shared/layouts"),
     },
     dedupe: ["ckeditor5", "@ckeditor/ckeditor5-react"],
   },

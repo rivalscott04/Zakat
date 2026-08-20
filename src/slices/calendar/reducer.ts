@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getEvents, addNewEvent, updateEvent, deleteEvent, getCategories, getUpCommingEvent, resetCalendar } from './thunk';
+import { getEvents, addNewEvent, updateEvent, deleteEvent, getCategories, getUpCommingEvent, resetCalendar } from "./thunk";
 
 export const initialState: any = {
   events: [],

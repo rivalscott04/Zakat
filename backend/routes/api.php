@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
 use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\ZakatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +38,7 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/change-password', [AuthController::class, 'changePassword']);
+        Route::post('/leave-impersonation', [AuthController::class, 'leaveImpersonation']);
         Route::post('/switch-organization', [OrganizationController::class, 'switch']);
 
         // PRD 01 §36 — session management milik user sendiri, tanpa permission khusus.
@@ -59,6 +62,9 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
             Route::post('/{userId}/suspend', [UserController::class, 'suspend']);
             Route::post('/{userId}/unlock', [UserController::class, 'unlock']);
         });
+
+        Route::post('/{userId}/impersonate', [UserController::class, 'impersonate'])
+            ->middleware('permission:users.impersonate');
     });
 
     // ------------------------------------------------------ roles & permissions
@@ -124,4 +130,28 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
 
     Route::post('/amil-assignments/{assignmentId}/end', [AmilController::class, 'endAssignment'])
         ->middleware('permission:assignments.update');
+
+    Route::prefix('muzakis')->group(function () {
+        Route::get('/', [MuzakiController::class, 'index'])->middleware('permission:muzaki.view');
+        Route::post('/', [MuzakiController::class, 'store'])->middleware('permission:muzaki.create');
+        Route::get('/{muzakiId}/contribution-summary', [MuzakiController::class, 'summary'])->middleware('permission:muzaki.view');
+        Route::get('/{muzakiId}', [MuzakiController::class, 'show'])->middleware('permission:muzaki.view');
+        Route::patch('/{muzakiId}', [MuzakiController::class, 'update'])->middleware('permission:muzaki.update');
+        Route::post('/{muzakiId}/activate', [MuzakiController::class, 'activate'])->middleware('permission:muzaki.activate');
+        Route::post('/{muzakiId}/deactivate', [MuzakiController::class, 'deactivate'])->middleware('permission:muzaki.deactivate');
+        Route::post('/{muzakiId}/archive', [MuzakiController::class, 'archive'])->middleware('permission:muzaki.archive');
+    });
+
+    Route::prefix('zakat')->group(function () {
+        Route::get('/categories', [ZakatController::class, 'categories'])->middleware('permission:zakat.view');
+        Route::post('/categories', [ZakatController::class, 'storeCategory'])->middleware('permission:zakat.category.manage');
+        Route::get('/types', [ZakatController::class, 'types'])->middleware('permission:zakat.view');
+        Route::post('/types', [ZakatController::class, 'storeType'])->middleware('permission:zakat.type.create');
+        Route::get('/rules', [ZakatController::class, 'rules'])->middleware('permission:zakat.view');
+        Route::post('/rules', [ZakatController::class, 'storeRule'])->middleware('permission:zakat.rule.create');
+        Route::get('/rules/{ruleId}', [ZakatController::class, 'showRule'])->middleware('permission:zakat.view');
+        Route::post('/rules/{ruleId}/activate', [ZakatController::class, 'activate'])->middleware('permission:zakat.rule.activate');
+        Route::post('/rules/{ruleId}/expire', [ZakatController::class, 'expire'])->middleware('permission:zakat.rule.expire');
+        Route::post('/rules/{ruleId}/archive', [ZakatController::class, 'archive'])->middleware('permission:zakat.rule.archive');
+    });
 });

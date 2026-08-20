@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     getTransationList as getTransationListApi,
     getOrderList as getOrderListApi
-} from "../../helpers/fakebackend_helper";
+} from "../../shared/helpers/fakebackend_helper";
 
 export const getTransationList = createAsyncThunk("crypto/getTransationList", async () => {
     try {

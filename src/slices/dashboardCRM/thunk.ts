@@ -14,7 +14,7 @@ import {
   getDecSalesData as getDecSalesDataApi,
   getJanSalesData as getJanSalesDataApi
 }
-  from "../../helpers/fakebackend_helper";
+  from "../../shared/helpers/fakebackend_helper";
 
 export const getBalanceChartsData = createAsyncThunk("dashboardCrm/getBalanceChartsData", async (data:any) => {
   try {

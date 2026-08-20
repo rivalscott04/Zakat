@@ -1,6 +1,6 @@
 # PRD MODULE 22 — SECURITY & APPLICATION SECURITY
 
-Project: Zakat OS
+Project: ZETRA
 Module: Security
 Module Code: SEC
 Version: 0.1.0
@@ -23,7 +23,7 @@ Related Modules:
 
 ## 1. Purpose
 
-Modul dan standar Security bertujuan untuk melindungi Zakat OS dari:
+Modul dan standar Security bertujuan untuk melindungi ZETRA dari:
 
 - Unauthorized Access.
 - IDOR.

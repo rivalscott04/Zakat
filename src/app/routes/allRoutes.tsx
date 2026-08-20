@@ -12,6 +12,9 @@ import CollectionsPage from "../../features/collections";
 import FundsPage from "../../features/funds";
 import AccountingPage from "../../features/accounting";
 import MustahiksPage from "../../features/mustahiks";
+import AssessmentsPage from "../../features/assessments";
+import ProgramsPage from "../../features/programs";
+import DistributionsPage from "../../features/distributions";
 
 export const publicRoutes = [{ path: "/login", component: <Login /> }];
 export const authProtectedRoutes = [
@@ -28,5 +31,8 @@ export const authProtectedRoutes = [
   { path: "/funds", component: <FundsPage />, permission: "fund.view" },
   { path: "/accounting", component: <AccountingPage />, permission: "accounting.account.view" },
   { path: "/mustahiks", component: <MustahiksPage />, permission: "mustahik.view" },
+  { path: "/assessments", component: <AssessmentsPage />, permission: "assessment.view" },
+  { path: "/programs", component: <ProgramsPage />, permission: "program.view" },
+  { path: "/distributions", component: <DistributionsPage />, permission: "distribution.view" },
   { path: "/", component: <MuzakisPage />, permission: "muzaki.view" },
 ];

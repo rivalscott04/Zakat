@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Assessment
 Module Code: ASM
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Core workflow + UI wired/build verified)
 
 Dependencies:
 

@@ -23,6 +23,12 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'REC', 'name' => 'Fund Reconciliation', 'entity_type' => 'fund_reconciliations', 'module' => 'fund'],
             ['code' => 'JRN', 'name' => 'Journal Entry', 'entity_type' => 'journal_entries', 'module' => 'accounting'],
             ['code' => 'MSH', 'name' => 'Mustahik', 'entity_type' => 'mustahiks', 'module' => 'mustahik'],
+            ['code' => 'ASR', 'name' => 'Assessment Request', 'entity_type' => 'assessment_requests', 'module' => 'assessment'],
+            ['code' => 'ASM', 'name' => 'Assessment', 'entity_type' => 'assessments', 'module' => 'assessment'],
+            ['code' => 'PRG', 'name' => 'Program', 'entity_type' => 'programs', 'module' => 'program'],
+            ['code' => 'ENR', 'name' => 'Program Enrollment', 'entity_type' => 'program_enrollments', 'module' => 'program'],
+            ['code' => 'DSR', 'name' => 'Distribution Request', 'entity_type' => 'distribution_requests', 'module' => 'distribution'],
+            ['code' => 'DST', 'name' => 'Distribution', 'entity_type' => 'distributions', 'module' => 'distribution'],
         ];
 
         foreach ($codes as $code) {

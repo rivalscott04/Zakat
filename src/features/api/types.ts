@@ -32,6 +32,10 @@ export interface Collection { id: string; collection_number: string; muzaki_id: 
 export interface Fund { id: string; fund_code: string; name: string; fund_type: string; category: string | null; restriction_type: string; status: string; currency: string; opening_balance: string; current_balance: string; available_balance: string; reserved_balance: string; allocated_balance: string; distributed_balance: string; }
 export interface AccountingAccount { id: string; account_code: string; account_name: string; account_type: string; normal_balance: string; is_postable: boolean; status: string; parent_id: string | null; }
 export interface Mustahik { id: string; mustahik_number: string; mustahik_type: string; full_name: string; display_name: string; phone: string | null; verification_status: string; eligibility_status: string; status: string; }
+export interface AssessmentRequest { id: string; request_number: string; mustahik_id: string; assessment_type: string; priority: string; reason: string | null; due_date: string | null; status: string; assessor_id: string | null; mustahik?: Mustahik | null; }
+export interface Assessment { id: string; assessment_number: string; assessment_request_id: string; mustahik_id: string; assessment_type: string; status: string; total_score: string | null; recommendation: string | null; mustahik?: Mustahik | null; }
+export interface Program { id: string; program_code: string; name: string; program_type: string; status: string; target_beneficiary: number | null; capacity_limit: number | null; }
+export interface Distribution { id: string; distribution_number: string; distribution_type: string; source_type: string; mustahik_id: string; fund_id: string; requested_amount: string; approved_amount: string; distributed_amount: string; status: string; mustahik?: Mustahik | null; }
 
 export interface OrganizationSummary {
   id: string;

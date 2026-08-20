@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\Api\V1\AccountingController;
 use App\Http\Controllers\Api\V1\AmilController;
+use App\Http\Controllers\Api\V1\AssessmentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CollectionController;
+use App\Http\Controllers\Api\V1\DistributionController;
 use App\Http\Controllers\Api\V1\FundController;
 use App\Http\Controllers\Api\V1\MustahikController;
 use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
 use App\Http\Controllers\Api\V1\PermissionController;
+use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -241,5 +244,62 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::post('/{id}/addresses', [MustahikController::class, 'address'])->middleware('permission:mustahik.update');
         Route::post('/{id}/asnaf', [MustahikController::class, 'asnaf'])->middleware('permission:mustahik.update');
         Route::post('/{id}/verify', [MustahikController::class, 'verify'])->middleware('permission:mustahik.verification.perform');
+    });
+    Route::prefix('assessment-requests')->group(function () {
+        Route::get('/', [AssessmentController::class, 'requests'])->middleware('permission:assessment.request.view');
+        Route::post('/', [AssessmentController::class, 'storeRequest'])->middleware('permission:assessment.request.create');
+        Route::get('/{id}', [AssessmentController::class, 'showRequest'])->middleware('permission:assessment.request.view');
+        Route::post('/{id}/assign', [AssessmentController::class, 'assign'])->middleware('permission:assessment.request.assign');
+        Route::post('/{id}/cancel', [AssessmentController::class, 'cancel'])->middleware('permission:assessment.request.cancel');
+    });
+    Route::prefix('assessment')->group(function () {
+        Route::get('/templates', [AssessmentController::class, 'templates'])->middleware('permission:assessment.template.view');
+        Route::post('/templates', [AssessmentController::class, 'storeTemplate'])->middleware('permission:assessment.template.create');
+        Route::post('/templates/{id}/publish', [AssessmentController::class, 'publishTemplate'])->middleware('permission:assessment.template.publish');
+    });
+    Route::prefix('assessments')->group(function () {
+        Route::get('/', [AssessmentController::class, 'index'])->middleware('permission:assessment.view');
+        Route::post('/', [AssessmentController::class, 'store'])->middleware('permission:assessment.create');
+        Route::get('/{id}', [AssessmentController::class, 'show'])->middleware('permission:assessment.view');
+        Route::patch('/{id}', [AssessmentController::class, 'update'])->middleware('permission:assessment.update');
+        Route::post('/{id}/submit', [AssessmentController::class, 'submit'])->middleware('permission:assessment.submit');
+        Route::post('/{id}/review', [AssessmentController::class, 'review'])->middleware('permission:assessment.review');
+        Route::post('/{id}/reassess', [AssessmentController::class, 'reassess'])->middleware('permission:assessment.reassess');
+    });
+    Route::prefix('programs')->group(function () {
+        Route::get('/', [ProgramController::class, 'index'])->middleware('permission:program.view');
+        Route::post('/', [ProgramController::class, 'store'])->middleware('permission:program.create');
+        Route::get('/categories', [ProgramController::class, 'categories'])->middleware('permission:program.view');
+        Route::post('/categories', [ProgramController::class, 'storeCategory'])->middleware('permission:program.category.manage');
+        Route::get('/{id}', [ProgramController::class, 'show'])->middleware('permission:program.view');
+        Route::patch('/{id}', [ProgramController::class, 'update'])->middleware('permission:program.update');
+        Route::post('/{id}/submit', fn (string $id, ProgramController $controller) => $controller->transition($id, 'pending_approval'))->middleware('permission:program.submit');
+        Route::post('/{id}/approve', fn (string $id, ProgramController $controller) => $controller->transition($id, 'active'))->middleware('permission:program.approve');
+        Route::post('/{id}/suspend', fn (string $id, ProgramController $controller) => $controller->transition($id, 'suspended'))->middleware('permission:program.suspend');
+        Route::post('/{id}/activate', fn (string $id, ProgramController $controller) => $controller->transition($id, 'active'))->middleware('permission:program.activate');
+        Route::post('/{id}/complete', fn (string $id, ProgramController $controller) => $controller->transition($id, 'completed'))->middleware('permission:program.complete');
+        Route::post('/{id}/close', fn (string $id, ProgramController $controller) => $controller->transition($id, 'closed'))->middleware('permission:program.close');
+        Route::post('/{id}/budgets', [ProgramController::class, 'budget'])->middleware('permission:program.budget.create');
+        Route::post('/{id}/enrollments', [ProgramController::class, 'enroll'])->middleware('permission:program.enrollment.create');
+    });
+    Route::post('/program-enrollments/{id}/approve', [ProgramController::class, 'approveEnrollment'])->middleware('permission:program.enrollment.approve');
+    Route::prefix('distributions')->group(function () {
+        Route::get('/', [DistributionController::class, 'index'])->middleware('permission:distribution.view');
+        Route::post('/', [DistributionController::class, 'store'])->middleware('permission:distribution.create');
+        Route::get('/{id}', [DistributionController::class, 'show'])->middleware('permission:distribution.view');
+        Route::patch('/{id}', [DistributionController::class, 'update'])->middleware('permission:distribution.update');
+        Route::post('/{id}/submit', fn (string $id, DistributionController $controller) => $controller->action('submit', $id))->middleware('permission:distribution.submit');
+        Route::post('/{id}/approve', fn (string $id, DistributionController $controller) => $controller->action('approve', $id))->middleware('permission:distribution.approve');
+        Route::post('/{id}/reserve', fn (string $id, DistributionController $controller) => $controller->action('reserve', $id))->middleware('permission:distribution.reserve');
+        Route::post('/{id}/schedule', fn (string $id, DistributionController $controller) => $controller->action('schedule', $id))->middleware('permission:distribution.schedule');
+        Route::post('/{id}/process', fn (string $id, DistributionController $controller) => $controller->action('process', $id))->middleware('permission:distribution.process');
+        Route::post('/{id}/complete', [DistributionController::class, 'complete'])->middleware('permission:distribution.complete');
+        Route::post('/{id}/cancel', [DistributionController::class, 'cancel'])->middleware('permission:distribution.cancel');
+        Route::post('/{id}/reverse', [DistributionController::class, 'reverse'])->middleware('permission:distribution.reverse');
+    });
+    Route::prefix('distribution-requests')->group(function () {
+        Route::get('/', [DistributionController::class, 'requests'])->middleware('permission:distribution.request.view');
+        Route::post('/', [DistributionController::class, 'storeRequest'])->middleware('permission:distribution.request.create');
+        Route::post('/{id}/approve', [DistributionController::class, 'approveRequest'])->middleware('permission:distribution.request.approve');
     });
 });

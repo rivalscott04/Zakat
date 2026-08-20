@@ -50,6 +50,18 @@ class PermissionSeeder extends Seeder
         'mustahik' => [
             'mustahik' => ['view', 'create', 'update', 'delete', 'merge', 'identity.view', 'identity.verify', 'assessment.view', 'assessment.create', 'assessment.submit', 'assessment.approve', 'eligibility.view', 'eligibility.determine', 'verification.perform', 'household.view', 'household.manage', 'distribution_history.view', 'export', 'audit.view'],
         ],
+        'assessment' => [
+            'assessment' => ['view', 'create', 'update', 'submit', 'review', 'approve', 'reject', 'return', 'reassess', 'score.override', 'export', 'audit.view'],
+            'assessment.request' => ['view', 'create', 'assign', 'cancel'],
+            'assessment.template' => ['view', 'create', 'update', 'publish'],
+        ],
+        'program' => [
+            'program' => ['view', 'create', 'update', 'delete', 'submit', 'approve', 'activate', 'suspend', 'complete', 'close', 'category.manage', 'budget.view', 'budget.create', 'budget.update', 'budget.approve', 'eligibility.view', 'eligibility.manage', 'enrollment.view', 'enrollment.create', 'enrollment.approve', 'enrollment.reject', 'enrollment.withdraw', 'export', 'audit.view'],
+        ],
+        'distribution' => [
+            'distribution' => ['view', 'create', 'update', 'submit', 'approve', 'reject', 'reserve', 'schedule', 'process', 'complete', 'cancel', 'reverse', 'confirm', 'export', 'audit.view'],
+            'distribution.request' => ['view', 'create', 'approve', 'reject'],
+        ],
     ];
 
     public function run(): void

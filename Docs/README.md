@@ -34,9 +34,9 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | 07 | [Fund Management](./07-fund-management.md) | Implemented (Backend + UI wired/build verified) |
 | 08 | [Accounting Ledger](./08-accounting-ledger.md) | Implemented (Backend + UI wired/build verified) |
 | 09 | [Mustahik](./09-mustahik.md) | Implemented (Core backend + UI wired/build verified) |
-| 10 | [Assessment](./10-assessment.md) | Draft |
-| 11 | [Program](./11-program.md) | Draft |
-| 12 | [Distribution](./12-distribution.md) | Draft |
+| 10 | [Assessment](./10-assessment.md) | Implemented (Core workflow + UI wired/build verified) |
+| 11 | [Program](./11-program.md) | Implemented (Core lifecycle + UI wired/build verified) |
+| 12 | [Distribution](./12-distribution.md) | Implemented (Core workflow + UI wired/build verified) |
 | 13 | [Payment Gateway](./13-payment-gateway.md) | Draft |
 | 14 | [Bank Reconciliation](./14-bank-reconciliation.md) | Draft |
 | 15 | [Document Management](./15-document-management.md) | Draft |
@@ -67,4 +67,10 @@ Module 08 sudah memiliki Chart of Accounts dengan hierarchy/postable validation,
 
 Module 09 sudah memiliki master Mustahik dengan nomor MSH, identitas terenkripsi dan duplicate detection, alamat, profil sosial ekonomi, klasifikasi Asnaf, verification status, permission, API, test feature, serta halaman UI list dan pendaftaran yang ter-wire ke backend. Household, assessment/eligibility lanjutan, dan distribution history tetap menjadi downstream pada modul terkait.
 
-Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 61 test dan 227 assertion lulus.
+Module 10 sudah memiliki Assessment Request ASR, Assessment ASM, template dasar berversi, jawaban dengan snapshot, scoring total, submit/review/approve/return/reject, reassessment, audit event, permission, API, dan halaman UI request/list assessment yang ter-wire ke backend. Evidence/file, field finding, conditional question builder, dan SLA automation tetap menjadi perluasan berikutnya pada cross-module terkait.
+
+Module 11 sudah memiliki Program dengan nomor PRG, kategori, lifecycle approval/activation/suspend/complete/close, budget dan enrollment Mustahik dengan capacity guard, permission, audit, API, dan UI list/create yang ter-wire ke backend. Period, eligibility rule builder, waitlist, activity, target/output/outcome, dan dashboard lanjutan menjadi perluasan berikutnya.
+
+Module 12 sudah memiliki Distribution Request, Distribution dengan nomor DST, approval maker-checker, fund reservation, process/complete partial, cancellation, reversal, item dasar, permission, audit, API, dan UI list/create yang ter-wire ke backend. Batch, proof/evidence, bank transfer detail, schedule recurring, recipient confirmation, dan accounting event lanjutan menjadi perluasan berikutnya.
+
+Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 63 test dan 262 assertion lulus.

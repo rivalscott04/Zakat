@@ -1,0 +1,210 @@
+.landing-zakat {
+  --landing-ink: #102c2a;
+  --landing-green: #0f766e;
+  --landing-gold: #e4b455;
+  color: var(--landing-ink);
+  font-family: "HKGrotesk", "Inter", system-ui, sans-serif;
+}
+
+.landing-nav {
+  background: linear-gradient(180deg, rgba(4, 24, 24, 0.65), transparent);
+}
+.landing-nav-link {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-decoration: none;
+}
+.landing-nav-link:hover {
+  color: #fff;
+}
+.landing-nav-button,
+.landing-primary-button,
+.landing-light-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.landing-nav-button {
+  padding: 0.65rem 1.25rem;
+  background: #fff;
+  color: var(--landing-ink);
+}
+.landing-nav-button:hover,
+.landing-primary-button:hover,
+.landing-light-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+.landing-hero {
+  min-height: min(860px, 88vh);
+  background: #123b36;
+}
+.landing-hero-image {
+  object-fit: cover;
+  object-position: center;
+}
+.landing-hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 24, 23, 0.9) 0%,
+      rgba(4, 24, 23, 0.7) 38%,
+      rgba(4, 24, 23, 0.08) 76%
+    ),
+    linear-gradient(0deg, rgba(4, 24, 23, 0.7), transparent 58%);
+}
+.landing-hero-copy {
+  max-width: 620px;
+  padding: 8rem 2.25rem 2.5rem;
+  background: linear-gradient(90deg, rgba(4, 24, 23, 0.65), transparent);
+}
+.landing-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.17em;
+  font-weight: 800;
+}
+.landing-hero h1 {
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+.landing-hero h1 span {
+  color: #f4c96c;
+}
+.landing-hero-lead {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 1.15rem;
+  line-height: 1.65;
+  max-width: 560px;
+}
+.landing-primary-button {
+  padding: 1rem 1.45rem;
+  background: #e4b455;
+  color: #17342f;
+}
+.landing-ghost-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+.landing-hero-scroll {
+  position: absolute;
+  right: 3rem;
+  bottom: 2.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+.landing-hero-scroll span {
+  display: block;
+  width: 1px;
+  height: 42px;
+  background: #e4b455;
+}
+.landing-section {
+  padding: 7rem 0;
+}
+.landing-section-heading {
+  max-width: 680px;
+  margin-bottom: 3rem;
+}
+.landing-section-heading h2,
+.landing-process h2 {
+  color: var(--landing-ink);
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  font-weight: 800;
+}
+.landing-section-heading > p:last-child {
+  color: #61716f;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+.landing-benefit-card {
+  padding: 2rem;
+  border: 1px solid #e4ece9;
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(16, 44, 42, 0.05);
+}
+.landing-benefit-card h3,
+.landing-step h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 1.5rem 0 0.7rem;
+}
+.landing-benefit-card p,
+.landing-step p {
+  color: #61716f;
+  line-height: 1.65;
+  margin: 0;
+}
+.landing-icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  color: var(--landing-green);
+  background: #e5f3ef;
+}
+.landing-icon svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+.landing-process {
+  background: #f2f7f5;
+}
+.landing-step {
+  border-top: 2px solid #b9d9cf;
+  padding-top: 1.3rem;
+}
+.landing-step > span {
+  color: var(--landing-green);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.landing-cta {
+  padding: 5rem 0;
+  background: var(--landing-ink);
+}
+.landing-cta h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  letter-spacing: -0.04em;
+}
+.landing-light-button {
+  padding: 1rem 1.4rem;
+  background: #fff;
+  color: var(--landing-ink);
+}
+.landing-footer {
+  padding: 1.5rem 0;
+  color: #72817f;
+  background: #fff;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 767.98px) {
+  .landing-hero {
+    min-height: 760px;
+  }
+  .landing-hero-copy {
+    padding: 7rem 1.25rem 2rem;
+    background: linear-gradient(90deg, rgba(4, 24, 23, 0.8), transparent);
+  }
+  .landing-hero h1 {
+    font-size: 3.2rem;
+  }
+  .landing-section {
+    padding: 4.5rem 0;
+  }
+}

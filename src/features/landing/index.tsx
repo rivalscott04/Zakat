@@ -1,220 +1,218 @@
 import { Link } from "react-router-dom";
-import { Col, Container, Nav, Navbar, Row } from "reactstrap";
-import logo from "../../assets/images/zetra-logo-dark.svg";
+import { Container } from "reactstrap";
+import logo from "../../assets/images/zetra-logo-light.svg";
 import heroImage from "../../assets/images/landing/zakat-hero.png";
+import "./landing.css";
+
+const Icon = ({ name }: { name: "coin" | "safe" | "people" }) => {
+  const paths = {
+    coin: (
+      <>
+        <circle cx="12" cy="12" r="8" />
+        <path d="M12 7v10M9.5 9.5c.6-1.2 4.5-1.2 5.1 0 .7 1.5-5.7 1.5-5 3 .6 1.5 4.8 1.5 5.3 0" />
+      </>
+    ),
+    safe: (
+      <>
+        <rect x="4" y="5" width="16" height="14" rx="2" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 9v3l2 1" />
+      </>
+    ),
+    people: (
+      <>
+        <circle cx="9" cy="8" r="3" />
+        <circle cx="17" cy="10" r="2.5" />
+        <path d="M3.5 19c.3-3 2.1-5 5.5-5s5.2 2 5.5 5M14 15c3.4-.8 5.7.7 6.5 3.5" />
+      </>
+    ),
+  };
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {paths[name]}
+    </svg>
+  );
+};
 
 const LandingPage = () => {
   document.title = "ZETRA — Kelola Zakat dengan Amanah";
 
   return (
-    <div className="bg-light min-vh-100">
-      <Navbar
-        expand="lg"
-        light
-        className="bg-white border-bottom py-3 sticky-top"
-      >
-        <Container>
-          <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
-            <img src={logo} alt="ZETRA" height="28" />
+    <div className="landing-zakat bg-white">
+      <header className="landing-nav position-absolute top-0 start-0 end-0 z-3">
+        <Container className="d-flex align-items-center justify-content-between py-4">
+          <Link to="/" aria-label="ZETRA beranda">
+            <img src={logo} alt="ZETRA" height="30" />
           </Link>
-          <Nav className="ms-auto align-items-center gap-2">
-            <a className="nav-link d-none d-md-block" href="#cara-kerja">
+          <nav className="d-flex align-items-center gap-4">
+            <a href="#manfaat" className="landing-nav-link d-none d-md-inline">
+              Mengapa ZETRA
+            </a>
+            <a href="#alur" className="landing-nav-link d-none d-md-inline">
               Cara kerja
             </a>
-            <a className="nav-link d-none d-md-block" href="#manfaat">
-              Manfaat
-            </a>
-            <Link to="/login" className="btn btn-primary px-4">
+            <Link to="/login" className="landing-nav-button">
               Masuk
             </Link>
-          </Nav>
+          </nav>
         </Container>
-      </Navbar>
+      </header>
 
       <main>
-        <section className="py-5 py-lg-6 overflow-hidden">
-          <Container>
-            <Row className="align-items-center g-5">
-              <Col lg={6}>
-                <span className="badge bg-success-subtle text-success rounded-pill px-3 py-2 mb-3">
-                  Zakat yang jelas, aman, dan bermanfaat
-                </span>
-                <h1 className="display-4 fw-bold text-dark lh-sm mb-4">
-                  Menyalurkan amanah,{" "}
-                  <span className="text-success">menguatkan sesama.</span>
-                </h1>
-                <p className="lead text-muted mb-4">
-                  ZETRA membantu lembaga zakat mencatat penerimaan, mengelola
-                  dana, dan menyalurkan bantuan dengan rapi—agar setiap rupiah
-                  dapat dipertanggungjawabkan.
-                </p>
-                <div className="d-flex flex-wrap gap-3">
-                  <Link to="/login" className="btn btn-success btn-lg px-4">
-                    Mulai mengelola zakat{" "}
-                    <i className="ri-arrow-right-line ms-1" />
-                  </Link>
-                  <a
-                    href="#cara-kerja"
-                    className="btn btn-outline-success btn-lg px-4"
-                  >
-                    Lihat cara kerja
-                  </a>
-                </div>
-                <div className="d-flex flex-wrap gap-4 mt-4 text-muted small">
-                  <span>
-                    <i className="ri-shield-check-line text-success me-1" />
-                    Data tercatat rapi
-                  </span>
-                  <span>
-                    <i className="ri-eye-line text-success me-1" />
-                    Mudah dipantau
-                  </span>
-                  <span>
-                    <i className="ri-heart-3-line text-success me-1" />
-                    Berpihak pada penerima
-                  </span>
-                </div>
-              </Col>
-              <Col lg={6}>
-                <div className="rounded-4 overflow-hidden shadow-lg">
-                  <img
-                    src={heroImage}
-                    alt="Penyaluran zakat yang amanah kepada keluarga penerima"
-                    className="img-fluid w-100"
-                  />
-                </div>
-              </Col>
-            </Row>
+        <section className="landing-hero position-relative overflow-hidden">
+          <img
+            className="landing-hero-image position-absolute top-0 start-0 w-100 h-100"
+            src={heroImage}
+            alt="Beragam sumber zakat dikelola transparan dan disalurkan kepada penerima"
+          />
+          <div className="landing-hero-shade position-absolute top-0 start-0 w-100 h-100" />
+          <Container className="position-relative h-100 d-flex align-items-end pb-5 pb-lg-6">
+            <div className="landing-hero-copy text-white">
+              <p className="landing-eyebrow mb-3">
+                PENGELOLAAN ZAKAT YANG AMANAH
+              </p>
+              <h1 className="display-3 fw-bold mb-4">
+                Dari amanah,
+                <br />
+                <span>menjadi manfaat.</span>
+              </h1>
+              <p className="landing-hero-lead mb-4">
+                Kelola zakat fitrah, harta, perdagangan, penghasilan, dan
+                penyalurannya dalam satu alur yang rapi dan mudah
+                dipertanggungjawabkan.
+              </p>
+              <div className="d-flex flex-wrap gap-3">
+                <Link to="/login" className="landing-primary-button">
+                  Mulai kelola zakat <span aria-hidden="true">→</span>
+                </Link>
+                <a href="#manfaat" className="landing-ghost-button">
+                  Lihat manfaat
+                </a>
+              </div>
+            </div>
           </Container>
+          <div className="landing-hero-scroll d-none d-lg-flex align-items-center gap-2 text-white small">
+            <span /> Gulir untuk melihat lebih banyak
+          </div>
         </section>
 
-        <section id="manfaat" className="py-5 bg-white">
+        <section id="manfaat" className="landing-section landing-benefits">
           <Container>
-            <div className="text-center mb-5">
-              <span className="text-success fw-semibold">
-                Satu tempat untuk semua kebutuhan
-              </span>
-              <h2 className="fw-bold mt-2">
-                Dari penerimaan sampai penyaluran
-              </h2>
-              <p className="text-muted mx-auto" style={{ maxWidth: 620 }}>
-                Kelola pekerjaan harian dengan lebih sederhana, tanpa kehilangan
-                ketelitian dan rasa tanggung jawab.
+            <div className="landing-section-heading">
+              <p className="landing-eyebrow text-success">
+                SATU ALUR YANG JELAS
+              </p>
+              <h2>Setiap rupiah punya cerita.</h2>
+              <p>
+                Mulai dari zakat diterima sampai bantuan sampai ke tangan yang
+                membutuhkan, semuanya tercatat dan mudah dipantau.
               </p>
             </div>
-            <Row className="g-4">
+            <div className="row g-4">
               {[
                 [
-                  "ri-hand-coin-line",
-                  "Catat penerimaan",
-                  "Simpan data muzaki dan penerimaan zakat dengan rapi sejak awal.",
+                  "coin",
+                  "Beragam sumber zakat",
+                  "Fitrah, harta, perdagangan, penghasilan, dan sumber lain tercatat dalam satu tempat.",
                 ],
                 [
-                  "ri-safe-2-line",
-                  "Jaga amanah dana",
-                  "Ketahui saldo, sumber dana, dan penggunaannya dengan lebih mudah.",
+                  "safe",
+                  "Dana tetap terjaga",
+                  "Lihat asal dana, penggunaannya, dan sisa yang tersedia tanpa membuka banyak catatan.",
                 ],
                 [
-                  "ri-user-heart-line",
-                  "Bantu yang berhak",
-                  "Kelola data penerima, program bantuan, dan penyaluran dalam satu alur.",
-                ],
-                [
-                  "ri-bar-chart-box-line",
-                  "Buat laporan jelas",
-                  "Lihat perkembangan dan siapkan laporan yang mudah dipahami.",
+                  "people",
+                  "Penerima tepat sasaran",
+                  "Kelola data penerima dan program bantuan dengan proses yang lebih tertib.",
                 ],
               ].map(([icon, title, description]) => (
-                <Col md={6} lg={3} key={title}>
-                  <div className="h-100 p-4 border rounded-4">
-                    <div className="avatar-sm bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center mb-4">
-                      <i className={`${icon} fs-4`} />
+                <div className="col-md-4" key={title}>
+                  <article className="landing-benefit-card h-100">
+                    <div className="landing-icon">
+                      <Icon name={icon as "coin" | "safe" | "people"} />
                     </div>
-                    <h5>{title}</h5>
-                    <p className="text-muted mb-0">{description}</p>
-                  </div>
-                </Col>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </article>
+                </div>
               ))}
-            </Row>
+            </div>
           </Container>
         </section>
 
-        <section id="cara-kerja" className="py-5">
+        <section id="alur" className="landing-section landing-process">
           <Container>
-            <Row className="justify-content-center text-center mb-5">
-              <Col lg={7}>
-                <span className="text-success fw-semibold">
-                  Cara kerja yang sederhana
-                </span>
-                <h2 className="fw-bold mt-2">
-                  Tiga langkah menuju pengelolaan yang lebih tertib
-                </h2>
-              </Col>
-            </Row>
-            <Row className="g-4">
+            <div className="row align-items-end g-4 mb-5">
+              <div className="col-lg-7">
+                <p className="landing-eyebrow text-success">CARA KERJA</p>
+                <h2>Dibuat untuk pekerjaan nyata di lembaga zakat.</h2>
+              </div>
+              <div className="col-lg-5">
+                <p className="mb-0 text-muted">
+                  Lebih sedikit pekerjaan berulang. Lebih banyak waktu untuk
+                  memastikan manfaat benar-benar sampai.
+                </p>
+              </div>
+            </div>
+            <div className="row g-4">
               {[
                 [
                   "01",
-                  "Masukkan data",
-                  "Catat muzaki, penerima, dana, dan kebutuhan program.",
+                  "Catat",
+                  "Simpan data muzaki, penerima, dana, dan kebutuhan bantuan.",
                 ],
                 [
                   "02",
-                  "Periksa dan setujui",
-                  "Pastikan setiap keputusan melewati pemeriksaan yang tepat.",
+                  "Periksa",
+                  "Pastikan setiap keputusan dan perubahan melewati pemeriksaan yang tepat.",
                 ],
                 [
                   "03",
-                  "Salurkan dan laporkan",
-                  "Pantau bantuan sampai diterima dan buat laporan dengan percaya diri.",
+                  "Salurkan",
+                  "Pantau bantuan sampai diterima dan siapkan laporan yang mudah dibaca.",
                 ],
               ].map(([number, title, description]) => (
-                <Col md={4} key={number}>
-                  <div className="d-flex gap-3">
-                    <span className="display-6 fw-bold text-success">
-                      {number}
-                    </span>
-                    <div>
-                      <h5>{title}</h5>
-                      <p className="text-muted">{description}</p>
-                    </div>
+                <div className="col-md-4" key={number}>
+                  <div className="landing-step">
+                    <span>{number}</span>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
                   </div>
-                </Col>
+                </div>
               ))}
-            </Row>
+            </div>
           </Container>
         </section>
 
-        <section className="py-5 bg-success">
-          <Container>
-            <Row className="align-items-center g-4">
-              <Col lg={8}>
-                <h2 className="text-white fw-bold mb-2">
-                  Mari rawat kepercayaan bersama.
-                </h2>
-                <p className="text-white-50 mb-0">
-                  Mulai bangun pengelolaan zakat yang lebih tertib dan
-                  bermanfaat hari ini.
-                </p>
-              </Col>
-              <Col lg={4} className="text-lg-end">
-                <Link to="/login" className="btn btn-light btn-lg px-4">
-                  Masuk ke ZETRA <i className="ri-arrow-right-line ms-1" />
-                </Link>
-              </Col>
-            </Row>
+        <section className="landing-cta">
+          <Container className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-4">
+            <div>
+              <p className="landing-eyebrow text-white-50">
+                MARI RAWAT KEPERCAYAAN
+              </p>
+              <h2 className="text-white mb-0">
+                Kelola zakat dengan lebih tenang.
+              </h2>
+            </div>
+            <Link to="/login" className="landing-light-button">
+              Masuk ke ZETRA <span aria-hidden="true">→</span>
+            </Link>
           </Container>
         </section>
       </main>
 
-      <footer className="bg-white py-4 border-top">
-        <Container className="d-flex flex-wrap justify-content-between gap-2">
-          <span className="text-muted small">
-            © {new Date().getFullYear()} ZETRA
-          </span>
-          <span className="text-muted small">
-            Pengelolaan zakat yang amanah dan transparan
-          </span>
+      <footer className="landing-footer">
+        <Container className="d-flex flex-wrap justify-content-between gap-3">
+          <span>© {new Date().getFullYear()} ZETRA</span>
+          <span>Amanah yang tercatat. Manfaat yang terasa.</span>
         </Container>
       </footer>
     </div>

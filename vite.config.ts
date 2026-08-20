@@ -1,6 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
@@ -9,15 +12,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      src: path.resolve(__dirname, "src"),
-      "@app": path.resolve(__dirname, "src/app"),
-      "@features": path.resolve(__dirname, "src/features"),
-      "@shared": path.resolve(__dirname, "src/shared"),
-      "@template": path.resolve(__dirname, "src/template"),
-      pages: path.resolve(__dirname, "src/template/pages"),
-      common: path.resolve(__dirname, "src/template"),
-      Components: path.resolve(__dirname, "src/shared/components"),
-      Layouts: path.resolve(__dirname, "src/shared/layouts"),
+      src: path.resolve(projectRoot, "src"),
+      "@app": path.resolve(projectRoot, "src/app"),
+      "@features": path.resolve(projectRoot, "src/features"),
+      "@shared": path.resolve(projectRoot, "src/shared"),
+      "@template": path.resolve(projectRoot, "src/template"),
+      pages: path.resolve(projectRoot, "src/template/pages"),
+      common: path.resolve(projectRoot, "src/template"),
+      Components: path.resolve(projectRoot, "src/shared/components"),
+      Layouts: path.resolve(projectRoot, "src/shared/layouts"),
     },
     dedupe: ["ckeditor5", "@ckeditor/ckeditor5-react"],
   },

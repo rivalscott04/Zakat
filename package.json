@@ -97,7 +97,7 @@
   },
   "scripts": {
     "start": "vite",
-    "dev": "vite --host 127.0.0.1 --clearScreen false",
+    "dev": "bun x --bun vite --host 127.0.0.1 --clearScreen false",
     "build": "bun build index.html --outdir=build --target=browser --minify",
     "build:vite": "NODE_OPTIONS='--max-old-space-size=8192' vite build",
     "preview": "vite preview",

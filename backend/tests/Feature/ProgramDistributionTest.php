@@ -18,6 +18,7 @@ class ProgramDistributionTest extends TestCase
         $mustahik = $this->postJson('/api/v1/mustahiks', ['full_name' => 'Penerima Program'])->assertCreated()->json('data.id');
         $fund = $this->postJson('/api/v1/funds', ['fund_code' => 'PROGRAM2026', 'name' => 'Fund Program', 'fund_type' => 'zakat', 'opening_balance' => 10000000])->assertCreated()->json('data.id');
         $program = $this->postJson('/api/v1/programs', ['name' => 'Bantuan Usaha', 'program_type' => 'empowerment', 'capacity_limit' => 5])->assertCreated()->json('data.id');
+        $this->postJson("/api/v1/programs/{$program}/budgets", ['fund_id' => $fund, 'budget_amount' => 5000000])->assertCreated();
         $this->postJson("/api/v1/programs/{$program}/submit")->assertOk();
         $this->loginAs($checker, $organization);
         $this->postJson("/api/v1/programs/{$program}/approve")->assertOk()->assertJsonPath('data.status', 'active');

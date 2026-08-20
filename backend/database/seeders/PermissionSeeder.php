@@ -56,7 +56,7 @@ class PermissionSeeder extends Seeder
             'assessment.template' => ['view', 'create', 'update', 'publish'],
         ],
         'program' => [
-            'program' => ['view', 'create', 'update', 'delete', 'submit', 'approve', 'activate', 'suspend', 'complete', 'close', 'category.manage', 'budget.view', 'budget.create', 'budget.update', 'budget.approve', 'eligibility.view', 'eligibility.manage', 'enrollment.view', 'enrollment.create', 'enrollment.approve', 'enrollment.reject', 'enrollment.withdraw', 'export', 'audit.view'],
+            'program' => ['view', 'create', 'update', 'delete', 'submit', 'approve', 'activate', 'suspend', 'complete', 'close', 'cancel', 'archive', 'category.manage', 'budget.view', 'budget.create', 'budget.update', 'budget.approve', 'eligibility.view', 'eligibility.manage', 'enrollment.view', 'enrollment.create', 'enrollment.approve', 'enrollment.reject', 'enrollment.withdraw', 'activity.view', 'activity.create', 'activity.update', 'activity.manage', 'target.view', 'target.manage', 'output.manage', 'outcome.manage', 'export', 'audit.view'],
         ],
         'distribution' => [
             'distribution' => ['view', 'create', 'update', 'submit', 'approve', 'reject', 'reserve', 'schedule', 'process', 'complete', 'cancel', 'reverse', 'confirm', 'export', 'audit.view'],

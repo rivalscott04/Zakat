@@ -34,7 +34,8 @@ export interface AccountingAccount { id: string; account_code: string; account_n
 export interface Mustahik { id: string; mustahik_number: string; mustahik_type: string; full_name: string; display_name: string; phone: string | null; verification_status: string; eligibility_status: string; status: string; }
 export interface AssessmentRequest { id: string; request_number: string; mustahik_id: string; assessment_type: string; priority: string; reason: string | null; due_date: string | null; status: string; assessor_id: string | null; mustahik?: Mustahik | null; }
 export interface Assessment { id: string; assessment_number: string; assessment_request_id: string; mustahik_id: string; assessment_type: string; status: string; total_score: string | null; recommendation: string | null; mustahik?: Mustahik | null; }
-export interface Program { id: string; program_code: string; name: string; program_type: string; status: string; target_beneficiary: number | null; capacity_limit: number | null; }
+export interface Program { id: string; program_code: string; name: string; program_type: string; status: string; target_beneficiary: number | null; capacity_limit: number | null; waitlist_enabled?: boolean; }
+export interface ProgramDashboard { active_programs: number; completed_programs: number; total_budget: string; committed_budget: string; disbursed_amount: string; remaining_budget: string; target_beneficiaries: number; active_beneficiaries: number; }
 export interface Distribution { id: string; distribution_number: string; distribution_type: string; source_type: string; mustahik_id: string; fund_id: string; requested_amount: string; approved_amount: string; distributed_amount: string; status: string; mustahik?: Mustahik | null; }
 
 export interface OrganizationSummary {

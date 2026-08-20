@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Distribution
 Module Code: DST
 Version: 0.1.0
-Status: Implemented (Core workflow + UI wired/build verified)
+Status: In progress (Core only; PRD not complete)
 
 Dependencies:
 

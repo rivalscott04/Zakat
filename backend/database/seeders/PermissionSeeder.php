@@ -44,6 +44,9 @@ class PermissionSeeder extends Seeder
         'fund' => [
             'fund' => ['view', 'create', 'update', 'balance.view', 'movement.view', 'movement.create', 'allocation.create', 'allocation.approve', 'allocation.cancel', 'reservation.create', 'reservation.release', 'transfer.create', 'transfer.approve', 'adjustment.create', 'adjustment.approve', 'reconciliation.create', 'reconciliation.review', 'report.view', 'export', 'audit.view'],
         ],
+        'accounting' => [
+            'accounting' => ['view', 'account.view', 'account.create', 'account.update', 'journal.view', 'journal.create', 'journal.submit', 'journal.approve', 'journal.post', 'journal.reverse', 'adjustment.create', 'adjustment.approve', 'period.view', 'period.create', 'period.lock', 'period.close', 'ledger.view', 'trial_balance.view', 'reconciliation.view', 'reconciliation.create', 'export', 'audit.view'],
+        ],
     ];
 
     public function run(): void

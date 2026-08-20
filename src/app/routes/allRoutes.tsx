@@ -10,6 +10,7 @@ import ZakatPage from "../../features/zakat";
 import CalculationsPage from "../../features/calculations";
 import CollectionsPage from "../../features/collections";
 import FundsPage from "../../features/funds";
+import AccountingPage from "../../features/accounting";
 
 export const publicRoutes = [{ path: "/login", component: <Login /> }];
 export const authProtectedRoutes = [
@@ -24,5 +25,6 @@ export const authProtectedRoutes = [
   { path: "/zakat/calculator", component: <CalculationsPage />, permission: "zakat.calculation.create" },
   { path: "/collections", component: <CollectionsPage />, permission: "collection.view" },
   { path: "/funds", component: <FundsPage />, permission: "fund.view" },
+  { path: "/accounting", component: <AccountingPage />, permission: "accounting.account.view" },
   { path: "/", component: <MuzakisPage />, permission: "muzaki.view" },
 ];

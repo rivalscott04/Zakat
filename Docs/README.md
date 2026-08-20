@@ -32,7 +32,7 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | 05 | [Zakat Calculator](./05-zakat-calculator.md) | Implemented (Backend + UI wired/build verified) |
 | 06 | [Collection](./06-collection.md) | Implemented (Backend + UI wired/build verified) |
 | 07 | [Fund Management](./07-fund-management.md) | Implemented (Backend + UI wired/build verified) |
-| 08 | [Accounting Ledger](./08-accounting-ledger.md) | Draft |
+| 08 | [Accounting Ledger](./08-accounting-ledger.md) | Implemented (Backend + UI wired/build verified) |
 | 09 | [Mustahik](./09-mustahik.md) | Draft |
 | 10 | [Assessment](./10-assessment.md) | Draft |
 | 11 | [Program](./11-program.md) | Draft |
@@ -63,4 +63,6 @@ Module 06 sudah memiliki collection number COL, collection manual/from-calculati
 
 Module 07 sudah memiliki fund dan fund type/category metadata, fund code, immutable fund movement, inflow dari Collection completed maupun manual, outflow dengan negative-balance prevention, current/available/reserved/allocated/distributed balance projection, allocation approval, reservation/release, transfer approval, adjustment, reconciliation, availability check, audit trail, permission, API, dan UI list/create fund. Distribution menjadi downstream consumer untuk penggunaan fund dan outflow berikutnya.
 
-Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 59 test dan 205 assertion lulus.
+Module 08 sudah memiliki Chart of Accounts dengan hierarchy/postable validation, accounting period open/locked/closed, journal entry dan journal line double-entry validation, submit/approve/post/reversal lifecycle, posted journal immutability, accounting event ingestion, general ledger, trial balance, audit trail, permission, API, dan UI COA. Reporting dan financial statement menjadi downstream consumer ledger.
+
+Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 60 test dan 218 assertion lulus.

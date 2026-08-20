@@ -21,6 +21,7 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'RSV', 'name' => 'Fund Reservation', 'entity_type' => 'fund_reservations', 'module' => 'fund'],
             ['code' => 'FTR', 'name' => 'Fund Transfer', 'entity_type' => 'fund_transfers', 'module' => 'fund'],
             ['code' => 'REC', 'name' => 'Fund Reconciliation', 'entity_type' => 'fund_reconciliations', 'module' => 'fund'],
+            ['code' => 'JRN', 'name' => 'Journal Entry', 'entity_type' => 'journal_entries', 'module' => 'accounting'],
         ];
 
         foreach ($codes as $code) {

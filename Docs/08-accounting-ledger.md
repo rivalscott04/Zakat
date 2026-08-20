@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Accounting & Ledger
 Module Code: ACC
 Version: 0.1.0
-Status: Draft
+Status: Implemented (COA, double-entry journal, period, posting, reversal, ledger, and trial balance core complete; Reporting remains downstream)
 
 Dependencies:
 

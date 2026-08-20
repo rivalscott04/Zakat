@@ -30,6 +30,7 @@ export interface ZakatRule { id: string; zakat_type_id: string; rule_code: strin
 export type CollectionStatus = "draft" | "pending" | "partially_paid" | "paid" | "completed" | "expired" | "cancelled" | "refunded";
 export interface Collection { id: string; collection_number: string; muzaki_id: string; calculation_id: string | null; zakat_type_id: string; collection_date: string; due_date: string | null; status: CollectionStatus; currency: string; expected_amount: string; paid_amount: string; remaining_amount: string; payment_count: number; source: string; overpayment_status: string; muzaki?: Muzaki | null; type?: ZakatType | null; }
 export interface Fund { id: string; fund_code: string; name: string; fund_type: string; category: string | null; restriction_type: string; status: string; currency: string; opening_balance: string; current_balance: string; available_balance: string; reserved_balance: string; allocated_balance: string; distributed_balance: string; }
+export interface AccountingAccount { id: string; account_code: string; account_name: string; account_type: string; normal_balance: string; is_postable: boolean; status: string; parent_id: string | null; }
 
 export interface OrganizationSummary {
   id: string;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AccountingController;
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CollectionController;
@@ -210,4 +211,23 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
     Route::post('/fund-reservations/{id}/release', [FundController::class, 'releaseReservation'])->middleware('permission:fund.reservation.release');
     Route::post('/fund-transfers', [FundController::class, 'transfer'])->middleware('permission:fund.transfer.create');
     Route::post('/fund-transfers/{id}/approve', [FundController::class, 'approveTransfer'])->middleware('permission:fund.transfer.approve');
+
+    Route::prefix('accounting')->group(function () {
+        Route::get('/accounts', [AccountingController::class, 'accounts'])->middleware('permission:accounting.account.view');
+        Route::post('/accounts', [AccountingController::class, 'createAccount'])->middleware('permission:accounting.account.create');
+        Route::get('/periods', [AccountingController::class, 'periods'])->middleware('permission:accounting.period.view');
+        Route::post('/periods', [AccountingController::class, 'createPeriod'])->middleware('permission:accounting.period.create');
+        Route::post('/periods/{id}/lock', [AccountingController::class, 'lockPeriod'])->middleware('permission:accounting.period.lock');
+        Route::post('/periods/{id}/close', [AccountingController::class, 'closePeriod'])->middleware('permission:accounting.period.close');
+        Route::get('/journals', [AccountingController::class, 'journals'])->middleware('permission:accounting.journal.view');
+        Route::post('/journals', [AccountingController::class, 'createJournal'])->middleware('permission:accounting.journal.create');
+        Route::get('/journals/{id}', [AccountingController::class, 'showJournal'])->middleware('permission:accounting.journal.view');
+        Route::post('/journals/{id}/submit', [AccountingController::class, 'submit'])->middleware('permission:accounting.journal.submit');
+        Route::post('/journals/{id}/approve', [AccountingController::class, 'approve'])->middleware('permission:accounting.journal.approve');
+        Route::post('/journals/{id}/post', [AccountingController::class, 'post'])->middleware('permission:accounting.journal.post');
+        Route::post('/journals/{id}/reverse', [AccountingController::class, 'reverse'])->middleware('permission:accounting.journal.reverse');
+        Route::get('/general-ledger', [AccountingController::class, 'ledger'])->middleware('permission:accounting.ledger.view');
+        Route::get('/trial-balance', [AccountingController::class, 'trialBalance'])->middleware('permission:accounting.trial_balance.view');
+        Route::post('/events', [AccountingController::class, 'event'])->middleware('permission:accounting.journal.create');
+    });
 });

@@ -6,12 +6,15 @@ use App\Enums\OrganizationStatus;
 use App\Enums\OrganizationType;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasBusinessNumber;
+use Database\Factories\OrganizationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /** PRD 02 §5 — organization sebagai tenant utama. */
 #[Fillable([
@@ -20,7 +23,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Organization extends Model
 {
-    use Auditable, HasBusinessNumber, HasUlids, SoftDeletes;
+    /** @use HasFactory<OrganizationFactory> */
+    use Auditable, HasBusinessNumber, HasFactory, HasUlids, SoftDeletes;
 
     public static function businessCode(): string
     {
@@ -102,7 +106,7 @@ class Organization extends Model
      */
     public function selfAndDescendantIds(): array
     {
-        $rows = \Illuminate\Support\Facades\DB::select(
+        $rows = DB::select(
             'WITH RECURSIVE tree AS (
                  SELECT id FROM organizations WHERE id = ? AND deleted_at IS NULL
                  UNION ALL

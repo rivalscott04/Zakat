@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Exceptions\ZakatException;
 use App\Models\Organization;
 
 /**
@@ -30,6 +31,6 @@ final class OrganizationContext
 
     public static function requireId(): string
     {
-        return self::id() ?? throw \App\Exceptions\ZakatException::forbidden('Organization context belum dipilih.');
+        return self::id() ?? throw ZakatException::forbidden('Organization context belum dipilih.');
     }
 }

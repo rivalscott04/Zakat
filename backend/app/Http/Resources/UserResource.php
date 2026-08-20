@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'status' => $this->status->value,
             'organization' => new OrganizationSummaryResource($this->whenLoaded('organization')),
-            'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'roles' => RoleSummaryResource::collection($this->whenLoaded('roles')),
             'last_login_at' => $this->last_login_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
         ];

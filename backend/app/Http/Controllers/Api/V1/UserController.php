@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ApiRequest;
+use App\Http\Requests\ListRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\SyncRolesRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -20,7 +20,7 @@ class UserController extends Controller
 {
     public function __construct(private readonly UserService $users) {}
 
-    public function index(ApiRequest $request): JsonResponse
+    public function index(ListRequest $request): JsonResponse
     {
         return ApiResponse::data(UserResource::collection($this->users->paginate($request->filters())));
     }

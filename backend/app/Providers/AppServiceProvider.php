@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Date;
@@ -31,5 +32,10 @@ class AppServiceProvider extends ServiceProvider
 
         // PRD 00 §14 — penyimpanan selalu UTC, serialisasi selalu ISO 8601.
         Date::useDefault();
+
+        // PRD 01 §16 dan §45 — tautan reset mengarah ke SPA, bukan ke API.
+        ResetPassword::createUrlUsing(fn ($notifiable, string $token) => rtrim((string) config('app.frontend_url'), '/')
+            .'/auth/reset-password?token='.$token
+            .'&email='.urlencode($notifiable->getEmailForPasswordReset()));
     }
 }

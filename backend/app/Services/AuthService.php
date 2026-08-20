@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use App\Exceptions\ZakatException;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +76,10 @@ class AuthService
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        // Guard sanctum menyimpan user hasil resolusi. Tanpa ini, user lama masih
+        // terbaca pada request berikutnya dalam proses yang sama (test dan Octane).
+        Auth::forgetGuards();
+
         if ($user !== null) {
             $this->audit->record('logout', $user, actorId: $user->getKey());
         }
@@ -135,7 +140,7 @@ class AuthService
     }
 
     /** PRD 01 §18 — session aktif user. */
-    public function sessions(User $user): \Illuminate\Support\Collection
+    public function sessions(User $user): Collection
     {
         return DB::table('sessions')
             ->where('user_id', $user->getKey())

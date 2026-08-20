@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\ErrorCode;
+use App\Enums\MembershipStatus;
 use App\Enums\OrganizationStatus;
 use App\Models\Organization;
 use App\Support\ApiResponse;
@@ -86,7 +87,7 @@ class ResolveOrganizationContext
         }
 
         return $user->memberships()
-            ->where('status', \App\Enums\MembershipStatus::Active)
+            ->where('status', MembershipStatus::Active)
             ->orderBy('created_at')
             ->value('organization_id');
     }

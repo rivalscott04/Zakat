@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ErrorCode;
 use App\Exceptions\ZakatException;
 use App\Models\Permission;
 use App\Models\Role;
@@ -104,8 +105,8 @@ class RoleService
         $permissions = Permission::query()->whereIn('id', $permissionIds)->get();
 
         if ($permissions->count() !== count(array_unique($permissionIds))) {
-            throw new \App\Exceptions\ZakatException(
-                \App\Enums\ErrorCode::ValidationError,
+            throw new ZakatException(
+                ErrorCode::ValidationError,
                 'Sebagian permission tidak dikenal.',
                 ['permission_ids' => ['Sebagian permission tidak dikenal.']]
             );

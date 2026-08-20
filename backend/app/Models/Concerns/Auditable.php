@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Models\Organization;
 use App\Services\AuditService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -57,7 +58,7 @@ trait Auditable
 
     protected function auditOrganizationId(): ?string
     {
-        if ($this instanceof \App\Models\Organization) {
+        if ($this instanceof Organization) {
             return $this->getKey();
         }
 

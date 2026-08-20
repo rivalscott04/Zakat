@@ -11,11 +11,27 @@ Pengelolaan zakat sering berantakan di Excel, chat grup, atau aplikasi yang susa
 - Publik bisa lihat data yang memang boleh dipublikasikan
 - Setiap aksi bisa dilacak: siapa melakukan apa, kapan, dan apa yang berubah
 - Data keuangan yang sudah final nggak bisa diutak-atik sembarangan
-- Aturan zakat diatur lewat konfigurasi, bukan digoreng di kode
+- Aturan zakat diatur lewat konfigurasi, bukan ditulis kaku di kode
 - Tiap modul bisa dikembangin terpisah
 - Logika bisnis ada di backend. Frontend cuma tampilan dan input
 
-Ini proyek **open source**. Bebas dipakai, dipelajari, di-fork, dan dikembangkan bareng.
+Ini proyek **open source**. Bebas dipakai, dipelajari, difork, dan dikembangkan bareng.
+
+## Amal jariyah
+
+Kontribusi di sini bisa jadi amal jariyah.
+
+Setiap baris kode, perbaikan bug, dokumentasi, atau ide yang bantu lembaga zakat bekerja lebih baik bisa terus bermanfaat selama sistem ini dipakai orang. Kalau ada yang lebih mudah bayar zakat, lebih akurat penyalurannya, atau lebih transparan laporannya karena kontribusimu, pahalanya insyaAllah ngalir terus.
+
+Nggak harus jago banget. Yang penting niatnya bantu:
+
+- Nulis atau perbaiki kode
+- Perjelas dokumentasi
+- Laporkan bug
+- Usulkan perbaikan
+- Bantu orang lain pakai dan kembangkan Zakat OS
+
+Sedikit tapi konsisten, itu juga amal jariyah.
 
 ## Teknologi
 
@@ -90,7 +106,7 @@ bun run build    # build produksi
 bun run preview  # cek hasil build
 ```
 
-Backend Laravel ada di [`backend/`](./backend/). Setup API dan database-nya ikuti README di folder itu.
+Backend Laravel ada di [`backend/`](./backend/). Setup API dan databasenya ikuti README di folder itu.
 
 ## Struktur folder
 
@@ -118,6 +134,6 @@ Boleh dipakai, diubah, dan dibagikan lagi. Yang penting, kode turunannya tetap o
 
 ## Yuk ikut
 
-Issue, ide, atau Pull Request semua welcome.
+Issue, ide, atau Pull Request semua welcome. Anggap aja ini jalan amal jariyah yang praktis: bantu orang kelola zakat lebih baik lewat teknologi.
 
 Kalau lembaga kamu mau pakai dan ngembangin sendiri, tinggal fork, bikin branch, terus lanjut dari sini.

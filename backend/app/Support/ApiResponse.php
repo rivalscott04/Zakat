@@ -24,10 +24,10 @@ final class ApiResponse
                 $response->setData($payload);
             }
 
-            return static::withMeta($response);
+            return self::withMeta($response);
         }
 
-        return static::withMeta(new JsonResponse(['data' => $data, 'meta' => (object) $meta], $status));
+        return self::withMeta(new JsonResponse(['data' => $data, 'meta' => (object) $meta], $status));
     }
 
     public static function noContent(): JsonResponse

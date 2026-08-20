@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,7 +16,7 @@ class SessionResource extends JsonResource
             'id' => $this->id,
             'ip_address' => $this->ip_address,
             'user_agent' => $this->user_agent,
-            'last_activity_at' => \Carbon\CarbonImmutable::createFromTimestamp($this->last_activity, 'UTC')->toIso8601String(),
+            'last_activity_at' => CarbonImmutable::createFromTimestamp($this->last_activity, 'UTC')->toIso8601String(),
             'created_at' => $this->created_at,
             'is_current' => $this->id === $request->session()->getId(),
         ];

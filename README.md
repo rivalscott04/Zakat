@@ -1,0 +1,123 @@
+# Zakat OS
+
+Open source platform buat ngelola zakat.
+
+Dari pengumpulan, penyaluran, sampai laporan dan transparansi. Cocok buat lembaga amil, organisasi zakat, atau komunitas yang mau sistemnya rapi, bisa diaudit, dan tetap sesuai aturan syariah.
+
+## Kenapa dibuat?
+
+Pengelolaan zakat sering berantakan di Excel, chat grup, atau aplikasi yang susah dilacak. Zakat OS dibuat biar semuanya lebih jelas:
+
+- Publik bisa lihat data yang memang boleh dipublikasikan
+- Setiap aksi bisa dilacak: siapa melakukan apa, kapan, dan apa yang berubah
+- Data keuangan yang sudah final nggak bisa diutak-atik sembarangan
+- Aturan zakat diatur lewat konfigurasi, bukan digoreng di kode
+- Tiap modul bisa dikembangin terpisah
+- Logika bisnis ada di backend. Frontend cuma tampilan dan input
+
+Ini proyek **open source**. Bebas dipakai, dipelajari, di-fork, dan dikembangkan bareng.
+
+## Teknologi
+
+| Bagian | Stack |
+| --- | --- |
+| Frontend | React + TypeScript (Vite) |
+| Backend | Laravel |
+| Database | PostgreSQL |
+| Lisensi | AGPL-3.0 |
+
+Spesifikasi produk ada di [`Docs/`](./Docs/). Mulai dari sini: [Core & Foundation](./Docs/00-core-foundation.md).
+
+## Mau ikut ngembangin?
+
+Silakan. Alurnya biasa aja:
+
+### 1. Fork
+
+Fork repo ini ke akun kamu.
+
+### 2. Clone
+
+```bash
+git clone https://github.com/<username>/Zakat.git
+cd Zakat
+```
+
+### 3. Bikin branch baru
+
+Jangan langsung kerja di `main`:
+
+```bash
+git checkout -b fitur/nama-fitur
+# atau
+git checkout -b perbaikan/nama-bug
+```
+
+Contoh:
+
+- `fitur/kalkulator-zakat`
+- `perbaikan/validasi-muzaki`
+- `docs/lengkapi-prd-collection`
+
+### 4. Coding, lalu commit
+
+```bash
+git add .
+git commit -m "Jelaskan kenapa perubahan ini dibutuhkan"
+```
+
+### 5. Push dan buka Pull Request
+
+```bash
+git push -u origin fitur/nama-fitur
+```
+
+Buka PR ke repo utama. Kasih ringkasan singkat sama cara ngetesnya.
+
+## Jalankan frontend
+
+Butuh Node.js, plus `bun` / `npm` / `yarn`.
+
+```bash
+bun install
+bun run dev
+```
+
+Lainnya:
+
+```bash
+bun run build    # build produksi
+bun run preview  # cek hasil build
+```
+
+Backend Laravel ada di [`backend/`](./backend/). Setup API dan database-nya ikuti README di folder itu.
+
+## Struktur folder
+
+```text
+Zakat/
+├── Docs/          # PRD per modul
+├── backend/       # API Laravel
+├── src/           # Frontend React + TypeScript
+├── public/        # Aset statis
+└── README.md
+```
+
+## Catatan sebelum ngoding
+
+1. Baca dulu `Docs/00-core-foundation.md`
+2. Baca PRD modul yang mau dikerjakan di `Docs/`
+3. Jangan nebak aturan bisnis di luar dokumen
+4. Jaga jejak audit, keamanan data keuangan, dan privasi
+
+## Lisensi
+
+Pakai **AGPL-3.0**.
+
+Boleh dipakai, diubah, dan dibagikan lagi. Yang penting, kode turunannya tetap open source sesuai aturan lisensi itu.
+
+## Yuk ikut
+
+Issue, ide, atau Pull Request semua welcome.
+
+Kalau lembaga kamu mau pakai dan ngembangin sendiri, tinggal fork, bikin branch, terus lanjut dari sini.

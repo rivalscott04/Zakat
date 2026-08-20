@@ -7,6 +7,10 @@
 /dist/
 /build/
 
+# Graphify generated knowledge graph output
+/graphify-out/
+/backend/graphify-out/
+
 # testing
 /coverage/
 src/**/*.test.ts

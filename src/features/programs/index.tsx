@@ -14,8 +14,10 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../shared/components/Common/BreadCrumb";
 import DataTable, { Column } from "../components/DataTable";
+import ErrorAlert from "../components/ErrorAlert";
 import StatusBadge from "../components/StatusBadge";
-import { ApiError, api, getData, getPage } from "../api/client";
+import { api, getData, getPage } from "../api/client";
+import { getUserErrorMessage } from "../api/userMessage";
 import { useAuth } from "../auth/AuthProvider";
 import type { Program, ProgramDashboard } from "../api/types";
 
@@ -95,7 +97,7 @@ const ProgramsPage = () => {
       setDashboard(summary);
       if (!selected && list.data[0]) setSelected(list.data[0].id);
     } catch (e) {
-      setError((e as ApiError).message);
+      setError(getUserErrorMessage(e));
     }
   };
   useEffect(() => {
@@ -111,7 +113,7 @@ const ProgramsPage = () => {
       reset?.();
       await load();
     } catch (e) {
-      setError((e as ApiError).message);
+      setError(getUserErrorMessage(e));
     }
   };
   const requireSelected = () => {
@@ -134,7 +136,9 @@ const ProgramsPage = () => {
       () => setProgram(emptyProgram),
     );
   };
-  const transition = async (id: string, action: string) => { await send(`/programs/${id}/${action}`, {}); };
+  const transition = async (id: string, action: string) => {
+    await send(`/programs/${id}/${action}`, {});
+  };
   const columns: Column<Program>[] = [
     {
       header: "Program",
@@ -151,7 +155,69 @@ const ProgramsPage = () => {
     {
       header: "Actions",
       render: (row) => (
-        <div className="d-flex gap-1 flex-wrap"><Button size="sm" color={selected === row.id ? "primary" : "light"} onClick={() => setSelected(row.id)}>Detail</Button>{row.status === "draft" ? <Button size="sm" color="warning" onClick={() => void transition(row.id, "submit")}>Submit</Button> : null}{row.status === "pending_approval" ? <Button size="sm" color="success" onClick={() => void transition(row.id, "approve")}>Approve</Button> : null}{row.status === "active" ? <Button size="sm" color="info" onClick={() => void transition(row.id, "suspend")}>Suspend</Button> : null}{row.status === "suspended" ? <Button size="sm" color="success" onClick={() => void transition(row.id, "activate")}>Activate</Button> : null}{row.status === "active" ? <Button size="sm" color="primary" onClick={() => void transition(row.id, "complete")}>Complete</Button> : null}{row.status === "completed" ? <Button size="sm" color="dark" onClick={() => void transition(row.id, "close")}>Close</Button> : null}</div>
+        <div className="d-flex gap-1 flex-wrap">
+          <Button
+            size="sm"
+            color={selected === row.id ? "primary" : "light"}
+            onClick={() => setSelected(row.id)}
+          >
+            Detail
+          </Button>
+          {row.status === "draft" ? (
+            <Button
+              size="sm"
+              color="warning"
+              onClick={() => void transition(row.id, "submit")}
+            >
+              Submit
+            </Button>
+          ) : null}
+          {row.status === "pending_approval" ? (
+            <Button
+              size="sm"
+              color="success"
+              onClick={() => void transition(row.id, "approve")}
+            >
+              Approve
+            </Button>
+          ) : null}
+          {row.status === "active" ? (
+            <Button
+              size="sm"
+              color="info"
+              onClick={() => void transition(row.id, "suspend")}
+            >
+              Suspend
+            </Button>
+          ) : null}
+          {row.status === "suspended" ? (
+            <Button
+              size="sm"
+              color="success"
+              onClick={() => void transition(row.id, "activate")}
+            >
+              Activate
+            </Button>
+          ) : null}
+          {row.status === "active" ? (
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => void transition(row.id, "complete")}
+            >
+              Complete
+            </Button>
+          ) : null}
+          {row.status === "completed" ? (
+            <Button
+              size="sm"
+              color="dark"
+              onClick={() => void transition(row.id, "close")}
+            >
+              Close
+            </Button>
+          ) : null}
+        </div>
       ),
     },
   ];
@@ -160,9 +226,7 @@ const ProgramsPage = () => {
       <Container fluid>
         <BreadCrumb title="Program Management" pageTitle="Mustahik" />
         {error ? (
-          <Alert color="danger" toggle={() => setError(null)}>
-            {error}
-          </Alert>
+          <ErrorAlert error={error} onClose={() => setError(null)} />
         ) : null}
         {dashboard ? (
           <Row className="mb-3">

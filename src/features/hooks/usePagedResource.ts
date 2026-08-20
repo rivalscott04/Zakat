@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { getPage, PaginationMeta } from "../api/client";
+import { getUserErrorMessage } from "../api/userMessage";
 
 /** State standar untuk halaman list: query, paginasi, reload. */
-export function usePagedResource<T>(url: string, extraParams: Record<string, unknown> = {}) {
+export function usePagedResource<T>(
+  url: string,
+  extraParams: Record<string, unknown> = {},
+) {
   const [rows, setRows] = useState<T[]>([]);
   const [meta, setMeta] = useState<PaginationMeta | undefined>();
   const [loading, setLoading] = useState(true);
@@ -16,12 +20,16 @@ export function usePagedResource<T>(url: string, extraParams: Record<string, unk
     setLoading(true);
     setError(null);
     try {
-      const params = { page, ...(search ? { search } : {}), ...JSON.parse(serialisedParams) };
+      const params = {
+        page,
+        ...(search ? { search } : {}),
+        ...JSON.parse(serialisedParams),
+      };
       const result = await getPage<T>(url, params);
       setRows(result.data);
       setMeta(result.meta);
     } catch (caught) {
-      setError((caught as Error).message);
+      setError(getUserErrorMessage(caught));
       setRows([]);
     } finally {
       setLoading(false);
@@ -32,5 +40,15 @@ export function usePagedResource<T>(url: string, extraParams: Record<string, unk
     load();
   }, [load]);
 
-  return { rows, meta, loading, error, page, setPage, search, setSearch, reload: load };
+  return {
+    rows,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    search,
+    setSearch,
+    reload: load,
+  };
 }

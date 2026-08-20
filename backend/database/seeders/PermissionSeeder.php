@@ -36,7 +36,10 @@ class PermissionSeeder extends Seeder
             'audit' => ['view'],
         ],
         'zakat' => [
-            'zakat' => ['view', 'category.manage', 'type.create', 'type.update', 'type.activate', 'type.deactivate', 'rule.create', 'rule.update', 'rule.activate', 'rule.expire', 'rule.archive', 'nisab.manage', 'haul.manage', 'rate.manage', 'rule.resolve'],
+            'zakat' => ['view', 'category.manage', 'type.create', 'type.update', 'type.activate', 'type.deactivate', 'rule.create', 'rule.update', 'rule.activate', 'rule.expire', 'rule.archive', 'nisab.manage', 'haul.manage', 'rate.manage', 'rule.resolve', 'calculation.view', 'calculation.create', 'calculation.calculate', 'calculation.confirm', 'calculation.cancel', 'calculation.recalculate', 'calculation.adjust', 'calculation.approve', 'calculation.override_expired', 'calculation.convert', 'calculation.view_breakdown', 'calculation.view_snapshot', 'calculation.view_audit', 'formula.manage'],
+        ],
+        'collection' => [
+            'collection' => ['view', 'create', 'update', 'confirm', 'cancel', 'reactivate', 'create_manual', 'verify', 'adjust', 'override', 'view_payment', 'view_receipt', 'export', 'view_audit', 'approve', 'manual.approve', 'overpayment.approve', 'refund.approve'],
         ],
     ];
 

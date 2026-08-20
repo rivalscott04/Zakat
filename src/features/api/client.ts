@@ -93,6 +93,11 @@ export async function getData<T>(url: string, params?: Record<string, unknown>):
   return response.data.data as T;
 }
 
+export async function postData<T>(url: string, payload: Record<string, unknown>): Promise<T> {
+  const response = await api.post(url, payload);
+  return response.data.data as T;
+}
+
 /** Ambil `data` dan `meta` sekaligus untuk endpoint yang berpaginasi. */
 export async function getPage<T>(
   url: string,

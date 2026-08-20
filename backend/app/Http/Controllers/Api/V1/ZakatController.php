@@ -6,15 +6,16 @@ use App\Enums\ZakatStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Http\Requests\StoreZakatCategoryRequest;
+use App\Http\Requests\StoreZakatConfigRequest;
 use App\Http\Requests\StoreZakatRuleRequest;
 use App\Http\Requests\StoreZakatTypeRequest;
 use App\Http\Resources\ZakatCategoryResource;
 use App\Http\Resources\ZakatRuleResource;
 use App\Http\Resources\ZakatTypeResource;
-use App\Models\ZakatRule;
 use App\Services\ZakatService;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ZakatController extends Controller
 {
@@ -52,7 +53,7 @@ class ZakatController extends Controller
 
     public function showRule(string $id): JsonResponse
     {
-        return ApiResponse::data(new ZakatRuleResource(ZakatRule::with(['type', 'rates', 'nisab', 'haul'])->findOrFail($id)));
+        return ApiResponse::data(new ZakatRuleResource($this->zakat->rule($id)));
     }
 
     public function activate(string $id): JsonResponse
@@ -72,6 +73,21 @@ class ZakatController extends Controller
 
     private function transition(string $id, ZakatStatus $s): JsonResponse
     {
-        return ApiResponse::data(new ZakatRuleResource($this->zakat->changeRuleStatus(ZakatRule::findOrFail($id), $s)));
+        return ApiResponse::data(new ZakatRuleResource($this->zakat->changeRuleStatus($this->zakat->rule($id), $s)));
+    }
+
+    public function config(StoreZakatConfigRequest $request, string $ruleId, string $kind): JsonResponse
+    {
+        return ApiResponse::data($this->zakat->config($ruleId, $kind, $request->validated()), status: 201);
+    }
+
+    public function reference(StoreZakatConfigRequest $request): JsonResponse
+    {
+        return ApiResponse::data($this->zakat->reference($request->validated()), status: 201);
+    }
+
+    public function resolve(Request $request): JsonResponse
+    {
+        return ApiResponse::data($this->zakat->resolve($request->validate(['zakat_type' => ['required', 'string'], 'calculation_date' => ['nullable', 'date']])));
     }
 }

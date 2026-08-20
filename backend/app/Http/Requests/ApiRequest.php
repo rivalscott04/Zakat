@@ -31,6 +31,6 @@ abstract class ApiRequest extends FormRequest
     /** @return array<string, mixed> */
     public function filters(): array
     {
-        return $this->only(['search', 'status', 'per_page', 'page', 'type', 'zakat_type_id', 'organization_id']);
+        return $this->only(['search', 'status', 'per_page', 'page', 'type', 'zakat_type_id', 'organization_id', 'muzaki_id', 'eligibility_status', 'calculation_date_from', 'calculation_date_to', 'created_by', 'source', 'date_from', 'date_to']);
     }
 }

@@ -8,6 +8,7 @@ use App\Exceptions\ZakatException;
 use App\Http\Middleware\ResolveOrganizationContext;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Lab404\Impersonate\Services\ImpersonateManager;
 
 /** Impersonate user untuk investigasi support (platform admin). */
@@ -26,11 +27,15 @@ class ImpersonationService
 
         $request->session()->put(self::PREVIOUS_ORG_SESSION_KEY, $request->session()->get(ResolveOrganizationContext::SESSION_KEY));
 
-        if (! $actor->impersonate($target)) {
+        $guard = config('laravel-impersonate.default_impersonator_guard', 'web');
+        auth()->shouldUse($guard);
+        if (! $actor->impersonate($target, $guard)) {
             $request->session()->forget(self::PREVIOUS_ORG_SESSION_KEY);
 
             throw new ZakatException(ErrorCode::ServerError, 'Impersonate gagal.');
         }
+        auth()->shouldUse($guard);
+        Auth::guard('sanctum')->setUser($target);
 
         $this->syncOrganizationContext($request, $target);
 
@@ -59,6 +64,7 @@ class ImpersonationService
         }
 
         $impersonated->leaveImpersonation();
+        Auth::guard('sanctum')->setUser($impersonator);
 
         $previousOrg = $request->session()->pull(self::PREVIOUS_ORG_SESSION_KEY);
 

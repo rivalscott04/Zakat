@@ -14,6 +14,8 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'ORG', 'name' => 'Organization', 'entity_type' => 'organizations', 'module' => 'organization'],
             ['code' => 'AML', 'name' => 'Amil', 'entity_type' => 'amils', 'module' => 'organization'],
             ['code' => 'MZK', 'name' => 'Muzaki', 'entity_type' => 'muzakis', 'module' => 'muzaki'],
+            ['code' => 'ZKC', 'name' => 'Zakat Calculation', 'entity_type' => 'zakat_calculations', 'module' => 'zakat'],
+            ['code' => 'COL', 'name' => 'Collection', 'entity_type' => 'collections', 'module' => 'collection'],
         ];
 
         foreach ($codes as $code) {

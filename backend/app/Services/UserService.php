@@ -67,6 +67,13 @@ class UserService
         return $user ?? throw ZakatException::notFound('User tidak ditemukan.');
     }
 
+    /** Platform-admin only lookup used by the impersonation boundary. */
+    public function findForImpersonation(string $id): User
+    {
+        return User::query()->with(['organization:id,code,name', 'roles:id,code,name'])->find($id)
+            ?? throw ZakatException::notFound('User tidak ditemukan.');
+    }
+
     /**
      * PRD 01 §7 dan §8 — admin membuat user lalu mengirim invitation.
      *

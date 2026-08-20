@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Zakat Calculator
 Module Code: ZKC
 Version: 0.1.0
-Status: Draft
+Status: Implemented (calculation engine complete; Collection conversion boundary reserved for Module 06)
 
 Dependencies:
 

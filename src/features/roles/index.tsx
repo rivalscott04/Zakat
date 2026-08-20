@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import BreadCrumb from "../../../shared/components/Common/BreadCrumb";
+import BreadCrumb from "../../shared/components/Common/BreadCrumb";
 import DataTable, { Column } from "../components/DataTable";
 import { api, ApiError, getData } from "../api/client";
 import { useAuth } from "../auth/AuthProvider";

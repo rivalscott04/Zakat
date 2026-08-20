@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Collection
 Module Code: COL
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Collection lifecycle and payment settlement complete; Fund Management handoff remains a downstream boundary)
 
 Dependencies:
 

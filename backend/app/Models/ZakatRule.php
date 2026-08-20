@@ -39,5 +39,23 @@ class ZakatRule extends Model
         return $this->hasOne(ZakatHaul::class);
     }
 
-    public function parameters() { return $this->hasMany(ZakatRuleParameter::class); }
+    public function parameters()
+    {
+        return $this->hasMany(ZakatRuleParameter::class);
+    }
+
+    public function formulaDefinitions()
+    {
+        return $this->hasMany(ZakatFormulaDefinition::class, 'zakat_rule_id');
+    }
+
+    public function agricultureConfigurations()
+    {
+        return $this->hasMany(ZakatAgricultureConfiguration::class, 'zakat_rule_id');
+    }
+
+    public function livestockConfigurations()
+    {
+        return $this->hasMany(ZakatLivestockConfiguration::class, 'zakat_rule_id');
+    }
 }

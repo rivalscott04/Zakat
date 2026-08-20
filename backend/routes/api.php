@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CollectionController;
 use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
@@ -9,7 +10,11 @@ use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\ZakatCalculationController;
 use App\Http\Controllers\Api\V1\ZakatController;
+use App\Services\ZakatService;
+use App\Support\ApiResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -143,15 +148,45 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
     });
 
     Route::prefix('zakat')->group(function () {
+        Route::get('/calculations', [ZakatCalculationController::class, 'index'])->middleware('permission:zakat.calculation.view');
+        Route::post('/calculations/preview', [ZakatCalculationController::class, 'preview'])->middleware('permission:zakat.calculation.calculate');
+        Route::post('/calculations', [ZakatCalculationController::class, 'store'])->middleware('permission:zakat.calculation.create');
+        Route::get('/calculations/{id}', [ZakatCalculationController::class, 'show'])->middleware('permission:zakat.calculation.view');
+        Route::post('/calculations/{id}/calculate', [ZakatCalculationController::class, 'calculate'])->middleware('permission:zakat.calculation.calculate');
+        Route::post('/calculations/{id}/confirm', [ZakatCalculationController::class, 'confirm'])->middleware('permission:zakat.calculation.confirm');
+        Route::post('/calculations/{id}/cancel', [ZakatCalculationController::class, 'cancel'])->middleware('permission:zakat.calculation.cancel');
+        Route::post('/calculations/{id}/recalculate', [ZakatCalculationController::class, 'recalculate'])->middleware('permission:zakat.calculation.recalculate');
+        Route::post('/calculations/{id}/adjustments', [ZakatCalculationController::class, 'adjust'])->middleware('permission:zakat.calculation.adjust');
+        Route::post('/calculations/{id}/convert', [ZakatCalculationController::class, 'convert'])->middleware('permission:zakat.calculation.convert');
         Route::get('/categories', [ZakatController::class, 'categories'])->middleware('permission:zakat.view');
         Route::post('/categories', [ZakatController::class, 'storeCategory'])->middleware('permission:zakat.category.manage');
         Route::get('/types', [ZakatController::class, 'types'])->middleware('permission:zakat.view');
         Route::post('/types', [ZakatController::class, 'storeType'])->middleware('permission:zakat.type.create');
         Route::get('/rules', [ZakatController::class, 'rules'])->middleware('permission:zakat.view');
         Route::post('/rules', [ZakatController::class, 'storeRule'])->middleware('permission:zakat.rule.create');
+        Route::get('/rules/resolve', [ZakatController::class, 'resolve'])->middleware('permission:zakat.rule.resolve');
         Route::get('/rules/{ruleId}', [ZakatController::class, 'showRule'])->middleware('permission:zakat.view');
+        Route::post('/rules/{ruleId}/rates', fn (Request $request, string $ruleId, ZakatService $service) => ApiResponse::data($service->config($ruleId, 'rate', $request->validate(['rate_type' => 'required|string', 'rate_value' => 'required|numeric', 'unit' => 'required|string', 'effective_from' => 'required|date', 'effective_until' => 'nullable|date'])), status: 201))->middleware('permission:zakat.rate.manage');
+        Route::post('/rules/{ruleId}/nisab', fn (Request $request, string $ruleId, ZakatService $service) => ApiResponse::data($service->config($ruleId, 'nisab', $request->validate(['nisab_type' => 'required|string', 'reference_type' => 'nullable|string', 'reference_value' => 'nullable|numeric', 'quantity' => 'nullable|numeric', 'unit' => 'nullable|string', 'currency' => 'nullable|string|size:3', 'effective_from' => 'required|date', 'effective_until' => 'nullable|date'])), status: 201))->middleware('permission:zakat.nisab.manage');
+        Route::post('/rules/{ruleId}/haul', fn (Request $request, string $ruleId, ZakatService $service) => ApiResponse::data($service->config($ruleId, 'haul', $request->validate(['haul_type' => 'required|string', 'duration' => 'nullable|integer', 'duration_unit' => 'nullable|string', 'calendar_type' => 'nullable|string'])), status: 201))->middleware('permission:zakat.haul.manage');
+        Route::post('/rules/{ruleId}/parameters', fn (Request $request, string $ruleId, ZakatService $service) => ApiResponse::data($service->config($ruleId, 'parameter', $request->validate(['parameter_code' => 'required|string', 'name' => 'required|string', 'data_type' => 'required|string', 'is_required' => 'boolean', 'default_value' => 'nullable|array', 'validation_rules' => 'nullable|array'])), status: 201))->middleware('permission:zakat.parameter.manage');
+        Route::post('/rules/{ruleId}/formulas', fn (Request $request, string $ruleId, ZakatService $service) => ApiResponse::data($service->config($ruleId, 'formula', $request->validate(['formula_code' => 'required|string|max:80', 'formula_version' => 'required|integer|min:1', 'formula_type' => 'required|string|max:30', 'expression' => 'required|string|max:255', 'input_schema' => 'nullable|array', 'output_schema' => 'nullable|array'])), status: 201))->middleware('permission:zakat.formula.manage');
+        Route::post('/reference-values', [ZakatController::class, 'reference'])->middleware('permission:zakat.reference_value.manage');
         Route::post('/rules/{ruleId}/activate', [ZakatController::class, 'activate'])->middleware('permission:zakat.rule.activate');
         Route::post('/rules/{ruleId}/expire', [ZakatController::class, 'expire'])->middleware('permission:zakat.rule.expire');
         Route::post('/rules/{ruleId}/archive', [ZakatController::class, 'archive'])->middleware('permission:zakat.rule.archive');
+    });
+
+    Route::prefix('collections')->group(function () {
+        Route::get('/summary', [CollectionController::class, 'summary'])->middleware('permission:collection.view');
+        Route::get('/', [CollectionController::class, 'index'])->middleware('permission:collection.view');
+        Route::post('/', [CollectionController::class, 'store'])->middleware('permission:collection.create_manual');
+        Route::post('/from-calculation', [CollectionController::class, 'fromCalculation'])->middleware('permission:collection.create');
+        Route::get('/{id}', [CollectionController::class, 'show'])->middleware('permission:collection.view');
+        Route::post('/{id}/confirm', [CollectionController::class, 'confirm'])->middleware('permission:collection.confirm');
+        Route::post('/{id}/cancel', [CollectionController::class, 'cancel'])->middleware('permission:collection.cancel');
+        Route::post('/{id}/reactivate', [CollectionController::class, 'reactivate'])->middleware('permission:collection.reactivate');
+        Route::post('/{id}/payments', [CollectionController::class, 'payment'])->middleware('permission:collection.create');
+        Route::post('/payments/{paymentId}/verify', [CollectionController::class, 'verifyPayment'])->middleware('permission:collection.verify');
     });
 });

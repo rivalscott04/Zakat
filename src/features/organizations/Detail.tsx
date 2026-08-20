@@ -24,7 +24,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import { useParams } from "react-router-dom";
-import BreadCrumb from "../../../shared/components/Common/BreadCrumb";
+import BreadCrumb from "../../shared/components/Common/BreadCrumb";
 import DataTable, { Column } from "../components/DataTable";
 import StatusBadge from "../components/StatusBadge";
 import { api, ApiError, getData, getPage, PaginationMeta } from "../api/client";

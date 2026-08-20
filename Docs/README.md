@@ -25,12 +25,12 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | Kode | Modul | Status |
 | --- | --- | --- |
 | 00 | [Core & Foundation](./00-core-foundation.md) | Implemented (Backend — verified) |
-| 01 | [Authentication & Authorization](./01-authentication-authorization.md) | Implemented (Backend — verified); UI belum terintegrasi |
-| 02 | [Organization & Amil](./02-organization-amil.md) | Implemented (Backend — verified); UI belum terintegrasi |
+| 01 | [Authentication & Authorization](./01-authentication-authorization.md) | Implemented (Backend + UI wired/build verified) |
+| 02 | [Organization & Amil](./02-organization-amil.md) | Implemented (Backend + UI wired/build verified) |
 | 03 | [Muzaki](./03-muzaki.md) | Implemented (Backend + UI build verified) |
 | 04 | [Zakat](./04-zakat.md) | In progress (Backend core + UI list verified) |
-| 05 | [Zakat Calculator](./05-zakat-calculator.md) | Draft |
-| 06 | [Collection](./06-collection.md) | Draft |
+| 05 | [Zakat Calculator](./05-zakat-calculator.md) | Implemented (Backend + UI wired/build verified) |
+| 06 | [Collection](./06-collection.md) | Implemented (Backend + UI wired/build verified) |
 | 07 | [Fund Management](./07-fund-management.md) | Draft |
 | 08 | [Accounting Ledger](./08-accounting-ledger.md) | Draft |
 | 09 | [Mustahik](./09-mustahik.md) | Draft |
@@ -53,4 +53,12 @@ Frontend aktif sekarang memakai `src/app`, `src/features`, dan `src/shared`. Rou
 
 Module 03 memiliki migrasi, model, service, request, resource, endpoint CRUD/status, serta halaman list Muzaki. Endpoint ringkasan kontribusi sengaja mengembalikan `available: false` sampai Module 06 Collection dan Module 08 Accounting Ledger tersedia; data kontribusi tidak dipalsukan.
 
-Module 04 sudah memiliki backend core untuk kategori, jenis zakat, rule version/effective period, lifecycle status, serta UI list jenis dan rule. Detail rate/nisab/haul management dan rule resolution masih dilanjutkan sebelum modul ditandai selesai.
+Module 01 sekarang memiliki route UI aktif untuk login, session, user, role, permission, serta guard berbasis permission. Module 02 sekarang memiliki route UI aktif untuk organisasi, detail/member, organization switcher, dan amil, semuanya memakai endpoint backend yang sama dengan permission guard.
+
+Module 04 sudah memiliki backend core untuk kategori, jenis zakat, rule version/effective period, lifecycle status, konfigurasi rate/nisab/haul/parameter, reference value, serta endpoint rule resolution. UI baru sudah ter-wire untuk list jenis dan rule. Validasi overlap rule aktif dan detail konfigurasi/UI workflow masih dilanjutkan sebelum modul ditandai selesai.
+
+Module 05 sudah memiliki calculation session, dynamic inputs, backend formula whitelist, rule/rate/nisab/haul/reference resolution, eligibility untuk percentage/nisab/asset/income/harvest/livestock, immutable snapshot, preview, calculate, confirm, cancel, recalculate/versioning, adjustment audit, expiration, API permission, dan halaman UI kalkulator yang wired ke API. Boundary conversion sengaja mengembalikan conflict sampai Module 06 menyediakan entitas Collection; calculation yang confirmed sudah siap dipakai sebagai payload integrasi.
+
+Module 06 sudah memiliki collection number COL, collection manual/from-calculation, item, lifecycle draft/pending/partial/paid/completed/expired/cancelled, payment event pending/verified/settled, allocation, partial payment, overpayment detection, expiration, cancellation, reactivation, summary, audit trail, permission, API, dan UI list/manual collection. Fund Management handoff tetap menjadi boundary modul berikutnya; collection completed menjadi source business transaction untuk handoff tersebut.
+
+Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 58 test dan 196 assertion lulus.

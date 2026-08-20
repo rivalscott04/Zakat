@@ -30,6 +30,9 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     open: false,
+    watch: {
+      ignored: ["**/backend/**", "**/build/**", "**/graphify-out/**"],
+    },
     proxy: {
       "/api": { target: "http://localhost:8000", changeOrigin: false },
       "/sanctum": { target: "http://localhost:8000", changeOrigin: false },

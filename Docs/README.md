@@ -31,7 +31,7 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | 04 | [Zakat](./04-zakat.md) | In progress (Backend core + UI list verified) |
 | 05 | [Zakat Calculator](./05-zakat-calculator.md) | Implemented (Backend + UI wired/build verified) |
 | 06 | [Collection](./06-collection.md) | Implemented (Backend + UI wired/build verified) |
-| 07 | [Fund Management](./07-fund-management.md) | Draft |
+| 07 | [Fund Management](./07-fund-management.md) | Implemented (Backend + UI wired/build verified) |
 | 08 | [Accounting Ledger](./08-accounting-ledger.md) | Draft |
 | 09 | [Mustahik](./09-mustahik.md) | Draft |
 | 10 | [Assessment](./10-assessment.md) | Draft |
@@ -61,4 +61,6 @@ Module 05 sudah memiliki calculation session, dynamic inputs, backend formula wh
 
 Module 06 sudah memiliki collection number COL, collection manual/from-calculation, item, lifecycle draft/pending/partial/paid/completed/expired/cancelled, payment event pending/verified/settled, allocation, partial payment, overpayment detection, expiration, cancellation, reactivation, summary, audit trail, permission, API, dan UI list/manual collection. Fund Management handoff tetap menjadi boundary modul berikutnya; collection completed menjadi source business transaction untuk handoff tersebut.
 
-Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 58 test dan 196 assertion lulus.
+Module 07 sudah memiliki fund dan fund type/category metadata, fund code, immutable fund movement, inflow dari Collection completed maupun manual, outflow dengan negative-balance prevention, current/available/reserved/allocated/distributed balance projection, allocation approval, reservation/release, transfer approval, adjustment, reconciliation, availability check, audit trail, permission, API, dan UI list/create fund. Distribution menjadi downstream consumer untuk penggunaan fund dan outflow berikutnya.
+
+Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 59 test dan 205 assertion lulus.

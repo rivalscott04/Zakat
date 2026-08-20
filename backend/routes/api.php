@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CollectionController;
+use App\Http\Controllers\Api\V1\FundController;
 use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
@@ -189,4 +190,24 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::post('/{id}/payments', [CollectionController::class, 'payment'])->middleware('permission:collection.create');
         Route::post('/payments/{paymentId}/verify', [CollectionController::class, 'verifyPayment'])->middleware('permission:collection.verify');
     });
+
+    Route::prefix('funds')->group(function () {
+        Route::get('/', [FundController::class, 'index'])->middleware('permission:fund.view');
+        Route::post('/', [FundController::class, 'store'])->middleware('permission:fund.create');
+        Route::get('/{id}', [FundController::class, 'show'])->middleware('permission:fund.view');
+        Route::get('/{id}/balance', [FundController::class, 'balance'])->middleware('permission:fund.balance.view');
+        Route::get('/{id}/movements', [FundController::class, 'movements'])->middleware('permission:fund.movement.view');
+        Route::post('/{id}/inflow', [FundController::class, 'inflow'])->middleware('permission:fund.movement.create');
+        Route::post('/{id}/outflow', [FundController::class, 'outflow'])->middleware('permission:fund.movement.create');
+        Route::post('/{id}/allocations', [FundController::class, 'allocation'])->middleware('permission:fund.allocation.create');
+        Route::post('/{id}/reservations', [FundController::class, 'reservation'])->middleware('permission:fund.reservation.create');
+        Route::post('/{id}/check-availability', [FundController::class, 'availability'])->middleware('permission:fund.balance.view');
+        Route::post('/{id}/reconciliations', [FundController::class, 'reconcile'])->middleware('permission:fund.reconciliation.create');
+    });
+    Route::post('/funds/inflow-from-collection', [FundController::class, 'inflowFromCollection'])->middleware('permission:fund.movement.create');
+    Route::post('/fund-adjustments', [FundController::class, 'adjustment'])->middleware('permission:fund.adjustment.create');
+    Route::post('/fund-allocations/{id}/approve', [FundController::class, 'approveAllocation'])->middleware('permission:fund.allocation.approve');
+    Route::post('/fund-reservations/{id}/release', [FundController::class, 'releaseReservation'])->middleware('permission:fund.reservation.release');
+    Route::post('/fund-transfers', [FundController::class, 'transfer'])->middleware('permission:fund.transfer.create');
+    Route::post('/fund-transfers/{id}/approve', [FundController::class, 'approveTransfer'])->middleware('permission:fund.transfer.approve');
 });

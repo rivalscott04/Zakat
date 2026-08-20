@@ -4,7 +4,7 @@ Project: ZETRA
 Module: Fund Management
 Module Code: FND
 Version: 0.1.0
-Status: Draft
+Status: Implemented (Fund balance, movement, allocation, reservation, transfer, adjustment, and reconciliation core complete; Distribution remains downstream)
 
 Dependencies:
 

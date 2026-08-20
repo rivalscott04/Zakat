@@ -41,6 +41,9 @@ class PermissionSeeder extends Seeder
         'collection' => [
             'collection' => ['view', 'create', 'update', 'confirm', 'cancel', 'reactivate', 'create_manual', 'verify', 'adjust', 'override', 'view_payment', 'view_receipt', 'export', 'view_audit', 'approve', 'manual.approve', 'overpayment.approve', 'refund.approve'],
         ],
+        'fund' => [
+            'fund' => ['view', 'create', 'update', 'balance.view', 'movement.view', 'movement.create', 'allocation.create', 'allocation.approve', 'allocation.cancel', 'reservation.create', 'reservation.release', 'transfer.create', 'transfer.approve', 'adjustment.create', 'adjustment.approve', 'reconciliation.create', 'reconciliation.review', 'report.view', 'export', 'audit.view'],
+        ],
     ];
 
     public function run(): void

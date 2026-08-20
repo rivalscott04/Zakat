@@ -9,6 +9,7 @@ import RolesPage from "../../features/roles";
 import ZakatPage from "../../features/zakat";
 import CalculationsPage from "../../features/calculations";
 import CollectionsPage from "../../features/collections";
+import FundsPage from "../../features/funds";
 
 export const publicRoutes = [{ path: "/login", component: <Login /> }];
 export const authProtectedRoutes = [
@@ -22,5 +23,6 @@ export const authProtectedRoutes = [
   { path: "/zakat", component: <ZakatPage />, permission: "zakat.view" },
   { path: "/zakat/calculator", component: <CalculationsPage />, permission: "zakat.calculation.create" },
   { path: "/collections", component: <CollectionsPage />, permission: "collection.view" },
+  { path: "/funds", component: <FundsPage />, permission: "fund.view" },
   { path: "/", component: <MuzakisPage />, permission: "muzaki.view" },
 ];

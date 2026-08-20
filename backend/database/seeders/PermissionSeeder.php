@@ -47,6 +47,9 @@ class PermissionSeeder extends Seeder
         'accounting' => [
             'accounting' => ['view', 'account.view', 'account.create', 'account.update', 'journal.view', 'journal.create', 'journal.submit', 'journal.approve', 'journal.post', 'journal.reverse', 'adjustment.create', 'adjustment.approve', 'period.view', 'period.create', 'period.lock', 'period.close', 'ledger.view', 'trial_balance.view', 'reconciliation.view', 'reconciliation.create', 'export', 'audit.view'],
         ],
+        'mustahik' => [
+            'mustahik' => ['view', 'create', 'update', 'delete', 'merge', 'identity.view', 'identity.verify', 'assessment.view', 'assessment.create', 'assessment.submit', 'assessment.approve', 'eligibility.view', 'eligibility.determine', 'verification.perform', 'household.view', 'household.manage', 'distribution_history.view', 'export', 'audit.view'],
+        ],
     ];
 
     public function run(): void

@@ -33,7 +33,7 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | 06 | [Collection](./06-collection.md) | Implemented (Backend + UI wired/build verified) |
 | 07 | [Fund Management](./07-fund-management.md) | Implemented (Backend + UI wired/build verified) |
 | 08 | [Accounting Ledger](./08-accounting-ledger.md) | Implemented (Backend + UI wired/build verified) |
-| 09 | [Mustahik](./09-mustahik.md) | Draft |
+| 09 | [Mustahik](./09-mustahik.md) | Implemented (Core backend + UI wired/build verified) |
 | 10 | [Assessment](./10-assessment.md) | Draft |
 | 11 | [Program](./11-program.md) | Draft |
 | 12 | [Distribution](./12-distribution.md) | Draft |
@@ -65,4 +65,6 @@ Module 07 sudah memiliki fund dan fund type/category metadata, fund code, immuta
 
 Module 08 sudah memiliki Chart of Accounts dengan hierarchy/postable validation, accounting period open/locked/closed, journal entry dan journal line double-entry validation, submit/approve/post/reversal lifecycle, posted journal immutability, accounting event ingestion, general ledger, trial balance, audit trail, permission, API, dan UI COA. Reporting dan financial statement menjadi downstream consumer ledger.
 
-Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 60 test dan 218 assertion lulus.
+Module 09 sudah memiliki master Mustahik dengan nomor MSH, identitas terenkripsi dan duplicate detection, alamat, profil sosial ekonomi, klasifikasi Asnaf, verification status, permission, API, test feature, serta halaman UI list dan pendaftaran yang ter-wire ke backend. Household, assessment/eligibility lanjutan, dan distribution history tetap menjadi downstream pada modul terkait.
+
+Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 61 test dan 227 assertion lulus.

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CollectionController;
 use App\Http\Controllers\Api\V1\FundController;
+use App\Http\Controllers\Api\V1\MustahikController;
 use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
@@ -229,5 +230,16 @@ Route::middleware(['auth:sanctum', 'organization.context'])->group(function () {
         Route::get('/general-ledger', [AccountingController::class, 'ledger'])->middleware('permission:accounting.ledger.view');
         Route::get('/trial-balance', [AccountingController::class, 'trialBalance'])->middleware('permission:accounting.trial_balance.view');
         Route::post('/events', [AccountingController::class, 'event'])->middleware('permission:accounting.journal.create');
+    });
+    Route::prefix('mustahiks')->group(function () {
+        Route::get('/', [MustahikController::class, 'index'])->middleware('permission:mustahik.view');
+        Route::post('/', [MustahikController::class, 'store'])->middleware('permission:mustahik.create');
+        Route::post('/check-duplicate', [MustahikController::class, 'duplicate'])->middleware('permission:mustahik.create');
+        Route::get('/{id}', [MustahikController::class, 'show'])->middleware('permission:mustahik.view');
+        Route::patch('/{id}', [MustahikController::class, 'update'])->middleware('permission:mustahik.update');
+        Route::post('/{id}/identities', [MustahikController::class, 'identity'])->middleware('permission:mustahik.identity.verify');
+        Route::post('/{id}/addresses', [MustahikController::class, 'address'])->middleware('permission:mustahik.update');
+        Route::post('/{id}/asnaf', [MustahikController::class, 'asnaf'])->middleware('permission:mustahik.update');
+        Route::post('/{id}/verify', [MustahikController::class, 'verify'])->middleware('permission:mustahik.verification.perform');
     });
 });

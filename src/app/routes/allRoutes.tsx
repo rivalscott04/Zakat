@@ -11,6 +11,7 @@ import CalculationsPage from "../../features/calculations";
 import CollectionsPage from "../../features/collections";
 import FundsPage from "../../features/funds";
 import AccountingPage from "../../features/accounting";
+import MustahiksPage from "../../features/mustahiks";
 
 export const publicRoutes = [{ path: "/login", component: <Login /> }];
 export const authProtectedRoutes = [
@@ -26,5 +27,6 @@ export const authProtectedRoutes = [
   { path: "/collections", component: <CollectionsPage />, permission: "collection.view" },
   { path: "/funds", component: <FundsPage />, permission: "fund.view" },
   { path: "/accounting", component: <AccountingPage />, permission: "accounting.account.view" },
+  { path: "/mustahiks", component: <MustahiksPage />, permission: "mustahik.view" },
   { path: "/", component: <MuzakisPage />, permission: "muzaki.view" },
 ];

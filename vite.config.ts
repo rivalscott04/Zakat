@@ -21,9 +21,16 @@ export default defineConfig({
     },
     dedupe: ["ckeditor5", "@ckeditor/ckeditor5-react"],
   },
+  // Velzone membawa ratusan halaman contoh. Discovery otomatis Vite akan
+  // menyisir semuanya sebelum server siap, padahal route sudah lazy-loaded.
+  optimizeDeps: {
+    noDiscovery: true,
+  },
   server: {
     port: 3000,
     open: false,
+    host: "127.0.0.1",
+    strictPort: true,
     // Backend Laravel di-proxy agar SPA dan API berada pada origin yang sama.
     // Ini syarat cookie-based Sanctum authentication (PRD 01 §17).
     proxy: {

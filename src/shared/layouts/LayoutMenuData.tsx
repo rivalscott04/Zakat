@@ -145,13 +145,13 @@ const Navdata = () => {
         },
         ...(can("users.view") ? [{
             id: "zetra-users",
-            label: "User",
+            label: "Pengguna",
             icon: "ri-user-settings-line",
             link: "/users",
         }] : []),
         ...(can("roles.view") ? [{
             id: "zetra-roles",
-            label: "Role & Permission",
+            label: "Peran & Izin",
             icon: "ri-shield-user-line",
             link: "/roles",
         }] : []),
@@ -161,13 +161,25 @@ const Navdata = () => {
             icon: "ri-building-line",
             link: "/organizations",
         }] : []),
+        ...(can("distribution.view") ? [{
+            id: "zetra-distributions",
+            label: "Penyaluran",
+            icon: "ri-hand-heart-line",
+            link: "/distributions",
+        }] : []),
+        ...(can("distribution.batch.view") ? [{
+            id: "zetra-distribution-batches",
+            label: "Batch Penyaluran",
+            icon: "ri-stack-line",
+            link: "/distribution-batches",
+        }] : []),
         {
-            label: "Menu",
+            label: "Menu Utama",
             isHeader: true,
         },
         {
             id: "dashboard",
-            label: "Dashboards",
+            label: "Ringkasan",
             icon: "ri-dashboard-2-line",
             link: "/#",
             stateVariables: isDashboard,

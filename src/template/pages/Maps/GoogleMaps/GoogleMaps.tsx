@@ -38,7 +38,7 @@ const GoogleMaps = (props: any) => {
                                 </CardHeader>
                                 <CardBody>
                                     <div id="gmaps-markers" className="gmaps" style={{ position: "relative" }}>
-                                        <LoadScript googleMapsApiKey="AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE">
+                                        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
                                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>
                                                 <Marker position={center} onClick={() => onSelect(center)} />
                                                 {selected && (
@@ -64,7 +64,7 @@ const GoogleMaps = (props: any) => {
                                 </CardHeader>
                                 <CardBody >
                                     <div id="gmaps-overlay" className="gmaps" style={{ position: "relative" }}>
-                                        <LoadScript googleMapsApiKey="AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE">
+                                        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
                                             <GoogleMap mapContainerStyle={containerStyle} center={second} zoom={14}>
                                                 <Marker position={second} onClick={() => onSelect(second)} />
                                                 {selected && (
@@ -93,7 +93,7 @@ const GoogleMaps = (props: any) => {
                                 </CardHeader>
                                 <CardBody>
                                     <div id="panorama" className="gmaps-panaroma" style={{ position: "relative" }}>
-                                        <LoadScript googleMapsApiKey="AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE">
+                                        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
                                             <GoogleMap mapContainerStyle={containerStyle} center={third} zoom={20}>
                                                 <Marker position={third} onClick={() => onSelect(third)} />
                                                 {selected && (
@@ -121,7 +121,7 @@ const GoogleMaps = (props: any) => {
 
                                 <div className="card-body">
                                     <div id="gmaps-types" className="gmaps" style={{ position: "relative" }}>
-                                        <LoadScript googleMapsApiKey="AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE">
+                                        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
                                             <GoogleMap mapContainerStyle={containerStyle} center={fourth} zoom={20}>
                                                 <Marker position={fourth} onClick={() => onSelect(fourth)} />
                                                 {selected && (

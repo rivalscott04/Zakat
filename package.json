@@ -97,7 +97,7 @@
   },
   "scripts": {
     "start": "vite",
-    "dev": "./node_modules/.bin/vite --host 127.0.0.1",
+    "dev": "./node_modules/.bin/vite --config vite.config.mjs",
     "build": "bun build index.html --outdir=build --target=browser --minify",
     "build:vite": "NODE_OPTIONS='--max-old-space-size=8192' vite build",
     "preview": "vite preview",

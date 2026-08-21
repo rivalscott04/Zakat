@@ -23,6 +23,7 @@ export const MENU: MenuItem[] = [
   { to: "/zakat", label: "Zakat", permission: "zakat.view" },
   { to: "/zakat/calculator", label: "Kalkulator", permission: "zakat.calculation.create" },
   { to: "/collections", label: "Collection", permission: "collection.view" },
+  { to: "/payments", label: "Payment", permission: "payment.view" },
   { to: "/funds", label: "Fund", permission: "fund.view" },
   { to: "/accounting", label: "Accounting", permission: "accounting.account.view" },
   { to: "/mustahiks", label: "Mustahik", permission: "mustahik.view" },

@@ -15,15 +15,23 @@ trait HasBusinessNumber
 {
     abstract public static function businessCode(): string;
 
+    /** Model dengan kolom bernama lain, misalnya `payment_number`, menimpa ini. */
+    public function businessNumberColumn(): string
+    {
+        return 'business_number';
+    }
+
     public function save(array $options = [])
     {
-        if (! $this->exists && blank($this->business_number)) {
-            $this->business_number = app(BusinessNumberService::class)->next(static::businessCode());
+        $column = $this->businessNumberColumn();
+
+        if (! $this->exists && blank($this->{$column})) {
+            $this->{$column} = app(BusinessNumberService::class)->next(static::businessCode());
         }
 
-        if ($this->exists && $this->isDirty('business_number')) {
+        if ($this->exists && $this->isDirty($column)) {
             // Immutable: kembalikan ke nilai semula, jangan diam-diam menerima perubahan.
-            $this->business_number = $this->getOriginal('business_number');
+            $this->{$column} = $this->getOriginal($column);
         }
 
         return parent::save($options);

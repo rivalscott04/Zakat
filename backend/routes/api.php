@@ -14,6 +14,9 @@ use App\Http\Controllers\Api\V1\MustahikController;
 use App\Http\Controllers\Api\V1\MuzakiController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\PaymentProviderController;
+use App\Http\Controllers\Api\V1\PaymentWebhookController;
 use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -43,6 +46,11 @@ Route::middleware('throttle:10,1')->prefix('auth')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     Route::post('/accept-invitation', [AuthController::class, 'acceptInvitation']);
 });
+
+// PRD 13H §17 — webhook provider tidak memakai autentikasi user. Rate limit
+// ketat karena endpoint ini terbuka ke internet.
+Route::post('/webhooks/payments/{providerId}', PaymentWebhookController::class)
+    ->middleware('throttle:60,1');
 
 // --------------------------------------------------------------- terproteksi
 
@@ -140,6 +148,36 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
 
         Route::get('/{amilId}/assignments', [AmilController::class, 'assignments'])->middleware('permission:assignments.view');
         Route::post('/{amilId}/assignments', [AmilController::class, 'storeAssignment'])->middleware('permission:assignments.create');
+    });
+
+    // ---------------------------------------------------------------- payment
+
+    Route::prefix('payment-providers')->middleware('throttle:financial')->group(function () {
+        Route::get('/', [PaymentProviderController::class, 'index'])->middleware('permission:payment.provider.view');
+        Route::post('/', [PaymentProviderController::class, 'store'])->middleware('permission:payment.provider.manage');
+        Route::get('/{id}', [PaymentProviderController::class, 'show'])->middleware('permission:payment.provider.view');
+        Route::patch('/{id}', [PaymentProviderController::class, 'update'])->middleware('permission:payment.provider.manage');
+        Route::post('/{id}/activate', [PaymentProviderController::class, 'activate'])->middleware('permission:payment.provider.manage');
+        Route::post('/{id}/deactivate', [PaymentProviderController::class, 'deactivate'])->middleware('permission:payment.provider.manage');
+        Route::post('/{id}/test', [PaymentProviderController::class, 'test'])->middleware('permission:payment.provider.view');
+    });
+
+    Route::prefix('payments')->middleware('throttle:financial')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->middleware('permission:payment.view');
+        Route::get('/summary', [PaymentController::class, 'summary'])->middleware('permission:payment.view');
+        Route::post('/', [PaymentController::class, 'store'])->middleware('permission:payment.create');
+        Route::get('/{id}', [PaymentController::class, 'show'])->middleware('permission:payment.view');
+        Route::post('/{id}/verify', [PaymentController::class, 'verify'])->middleware('permission:payment.verify');
+        Route::post('/{id}/cancel', [PaymentController::class, 'cancel'])->middleware('permission:payment.cancel');
+        Route::post('/{id}/refresh-status', [PaymentController::class, 'refreshStatus'])->middleware('permission:payment.refresh');
+        Route::post('/{id}/reconcile', [PaymentController::class, 'reconcile'])->middleware('permission:payment.reconciliation.manage');
+        Route::get('/{id}/refunds', [PaymentController::class, 'refunds'])->middleware('permission:payment.view');
+        Route::post('/{id}/refunds', [PaymentController::class, 'storeRefund'])->middleware('permission:payment.refund.request');
+    });
+
+    Route::prefix('payment-refunds')->middleware('throttle:financial')->group(function () {
+        Route::post('/{refundId}/approve', [PaymentController::class, 'approveRefund'])->middleware('permission:payment.refund.approve');
+        Route::post('/{refundId}/reject', [PaymentController::class, 'rejectRefund'])->middleware('permission:payment.refund.reject');
     });
 
     Route::post('/amil-assignments/{assignmentId}/end', [AmilController::class, 'endAssignment'])

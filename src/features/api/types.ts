@@ -258,3 +258,81 @@ export interface Session {
   last_activity_at: string;
   is_current: boolean;
 }
+
+export type PaymentStatus =
+  | "created"
+  | "pending"
+  | "paid"
+  | "failed"
+  | "expired"
+  | "cancelled"
+  | "refunded";
+
+export interface PaymentProvider {
+  id: string;
+  provider_code: string;
+  name: string;
+  driver: string;
+  status: "active" | "inactive";
+  sandbox_mode: boolean;
+  configured_keys: string[];
+  webhook_secret_configured: boolean;
+  webhook_url: string;
+  created_at: string | null;
+}
+
+export interface PaymentRefund {
+  id: string;
+  payment_id: string;
+  refund_number: string;
+  amount: string;
+  reason: string;
+  status: string;
+  rejection_reason: string | null;
+  requested_at: string | null;
+  processed_at: string | null;
+}
+
+export interface PaymentWebhookRecord {
+  id: string;
+  event_id: string | null;
+  event_type: string | null;
+  signature_valid: boolean;
+  status: string;
+  error_message: string | null;
+  received_at: string | null;
+  processed_at: string | null;
+}
+
+export interface Payment {
+  id: string;
+  payment_number: string;
+  provider_id: string;
+  provider_reference: string | null;
+  source_type: string;
+  source_id: string;
+  payer_name: string | null;
+  amount: string;
+  currency: string;
+  payment_method: string | null;
+  payment_url: string | null;
+  status: PaymentStatus;
+  allowed_transitions: PaymentStatus[];
+  refundable_amount: string;
+  expires_at: string | null;
+  paid_at: string | null;
+  verification_reason: string | null;
+  cancellation_reason: string | null;
+  failure_reason: string | null;
+  failure_note: string | null;
+  provider?: { id: string; provider_code: string; name: string } | null;
+  webhooks?: PaymentWebhookRecord[];
+  refunds?: PaymentRefund[];
+}
+
+export interface PaymentSummary {
+  by_status: Record<PaymentStatus, { total: number; amount: string }>;
+}
+export interface BankAccount { id: string; account_code: string; bank_name: string; account_name: string; account_number_masked: string; currency: string; current_balance: string; status: string; }
+export interface BankTransaction { id: string; transaction_reference: string; transaction_date: string; description: string | null; debit_amount: string; credit_amount: string; match_status: string; duplicate_status: string; }
+export interface DocumentItem { id: string; document_number: string; document_name: string; original_filename: string; document_type: string; version: number; status: string; mime_type: string; file_size: number; checksum: string; }

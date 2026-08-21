@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // F-14 — dijalankan terjadwal, bukan sebagai efek samping endpoint baca.
 Schedule::command('zakat:expire-due-collections')->dailyAt('00:15');
+
+// PRD 13M §25 — payment pending yang lewat masa berlaku ditutup otomatis.
+Schedule::command('zakat:expire-pending-payments')->everyFifteenMinutes();

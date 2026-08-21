@@ -34,6 +34,8 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'DSR', 'name' => 'Distribution Request', 'entity_type' => 'distribution_requests', 'module' => 'distribution'],
             ['code' => 'DST', 'name' => 'Distribution', 'entity_type' => 'distributions', 'module' => 'distribution'],
             ['code' => 'DTB', 'name' => 'Distribution Batch', 'entity_type' => 'distribution_batches', 'module' => 'distribution'],
+            ['code' => 'PAY', 'name' => 'Payment', 'entity_type' => 'payments', 'module' => 'payment'],
+            ['code' => 'RFD', 'name' => 'Payment Refund', 'entity_type' => 'payment_refunds', 'module' => 'payment'],
         ];
 
         foreach ($codes as $code) {

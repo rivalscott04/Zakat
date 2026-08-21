@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Enums\MembershipStatus;
-use App\Enums\MemberType;
 use App\Enums\OrganizationStatus;
 use App\Enums\OrganizationType;
 use App\Enums\UserStatus;
 use App\Models\Organization;
-use App\Models\OrganizationMember;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -59,7 +56,10 @@ class BootstrapSeeder extends Seeder
                 'username' => $username,
                 'password' => $password,
             ]);
-            $user->organization_id = $organization->getKey();
+            // Dibiarkan null: SUPER_ADMIN adalah role platform, tidak bernaung
+            // pada organisasi mana pun (PRD 01 §24). Organisasi kerja dipilih
+            // lewat organization switcher saat dibutuhkan.
+            $user->organization_id = null;
             $user->status = UserStatus::Active;
             $user->email_verified_at = now();
             $user->saveQuietly();
@@ -68,21 +68,6 @@ class BootstrapSeeder extends Seeder
         } elseif ($user->username === null) {
             $user->forceFill(['username' => $username])->saveQuietly();
             $this->command?->info("Username Super Admin dilengkapi: {$username}");
-        }
-
-        $membership = OrganizationMember::query()->acrossOrganizations()
-            ->where('organization_id', $organization->getKey())
-            ->where('user_id', $user->getKey())
-            ->first();
-
-        if ($membership === null) {
-            $membership = new OrganizationMember;
-            $membership->fill(['member_type' => MemberType::Employee->value]);
-            $membership->organization_id = $organization->getKey();
-            $membership->user_id = $user->getKey();
-            $membership->status = MembershipStatus::Active;
-            $membership->joined_at = now();
-            $membership->saveQuietly();
         }
 
         // organization_id NULL pada pivot menandai assignment platform-level.

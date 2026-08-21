@@ -789,9 +789,38 @@ Terverifikasi: Super Admin melihat 15 menu, VIEWER hanya 3 (Organisasi, Amil, Us
 
 ---
 
+# KONFLIK PRD YANG SUDAH DISELESAIKAN
+
+## PRD 02 bagian 27 versus bagian 28 — syarat membership bagi role platform
+
+Bagian 27 menuntut membership aktif untuk semua akses dan menutupnya dengan
+"Semua kondisi wajib dipenuhi", sedangkan bagian 28 menyatakan administrator
+platform tetap dapat mengakses organisasi suspended untuk investigasi. Keduanya
+tidak dapat berlaku bersamaan.
+
+Implementasi awal mengikuti bagian 27 secara harfiah, sehingga SUPER_ADMIN
+terpaksa didaftarkan sebagai anggota organisasi agar sistem berjalan. Akibatnya
+super admin hanya melihat organisasi tempat ia terdaftar, dan menerima 403 saat
+mencoba masuk ke organisasi lain. Kode melanggar PRD-nya sendiri.
+
+Keputusan pemilik produk 2026-08-21: bagian 28 yang dimenangkan. SUPER_ADMIN
+adalah role platform, tidak memerlukan membership. Role organisasi tetap tunduk
+pada kelima syarat bagian 27.
+
+PRD sudah disamakan di tujuh tempat: PRD 01 bagian 24 dan 29, serta PRD 02
+bagian 13, 15, 26, 27, dan 36.
+
+Perbaikan kode: `OrganizationService::availableFor()` dan `switchTo()`,
+`ResolveOrganizationContext`, serta `BootstrapSeeder` yang tidak lagi
+mendaftarkan super admin sebagai member dan mengosongkan `organization_id`.
+Dijaga oleh `OrganizationTest::test_platform_admin_tidak_perlu_membership_untuk_masuk_organisasi`
+dan `OrganizationTest::test_admin_organisasi_tetap_butuh_membership`.
+
+---
+
 # PERTANYAAN TERBUKA UNTUK PEMILIK PRODUK
 
-Tiga hal ini butuh keputusan sebelum dapat diimplementasikan, bukan bug:
+Tiga hal ini butuh keputusan pemilik produk, bukan bug:
 
 1. Accounting event untuk realisasi sebagian. PRD 12X §56 hanya menyebut event
    saat `Completed`, sehingga distribution `partially_completed` sudah
@@ -799,4 +828,7 @@ Tiga hal ini butuh keputusan sebelum dapat diimplementasikan, bukan bug:
 2. Kode permission untuk melihat nomor rekening penuh. PRD 12D §9 menyebut
    permission khusus, tetapi PRD 12AB §65 tidak mendefinisikan kodenya. Sementara
    ini nomor penuh tidak pernah keluar lewat API.
-3. Perubahan presisi kolom uang collection (F-07) bila sudah ada data produksi.
+3. Presisi kolom uang collection sudah diubah ke `NUMERIC(20,2)` pada F-07.
+   Yang masih perlu dipastikan: apakah sudah ada data produksi yang nilainya
+   memiliki lebih dari dua desimal, karena migrasi membulatkannya tanpa jalan
+   kembali.

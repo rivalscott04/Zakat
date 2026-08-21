@@ -159,4 +159,46 @@ class OrganizationTest extends TestCase
             ->getJson("/api/v1/organizations/{$organizationB->getKey()}")
             ->assertStatus(404);
     }
+
+    /**
+     * PRD 01 §24 dan PRD 02 §28 — SUPER_ADMIN adalah role platform.
+     *
+     * PRD 02 §27 menuntut membership aktif untuk semua akses, tetapi §28
+     * mengecualikan administrator platform. Yang lebih khusus dimenangkan,
+     * karena kalau tidak, platform admin tidak akan pernah bisa masuk untuk
+     * investigasi seperti yang §28 sendiri wajibkan.
+     */
+    public function test_platform_admin_tidak_perlu_membership_untuk_masuk_organisasi(): void
+    {
+        $platform = $this->organization(['code' => 'PLATFORMX', 'name' => 'Platform']);
+        $lembaga = $this->organization(['code' => 'LAZABCX', 'name' => 'LAZ ABC']);
+
+        $superAdmin = $this->platformAdmin($platform);
+        $this->loginAs($superAdmin, $platform);
+
+        // Seluruh organisasi terlihat, bukan hanya tempat dia terdaftar.
+        $available = $this->getJson('/api/v1/organizations/available')->assertOk()->json('data');
+        $this->assertEqualsCanonicalizing(['PLATFORMX', 'LAZABCX'], array_column($available, 'code'));
+
+        // Dan boleh masuk ke organisasi tanpa membership.
+        $this->postJson('/api/v1/auth/switch-organization', ['organization_id' => $lembaga->getKey()])
+            ->assertOk()
+            ->assertJsonPath('data.code', 'LAZABCX');
+
+        $this->getJson('/api/v1/auth/me')->assertOk()->assertJsonPath('data.organization.code', 'LAZABCX');
+    }
+
+    /** Pengecualian itu khusus platform admin; user biasa tetap tunduk PRD 02 §27. */
+    public function test_admin_organisasi_tetap_butuh_membership(): void
+    {
+        $organizationA = $this->organization();
+        $organizationB = $this->organization();
+        $admin = $this->member($organizationA, 'ADMIN');
+
+        $this->loginAs($admin, $organizationA);
+
+        $this->getJson('/api/v1/organizations/available')->assertOk()->assertJsonCount(1, 'data');
+        $this->postJson('/api/v1/auth/switch-organization', ['organization_id' => $organizationB->getKey()])
+            ->assertStatus(403);
+    }
 }

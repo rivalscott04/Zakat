@@ -404,6 +404,9 @@ membership.status = active
 
 dan memiliki role/permission yang sesuai.
 
+Pengecualian: pemegang role platform seperti SUPER_ADMIN tidak tunduk pada
+syarat membership. Lihat bagian 27.
+
 ---
 
 ## 14. Multiple Membership
@@ -445,7 +448,8 @@ Store Active Context
 All Requests Scoped
 ```
 
-Backend tetap wajib memvalidasi membership.
+Backend tetap wajib memvalidasi membership, kecuali untuk role platform
+sebagaimana diatur pada bagian 27.
 
 Frontend tidak boleh menentukan organization scope secara bebas.
 
@@ -783,7 +787,8 @@ Request:
 }
 ```
 
-Backend wajib memastikan user memiliki membership aktif.
+Backend wajib memastikan user memiliki membership aktif, kecuali untuk role
+platform sebagaimana diatur pada bagian 27.
 
 ---
 
@@ -798,6 +803,29 @@ User dapat mengakses data jika:
 5. Resource berada dalam organization scope yang valid.
 
 Semua kondisi wajib dipenuhi.
+
+### Pengecualian Role Platform
+
+Syarat nomor 3 tidak berlaku bagi pemegang role platform seperti SUPER_ADMIN.
+
+Role platform bukan anggota organisasi mana pun. Sesuai PRD 01 bagian 24, role
+tersebut hanya digunakan untuk pengelolaan platform, sehingga tidak memiliki
+membership pada organisasi operasional.
+
+Tanpa pengecualian ini, bagian 28 tidak dapat dijalankan: administrator platform
+tidak akan pernah bisa masuk ke organisasi suspended untuk investigasi.
+
+Yang tetap berlaku bagi role platform:
+
+1. User authenticated.
+2. User memiliki role/permission.
+3. Organization context dipilih secara eksplisit sebelum membuat data
+   yang ber-scope organisasi.
+4. Seluruh akses tetap dicatat pada audit trail.
+
+Pengecualian ini hanya untuk role platform. Role organisasi seperti ADMIN, AMIL,
+VERIFIER, APPROVER, FINANCE, AUDITOR, dan VIEWER tetap wajib memenuhi kelima
+kondisi di atas.
 
 ---
 
@@ -946,6 +974,7 @@ UPZMATARAM
 3. Membership inactive tidak dapat digunakan untuk akses.
 4. User dapat memiliki multiple organization membership.
 5. Role dapat berbeda pada setiap organization.
+6. Pemegang role platform tidak memerlukan membership. Lihat bagian 27.
 
 ---
 

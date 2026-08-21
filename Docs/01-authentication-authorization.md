@@ -554,11 +554,20 @@ Akses penuh terhadap sistem.
 
 Role ini hanya digunakan untuk pengelolaan platform/system-level.
 
+SUPER_ADMIN tidak bernaung pada organisasi mana pun. Role ini di-assign tanpa
+organization scope, dan tidak memerlukan membership organisasi. Organisasi kerja
+dipilih secara eksplisit melalui organization switcher saat dibutuhkan.
+
+Konsekuensinya diatur pada PRD 02 bagian 27.
+
 ---
 
 ### ADMIN
 
 Mengelola konfigurasi organisasi dan user sesuai permission.
+
+Berbeda dengan SUPER_ADMIN, ADMIN adalah role organisasi. Role ini wajib
+memiliki membership aktif pada organisasi yang dikelolanya.
 
 ---
 
@@ -724,6 +733,9 @@ Data Organization A
 ```
 
 User tidak boleh mengakses data organisasi lain walaupun mengetahui ULID resource tersebut.
+
+Ketentuan ini tidak berlaku bagi role platform, yang memang bertugas lintas
+organisasi. Lihat PRD 02 bagian 27.
 
 ---
 

@@ -66,7 +66,9 @@ class ResolveOrganizationContext
         }
 
         // Membership wajib aktif. Bila dicabut, context dibuang dari session.
-        if ($user->activeMembershipFor($candidate) === null) {
+        // Platform admin dikecualikan karena bukan anggota organisasi mana pun
+        // (PRD 01 §24, PRD 02 §28).
+        if (! $user->isPlatformAdmin() && $user->activeMembershipFor($candidate) === null) {
             if ($request->hasSession()) {
                 $request->session()->forget(self::SESSION_KEY);
             }

@@ -28,7 +28,10 @@ class OrganizationService
     public function availableFor(User $user): Collection
     {
         return Organization::query()
-            ->whereIn('id', $this->membershipOrganizationIds($user))
+            // PRD 01 §24 dan PRD 02 §28 — SUPER_ADMIN adalah role platform, bukan
+            // anggota salah satu organisasi. Membatasinya pada membership membuat
+            // dia tidak bisa masuk untuk investigasi seperti yang PRD wajibkan.
+            ->when(! $user->isPlatformAdmin(), fn ($query) => $query->whereIn('id', $this->membershipOrganizationIds($user)))
             ->where('status', '!=', OrganizationStatus::Archived)
             ->orderBy('name')
             ->get();
@@ -37,9 +40,9 @@ class OrganizationService
     /** PRD 02 §26 — backend memverifikasi membership sebelum context berpindah. */
     public function switchTo(Request $request, User $user, string $organizationId): Organization
     {
-        $membership = $user->activeMembershipFor($organizationId);
-
-        if ($membership === null) {
+        // Platform admin boleh masuk ke organisasi mana pun tanpa membership.
+        // Pengguna biasa tetap tunduk pada PRD 02 §27.
+        if (! $user->isPlatformAdmin() && $user->activeMembershipFor($organizationId) === null) {
             throw ZakatException::forbidden('Anda tidak memiliki membership aktif pada organisasi tersebut.');
         }
 

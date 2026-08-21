@@ -1,6 +1,8 @@
 import { lazy } from "react";
 
 const Login = lazy(() => import("../../features/auth/pages/Login"));
+const ForgotPassword = lazy(() => import("../../features/auth/pages/ForgotPassword"));
+const SetPassword = lazy(() => import("../../features/auth/pages/SetPassword"));
 const MuzakisPage = lazy(() => import("../../features/muzakis"));
 const OrganizationsPage = lazy(() => import("../../features/organizations"));
 const OrganizationDetail = lazy(
@@ -29,6 +31,12 @@ const DocumentsPage = lazy(() => import("../../features/documents"));
 export const publicRoutes = [
   { path: "/", component: <LandingPage /> },
   { path: "/login", component: <Login /> },
+  // Ketiganya wajib publik: penerima undangan dan pemulihan password belum bisa
+  // login. Path-nya harus sama persis dengan tautan pada email yang dikirim
+  // backend (UserInvitationNotification dan ResetPassword::createUrlUsing).
+  { path: "/forgot-password", component: <ForgotPassword /> },
+  { path: "/reset-password", component: <SetPassword mode="reset" /> },
+  { path: "/accept-invitation", component: <SetPassword mode="invitation" /> },
 ];
 export const authProtectedRoutes = [
   { path: "/dashboard", component: <MuzakisPage />, permission: "muzaki.view" },

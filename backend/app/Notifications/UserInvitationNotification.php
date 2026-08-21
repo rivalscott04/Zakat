@@ -22,7 +22,7 @@ class UserInvitationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = rtrim((string) config('app.frontend_url'), '/')
-            .'/auth/accept-invitation?token='.$this->token
+            .'/accept-invitation?token='.$this->token
             .'&email='.urlencode($notifiable->email);
 
         return (new MailMessage)

@@ -7,7 +7,9 @@ use App\Models\AuditLog;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserInvitation;
+use App\Notifications\UserInvitationNotification;
 use App\Services\UserService;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -275,5 +277,40 @@ class AuthenticationTest extends TestCase
         ])->assertStatus(422);
 
         $this->assertNotNull($token);
+    }
+
+    /**
+     * Tautan pada email wajib menunjuk path yang benar-benar terdaftar sebagai
+     * route publik di SPA (src/app/routes/allRoutes.tsx).
+     *
+     * Sempat tidak cocok: email memakai awalan /auth sedangkan route memakai
+     * bentuk tanpa awalan, sehingga penerima undangan membuka halaman kosong dan
+     * tidak pernah bisa mengaktifkan akunnya.
+     */
+    public function test_tautan_email_menunjuk_route_frontend_yang_terdaftar(): void
+    {
+        Notification::fake();
+
+        $organization = $this->organization();
+        $admin = $this->member($organization);
+        $target = $this->member($organization, 'AMIL', ['email' => 'penerima@example.test']);
+
+        $this->loginAs($admin, $organization);
+        app(UserService::class)->sendInvitation($target);
+
+        Notification::assertSentTo($target, UserInvitationNotification::class, function ($notification) use ($target) {
+            $url = $notification->toMail($target)->actionUrl;
+
+            $this->assertStringContainsString('/accept-invitation?token=', $url);
+            $this->assertStringNotContainsString('/auth/accept-invitation', $url);
+
+            return true;
+        });
+
+        // Alur reset password memakai URL yang dibentuk pada AppServiceProvider.
+        $resetUrl = (new ResetPassword('token-uji'))->toMail($target)->actionUrl;
+
+        $this->assertStringContainsString('/reset-password?token=', $resetUrl);
+        $this->assertStringNotContainsString('/auth/reset-password', $resetUrl);
     }
 }

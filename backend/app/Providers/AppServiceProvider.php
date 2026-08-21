@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
 
         // PRD 01 §16 dan §45 — tautan reset mengarah ke SPA, bukan ke API.
         ResetPassword::createUrlUsing(fn ($notifiable, string $token) => rtrim((string) config('app.frontend_url'), '/')
-            .'/auth/reset-password?token='.$token
+            .'/reset-password?token='.$token
             .'&email='.urlencode($notifiable->getEmailForPasswordReset()));
     }
 }

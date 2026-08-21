@@ -1,0 +1,5 @@
+<?php
+namespace App\Models;
+use App\Models\Concerns\BelongsToOrganization; use App\Models\Concerns\HasBusinessNumber; use Illuminate\Database\Eloquent\Attributes\Fillable; use Illuminate\Database\Eloquent\Concerns\HasUlids; use Illuminate\Database\Eloquent\Model;
+#[Fillable(['bank_account_id','period_start','period_end','opening_balance','closing_balance','matched_amount','unmatched_amount','difference_amount','status','started_by','started_at','completed_at'])]
+class ReconciliationSession extends Model { use BelongsToOrganization,HasUlids,HasBusinessNumber; public static function businessCode():string{return 'RCS';} public function businessNumberColumn():string{return 'session_number';} protected function casts():array{return ['period_start'=>'date','period_end'=>'date','opening_balance'=>'decimal:2','closing_balance'=>'decimal:2','matched_amount'=>'decimal:2','unmatched_amount'=>'decimal:2','difference_amount'=>'decimal:2','started_at'=>'datetime','completed_at'=>'datetime'];} public function account(){return $this->belongsTo(BankAccount::class,'bank_account_id');} }

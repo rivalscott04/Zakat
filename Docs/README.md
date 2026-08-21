@@ -38,8 +38,8 @@ Setiap modul memiliki dokumen PRD terpisah agar dapat dikembangkan, direview, da
 | 11 | [Program](./11-program.md) | Implemented (PRD complete + UI wired/build verified) |
 | 12 | [Distribution](./12-distribution.md) | In progress (Core only; PRD completion after Module 11 review) |
 | 13 | [Payment Gateway](./13-payment-gateway.md) | Draft |
-| 14 | [Bank Reconciliation](./14-bank-reconciliation.md) | Draft |
-| 15 | [Document Management](./15-document-management.md) | Draft |
+| 14 | [Bank Reconciliation](./14-bank-reconciliation.md) | In progress (Backend + UI wired; database acceptance verification pending) |
+| 15 | [Document Management](./15-document-management.md) | In progress (Backend + UI wired; database acceptance verification pending) |
 | 16 | [Notification](./16-notification.md) | Draft |
 | 17 | [Audit Trail](./17-audit-trail.md) | Draft |
 | 18 | [Transparency](./18-transparency.md) | Draft |
@@ -72,5 +72,9 @@ Module 10 sudah memiliki Assessment Request ASR, Assessment ASM, template dasar 
 Module 11 sudah lengkap sesuai PRD: Program dengan nomor PRG, kategori/type, period, lifecycle dan maker-checker approval, multi-fund, budget/approval/calculation, eligibility rule/evaluation/override, enrollment/reject/withdraw, capacity/waitlist, activity/participant, target, output, outcome, budget commitment, Distribution handoff, dashboard, permission, organization-scoped lookup, audit event, API, acceptance test, dan UI workspace yang ter-wire ke backend.
 
 Module 12 saat ini baru core awal: Distribution Request, Distribution dengan nomor DST, approval maker-checker, fund reservation, process/complete partial, cancellation, reversal, item dasar, permission, audit, API, dan UI list/create. Modul ini belum ditandai complete; batch, proof/evidence, bank transfer detail, recurring schedule, recipient confirmation, dan accounting event akan diselesaikan setelah review Modul 11.
+
+Modul 14 sudah memiliki fondasi bank account dengan nomor rekening terenkripsi/masked, statement import CSV/XLSX, duplicate detection, transaksi bank, auto/manual/partial matching, exclusion, reconciliation session, summary, permission, audit, API, dan halaman UI rekening/impor/transaksi. Verifikasi migrasi dan acceptance test database belum dapat dijalankan di lingkungan ini karena PostgreSQL lokal tidak tersedia.
+
+Modul 15 sudah memiliki upload private storage dengan validasi ukuran/ekstensi, stored filename aman, SHA-256 checksum dan duplicate event, document relation, versioning saat replace, verification/rejection, expiration metadata, preview/download terotorisasi, soft delete/restore/archive, access log, permission, audit, API, dan halaman UI upload/list. Verifikasi migrasi dan acceptance test database menunggu PostgreSQL lokal.
 
 Verifikasi terakhir: `bun x tsc --noEmit`, `bun run build`, `./vendor/bin/pint --test`, dan `php artisan test` lulus. Full backend suite: 64 test dan 287 assertion lulus.

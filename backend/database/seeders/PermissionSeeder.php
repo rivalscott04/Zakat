@@ -64,6 +64,20 @@ class PermissionSeeder extends Seeder
             'distribution.batch' => ['view', 'create', 'update', 'approve', 'process'],
             'distribution.proof' => ['view', 'upload', 'verify'],
         ],
+        // PRD 13R §35.
+        'payment' => [
+            'payment' => ['view', 'create', 'verify', 'cancel', 'refresh', 'audit.view'],
+            'payment.refund' => ['request', 'approve', 'reject'],
+            'payment.provider' => ['view', 'manage'],
+            'payment.webhook' => ['view'],
+            'payment.reconciliation' => ['view', 'manage'],
+        ],
+        'bank_reconciliation' => [
+            'bank_account' => ['view','create','update','manage'], 'bank_statement' => ['view','import','process'], 'bank_transaction' => ['view','match','unmatch','exclude'], 'bank_reconciliation' => ['view','create','start','auto_match','complete','close','adjustment.create','adjustment.approve','audit.view'],
+        ],
+        'document_management' => [
+            'document' => ['view','create','update','delete','restore','download','preview','replace','verify','reject','relation.manage','archive','access_log.view','manage'], 'document.version' => ['view','create','restore'],
+        ],
     ];
 
     public function run(): void

@@ -1,0 +1,5 @@
+<?php
+namespace App\Models;
+use App\Models\Concerns\BelongsToOrganization; use App\Models\Concerns\HasBusinessNumber; use Illuminate\Database\Eloquent\Attributes\Fillable; use Illuminate\Database\Eloquent\Concerns\HasUlids; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\HasMany;
+#[Fillable(['bank_account_id','period_start','period_end','opening_balance','closing_balance','transaction_count','status','imported_by','imported_at'])]
+class BankStatement extends Model { use BelongsToOrganization,HasUlids,HasBusinessNumber; public static function businessCode(): string{return 'BST';} public function businessNumberColumn():string{return 'statement_number';} protected function casts():array{return ['period_start'=>'date','period_end'=>'date','opening_balance'=>'decimal:2','closing_balance'=>'decimal:2','imported_at'=>'datetime'];} public function transactions():HasMany{return $this->hasMany(BankTransaction::class);} public function account(){return $this->belongsTo(BankAccount::class,'bank_account_id');} }

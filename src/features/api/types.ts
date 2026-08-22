@@ -437,3 +437,16 @@ export interface AuditSummary {
   by_category: Record<string, number>;
   by_module: Record<string, number>;
 }
+
+// ---------------------------------------------------------------- modul 20
+
+export interface SettingItem {
+  key: string;
+  label: string;
+  group: string;
+  scope: "GLOBAL" | "ORGANIZATION";
+  type: "integer" | "boolean" | "string";
+  value: string | number | boolean;
+  default_value: string | number | boolean;
+  source: "DEFAULT" | "GLOBAL" | "ORGANIZATION";
+}

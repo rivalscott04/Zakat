@@ -1,12 +1,12 @@
 <?php
 
 /*
- | ZETRA runtime policy.
+ | ZETRA runtime policy — System Default pada PRD 02 §24.
  |
- | PRD 01 §14 dan §20 menyatakan password policy, login threshold, dan lock
- | duration harus configurable melalui System Settings (PRD 20). Modul System
- | Settings belum diimplementasikan, jadi nilainya tinggal di sini dulu.
- | Saat PRD 20 dikerjakan, service settings cukup meng-override key ini.
+ | Nilai di sini adalah lapisan terbawah. SettingService menimpanya saat runtime
+ | dengan System Setting global lalu Organization Setting, sehingga seluruh
+ | pemanggil cukup membaca config('zakat.*') seperti biasa. Key yang boleh
+ | ditimpa terdaftar di App\Support\SettingRegistry.
  */
 
 return [

@@ -6,6 +6,7 @@ use App\Enums\ErrorCode;
 use App\Enums\MembershipStatus;
 use App\Enums\OrganizationStatus;
 use App\Models\Organization;
+use App\Services\SettingService;
 use App\Support\ApiResponse;
 use App\Support\OrganizationContext;
 use Closure;
@@ -51,6 +52,9 @@ class ResolveOrganizationContext
         }
 
         OrganizationContext::set($organization);
+
+        // PRD 02 §24 — Organization Setting menimpa System Default di atasnya.
+        app(SettingService::class)->apply($organization->getKey());
 
         return $next($request);
     }

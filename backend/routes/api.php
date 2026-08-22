@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
+use App\Http\Controllers\Api\V1\SettingController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZakatCalculationController;
 use App\Http\Controllers\Api\V1\ZakatController;
@@ -152,6 +153,13 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
     });
 
     // PRD 17T — audit trail, seluruhnya hanya-baca.
+    // PRD 20 — System Settings.
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingController::class, 'index'])->middleware('permission:setting.view');
+        Route::put('/', [SettingController::class, 'update'])->middleware('permission:setting.update');
+        Route::delete('/{key}', [SettingController::class, 'reset'])->middleware('permission:setting.update');
+    });
+
     Route::prefix('audit-logs')->group(function () {
         Route::get('/', [AuditLogController::class, 'index'])->middleware('permission:audit.view');
         Route::get('/summary', [AuditLogController::class, 'summary'])->middleware('permission:audit.view');

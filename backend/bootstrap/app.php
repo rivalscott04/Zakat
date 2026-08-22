@@ -2,6 +2,7 @@
 
 use App\Enums\ErrorCode;
 use App\Exceptions\ZakatException;
+use App\Http\Middleware\ApplySettings;
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnsurePermission;
 use App\Http\Middleware\ResolveOrganizationContext;
@@ -32,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
             AssignRequestId::class,
+            ApplySettings::class,
         ]);
 
         $middleware->alias([

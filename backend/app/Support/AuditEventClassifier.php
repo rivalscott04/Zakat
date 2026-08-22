@@ -92,6 +92,7 @@ final class AuditEventClassifier
         'distribution' => 'distribution', 'payment' => 'payment',
         'bank' => 'bank', 'reconciliation' => 'bank',
         'document' => 'document', 'notification' => 'notification',
+        'setting' => 'setting',
     ];
 
     /** Modul yang menentukan kategori ketika aksinya tidak menyiratkan apa pun. */
@@ -109,6 +110,7 @@ final class AuditEventClassifier
         'document' => AuditEventCategory::Document,
         'notification' => AuditEventCategory::Notification,
         'audit' => AuditEventCategory::System,
+        'setting' => AuditEventCategory::Configuration,
     ];
 
     /**
@@ -126,9 +128,10 @@ final class AuditEventClassifier
             ?? self::BY_PREFIX[$prefix]
             ?? 'system';
 
-        $category = self::BY_SUFFIX[$suffix]
-            ?? self::MODULE_CATEGORY[$module]
-            ?? AuditEventCategory::Other;
+        // Perubahan setting selalu CONFIGURATION, bukan UPDATE biasa (PRD 17 §22).
+        $category = $module === 'setting'
+            ? AuditEventCategory::Configuration
+            : (self::BY_SUFFIX[$suffix] ?? self::MODULE_CATEGORY[$module] ?? AuditEventCategory::Other);
 
         // PRD 17L §21 — module.entity.action.
         $actionName = count($segments) > 1 ? implode('_', array_slice($segments, 1)) : $action;

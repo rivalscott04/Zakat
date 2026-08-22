@@ -32,6 +32,10 @@ class PermissionSeeder extends Seeder
                 'merge', 'export', 'view_audit',
             ],
         ],
+        // PRD 20.
+        'setting' => [
+            'setting' => ['view', 'update'],
+        ],
         // PRD 17U §39.
         'audit' => [
             'audit' => ['view', 'view_detail', 'view_sensitive', 'export', 'integrity_check', 'archive.view', 'retention.manage', 'system.view', 'security.view'],

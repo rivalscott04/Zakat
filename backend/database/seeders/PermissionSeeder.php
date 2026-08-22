@@ -32,8 +32,9 @@ class PermissionSeeder extends Seeder
                 'merge', 'export', 'view_audit',
             ],
         ],
+        // PRD 17U §39.
         'audit' => [
-            'audit' => ['view'],
+            'audit' => ['view', 'view_detail', 'view_sensitive', 'export', 'integrity_check', 'archive.view', 'retention.manage', 'system.view', 'security.view'],
         ],
         'zakat' => [
             'zakat' => ['view', 'category.manage', 'type.create', 'type.update', 'type.activate', 'type.deactivate', 'rule.create', 'rule.update', 'rule.activate', 'rule.expire', 'rule.archive', 'nisab.manage', 'haul.manage', 'rate.manage', 'rule.resolve', 'calculation.view', 'calculation.create', 'calculation.calculate', 'calculation.confirm', 'calculation.cancel', 'calculation.recalculate', 'calculation.adjust', 'calculation.approve', 'calculation.override_expired', 'calculation.convert', 'calculation.view_breakdown', 'calculation.view_snapshot', 'calculation.view_audit', 'formula.manage'],

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AccountingController;
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AssessmentController;
+use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\BankReconciliationController;
 use App\Http\Controllers\Api\V1\CollectionController;
@@ -148,6 +149,17 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
 
         Route::get('/{amilId}/assignments', [AmilController::class, 'assignments'])->middleware('permission:assignments.view');
         Route::post('/{amilId}/assignments', [AmilController::class, 'storeAssignment'])->middleware('permission:assignments.create');
+    });
+
+    // PRD 17T — audit trail, seluruhnya hanya-baca.
+    Route::prefix('audit-logs')->group(function () {
+        Route::get('/', [AuditLogController::class, 'index'])->middleware('permission:audit.view');
+        Route::get('/summary', [AuditLogController::class, 'summary'])->middleware('permission:audit.view');
+        Route::post('/export', [AuditLogController::class, 'export'])->middleware('permission:audit.export');
+        Route::post('/integrity-check', [AuditLogController::class, 'integrityCheck'])->middleware('permission:audit.integrity_check');
+        Route::get('/entity/{entityType}/{entityId}', [AuditLogController::class, 'entity'])->middleware('permission:audit.view');
+        Route::get('/request/{requestId}', [AuditLogController::class, 'request'])->middleware('permission:audit.view');
+        Route::get('/{id}', [AuditLogController::class, 'show'])->middleware('permission:audit.view_detail');
     });
 
     // ---------------------------------------------------------------- payment

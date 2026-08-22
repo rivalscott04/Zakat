@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AuditLog;
+use App\Support\AuditEventClassifier;
 use App\Support\OrganizationContext;
 use App\Support\RequestId;
 use Illuminate\Database\Eloquent\Model;
@@ -39,24 +40,63 @@ class AuditService
         array $context = [],
         ?string $organizationId = null,
         ?string $actorId = null,
+        ?string $description = null,
     ): AuditLog {
         $actor = Auth::user();
+        $classification = AuditEventClassifier::classify($action, $entity);
 
         return AuditLog::create([
+            // PRD 17C §8 — penomoran audit.
+            'audit_number' => app(BusinessNumberService::class)->next('AUD'),
+            'event_name' => $classification['event_name'],
+            'event_category' => $classification['event_category'],
+            'module_code' => $classification['module_code'],
+            'severity' => $classification['severity'],
             'request_id' => RequestId::current(),
             'actor_id' => $actorId ?? $actor?->getKey(),
             'actor_name' => $actor?->getAttribute('name'),
+            // PRD 17F §11 — peristiwa tanpa pengguna dicatat sebagai SYSTEM.
+            'actor_type' => ($actorId ?? $actor?->getKey()) === null ? 'SYSTEM' : 'USER',
             'organization_id' => $organizationId ?? OrganizationContext::id(),
             'action' => $action,
             'entity_type' => $entity ? $entity::class : null,
             'entity_id' => $entity?->getKey(),
-            'before' => $before === null ? null : $this->redact($before),
-            'after' => $after === null ? null : $this->redact($after),
-            'context' => $context === [] ? null : $this->redact($context),
+            'entity_reference' => $this->reference($entity),
+            'description' => $description,
+            'old_values' => $before === null ? null : $this->redact($before),
+            'new_values' => $after === null ? null : $this->redact($after),
+            'metadata' => $context === [] ? null : $this->redact($context),
             'ip_address' => Request::ip(),
             'user_agent' => substr((string) Request::userAgent(), 0, 1000),
+            // PRD 17C §6 — waktu kejadian dipisahkan dari waktu penyimpanan.
+            'occurred_at' => now(),
             'created_at' => now(),
         ]);
+    }
+
+    /**
+     * PRD 17G §14 — penanda yang dapat dibaca manusia untuk entitas terkait.
+     *
+     * Dicari dari kolom penomoran yang lazim dipakai modul, supaya baris audit
+     * tetap bermakna walau entitasnya sudah terhapus.
+     */
+    private function reference(?Model $entity): ?string
+    {
+        if ($entity === null) {
+            return null;
+        }
+
+        // Dibaca dari array atribut, bukan getAttribute(), karena Model::shouldBeStrict()
+        // melempar exception untuk kolom yang tidak dimiliki model bersangkutan.
+        $attributes = $entity->getAttributes();
+
+        foreach (['business_number', 'payment_number', 'distribution_number', 'collection_number', 'document_number', 'session_number', 'refund_number', 'batch_number', 'movement_number', 'journal_number', 'account_code', 'mustahik_number', 'code', 'email'] as $column) {
+            if (filled($attributes[$column] ?? null)) {
+                return (string) $attributes[$column];
+            }
+        }
+
+        return null;
     }
 
     /**

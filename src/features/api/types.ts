@@ -404,3 +404,36 @@ export interface DocumentItem {
   previewable: boolean;
   created_at: string | null;
 }
+
+export type AuditSeverity = "INFO" | "NOTICE" | "WARNING" | "CRITICAL";
+
+export interface AuditLogItem {
+  id: string;
+  audit_number: string | null;
+  event_name: string | null;
+  event_category: string | null;
+  module_code: string | null;
+  severity: AuditSeverity;
+  action: string;
+  description: string | null;
+  entity_type: string | null;
+  entity_id: string | null;
+  entity_reference: string | null;
+  actor_id: string | null;
+  actor_name: string | null;
+  actor_type: string;
+  ip_address: string | null;
+  request_id: string | null;
+  occurred_at: string | null;
+  has_changes: boolean;
+  old_values?: Record<string, unknown> | null;
+  new_values?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown> | null;
+}
+
+export interface AuditSummary {
+  total: number;
+  by_severity: Record<string, number>;
+  by_category: Record<string, number>;
+  by_module: Record<string, number>;
+}

@@ -33,6 +33,7 @@ export const MENU: MenuItem[] = [
   { to: "/distribution-batches", label: "Batch Penyaluran", permission: "distribution.batch.view" },
   { to: "/bank-reconciliation", label: "Rekonsiliasi Bank", permission: "bank_reconciliation.view" },
   { to: "/documents", label: "Dokumen", permission: "document.view" },
+  { to: "/audit-logs", label: "Audit Trail", permission: "audit.view" },
 ];
 
 export type PermissionCheck = (...permissions: string[]) => boolean;

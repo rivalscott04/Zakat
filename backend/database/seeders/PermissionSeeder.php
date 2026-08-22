@@ -73,10 +73,10 @@ class PermissionSeeder extends Seeder
             'payment.reconciliation' => ['view', 'manage'],
         ],
         'bank_reconciliation' => [
-            'bank_account' => ['view','create','update','manage'], 'bank_statement' => ['view','import','process'], 'bank_transaction' => ['view','match','unmatch','exclude'], 'bank_reconciliation' => ['view','create','start','auto_match','complete','close','adjustment.create','adjustment.approve','audit.view'],
+            'bank_account' => ['view', 'create', 'update', 'manage'], 'bank_statement' => ['view', 'import', 'process'], 'bank_transaction' => ['view', 'match', 'unmatch', 'exclude'], 'bank_reconciliation' => ['view', 'create', 'start', 'auto_match', 'complete', 'close', 'adjustment.create', 'adjustment.approve', 'audit.view'],
         ],
         'document_management' => [
-            'document' => ['view','create','update','delete','restore','download','preview','replace','verify','reject','relation.manage','archive','access_log.view','manage'], 'document.version' => ['view','create','restore'],
+            'document' => ['view', 'create', 'update', 'delete', 'restore', 'download', 'preview', 'replace', 'verify', 'reject', 'relation.manage', 'archive', 'access_log.view', 'manage'], 'document.version' => ['view', 'create', 'restore'],
         ],
     ];
 

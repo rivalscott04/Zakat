@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AccountingController;
-use App\Http\Controllers\Api\V1\BankReconciliationController;
 use App\Http\Controllers\Api\V1\AmilController;
 use App\Http\Controllers\Api\V1\AssessmentController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BankReconciliationController;
 use App\Http\Controllers\Api\V1\CollectionController;
 use App\Http\Controllers\Api\V1\DistributionBatchController;
 use App\Http\Controllers\Api\V1\DistributionController;
@@ -399,11 +399,53 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
         Route::post('/{id}/approve', [DistributionController::class, 'approveRequest'])->middleware('permission:distribution.request.approve');
         Route::post('/{id}/reject', [DistributionController::class, 'rejectRequest'])->middleware('permission:distribution.request.reject');
     });
-    Route::prefix('bank-accounts')->group(function () { Route::get('/', [BankReconciliationController::class,'accounts'])->middleware('permission:bank_account.view'); Route::post('/', [BankReconciliationController::class,'storeAccount'])->middleware('permission:bank_account.create'); Route::get('/{id}', [BankReconciliationController::class,'showAccount'])->middleware('permission:bank_account.view'); });
-    Route::prefix('bank-statements')->group(function () { Route::post('/import', [BankReconciliationController::class,'import'])->middleware('permission:bank_statement.import'); });
-    Route::get('/bank-transactions', [BankReconciliationController::class,'transactions'])->middleware('permission:bank_transaction.view');
-    Route::post('/bank-transactions/{id}/match', [BankReconciliationController::class,'match'])->middleware('permission:bank_transaction.match');
-    Route::post('/bank-transactions/{id}/exclude', [BankReconciliationController::class,'exclude'])->middleware('permission:bank_transaction.exclude');
-    Route::prefix('reconciliation-sessions')->group(function () { Route::get('/', [BankReconciliationController::class,'sessions'])->middleware('permission:bank_reconciliation.view'); Route::post('/', [BankReconciliationController::class,'storeSession'])->middleware('permission:bank_reconciliation.create'); Route::post('/{id}/auto-match', [BankReconciliationController::class,'autoMatch'])->middleware('permission:bank_reconciliation.auto_match'); Route::post('/{id}/complete', [BankReconciliationController::class,'complete'])->middleware('permission:bank_reconciliation.complete'); Route::post('/{id}/close', [BankReconciliationController::class,'close'])->middleware('permission:bank_reconciliation.close'); });
-    Route::prefix('documents')->group(function () { Route::get('/', [DocumentController::class,'index'])->middleware('permission:document.view'); Route::post('/', [DocumentController::class,'store'])->middleware('permission:document.create'); Route::get('/{id}', [DocumentController::class,'show'])->middleware('permission:document.view'); Route::patch('/{id}', [DocumentController::class,'update'])->middleware('permission:document.update'); Route::delete('/{id}', [DocumentController::class,'delete'])->middleware('permission:document.delete'); Route::post('/{id}/restore', [DocumentController::class,'restore'])->middleware('permission:document.restore'); Route::get('/{id}/download', [DocumentController::class,'download'])->middleware('permission:document.download'); Route::get('/{id}/preview', [DocumentController::class,'preview'])->middleware('permission:document.preview'); Route::post('/{id}/replace', [DocumentController::class,'replace'])->middleware('permission:document.replace'); Route::get('/{id}/relations', [DocumentController::class,'relations'])->middleware('permission:document.view'); Route::post('/{id}/relations', [DocumentController::class,'relation'])->middleware('permission:document.relation.manage'); Route::delete('/{id}/relations/{relationId}', [DocumentController::class,'deleteRelation'])->middleware('permission:document.relation.manage'); Route::post('/{id}/archive', [DocumentController::class,'archive'])->middleware('permission:document.archive'); Route::post('/{id}/verify', [DocumentController::class,'verify'])->middleware('permission:document.verify'); Route::post('/{id}/reject', [DocumentController::class,'reject'])->middleware('permission:document.reject'); });
+    Route::prefix('bank-accounts')->group(function () {
+        Route::get('/', [BankReconciliationController::class, 'accounts'])->middleware('permission:bank_account.view');
+        Route::post('/', [BankReconciliationController::class, 'storeAccount'])->middleware('permission:bank_account.create');
+        Route::get('/{id}', [BankReconciliationController::class, 'showAccount'])->middleware('permission:bank_account.view');
+    });
+    Route::prefix('bank-statements')->group(function () {
+        Route::post('/import', [BankReconciliationController::class, 'import'])->middleware('permission:bank_statement.import');
+    });
+    Route::get('/bank-transactions', [BankReconciliationController::class, 'transactions'])->middleware('permission:bank_transaction.view');
+    Route::post('/bank-transactions/{id}/match', [BankReconciliationController::class, 'match'])->middleware('permission:bank_transaction.match');
+    Route::post('/bank-transactions/{id}/exclude', [BankReconciliationController::class, 'exclude'])->middleware('permission:bank_transaction.exclude');
+    Route::prefix('reconciliation-sessions')->group(function () {
+        Route::get('/', [BankReconciliationController::class, 'sessions'])->middleware('permission:bank_reconciliation.view');
+        Route::post('/', [BankReconciliationController::class, 'storeSession'])->middleware('permission:bank_reconciliation.create');
+        Route::get('/{id}/summary', [BankReconciliationController::class, 'summary'])->middleware('permission:bank_reconciliation.view');
+        Route::post('/{id}/auto-match', [BankReconciliationController::class, 'autoMatch'])->middleware('permission:bank_reconciliation.auto_match');
+        Route::post('/{id}/complete', [BankReconciliationController::class, 'complete'])->middleware('permission:bank_reconciliation.complete');
+        Route::post('/{id}/close', [BankReconciliationController::class, 'close'])->middleware('permission:bank_reconciliation.close');
+    });
+
+    // PRD 14H — sisi internal pencocokan.
+    Route::prefix('reconciliation-transactions')->group(function () {
+        Route::post('/sync', [BankReconciliationController::class, 'syncInternal'])->middleware('permission:bank_reconciliation.create');
+        Route::post('/', [BankReconciliationController::class, 'storeInternal'])->middleware('permission:bank_reconciliation.create');
+    });
+
+    // PRD 14W §58.
+    Route::prefix('reconciliation-adjustments')->group(function () {
+        Route::post('/', [BankReconciliationController::class, 'storeAdjustment'])->middleware('permission:bank_reconciliation.adjustment.create');
+        Route::post('/{id}/approve', [BankReconciliationController::class, 'approveAdjustment'])->middleware('permission:bank_reconciliation.adjustment.approve');
+        Route::post('/{id}/reject', [BankReconciliationController::class, 'rejectAdjustment'])->middleware('permission:bank_reconciliation.adjustment.approve');
+    });
+    Route::prefix('documents')->group(function () {
+        Route::get('/', [DocumentController::class, 'index'])->middleware('permission:document.view');
+        Route::post('/', [DocumentController::class, 'store'])->middleware('permission:document.create');
+        Route::get('/{id}', [DocumentController::class, 'show'])->middleware('permission:document.view');
+        Route::patch('/{id}', [DocumentController::class, 'update'])->middleware('permission:document.update');
+        Route::delete('/{id}', [DocumentController::class, 'delete'])->middleware('permission:document.delete');
+        Route::post('/{id}/restore', [DocumentController::class, 'restore'])->middleware('permission:document.restore');
+        Route::get('/{id}/download', [DocumentController::class, 'download'])->middleware('permission:document.download');
+        Route::get('/{id}/preview', [DocumentController::class, 'preview'])->middleware('permission:document.preview');
+        Route::post('/{id}/replace', [DocumentController::class, 'replace'])->middleware('permission:document.replace');
+        Route::get('/{id}/relations', [DocumentController::class, 'relations'])->middleware('permission:document.view');
+        Route::post('/{id}/relations', [DocumentController::class, 'relation'])->middleware('permission:document.relation.manage');
+        Route::delete('/{id}/relations/{relationId}', [DocumentController::class, 'deleteRelation'])->middleware('permission:document.relation.manage');
+        Route::post('/{id}/archive', [DocumentController::class, 'archive'])->middleware('permission:document.archive');
+        Route::post('/{id}/verify', [DocumentController::class, 'verify'])->middleware('permission:document.verify');
+        Route::post('/{id}/reject', [DocumentController::class, 'reject'])->middleware('permission:document.reject');
+    });
 });

@@ -38,6 +38,21 @@ return [
             'report' => false,
         ],
 
+        /*
+         | Penyimpanan dokumen (PRD 15L §22 dan PRD 15T §37).
+         |
+         | Sengaja tidak disimbolkan ke public/ dan tidak punya URL publik
+         | permanen: berkas hanya boleh diakses lewat endpoint terautentikasi
+         | yang memeriksa organisasi, visibility, dan permission.
+         */
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'serve' => false,
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

@@ -335,4 +335,72 @@ export interface PaymentSummary {
 }
 export interface BankAccount { id: string; account_code: string; bank_name: string; account_name: string; account_number_masked: string; currency: string; current_balance: string; status: string; }
 export interface BankTransaction { id: string; transaction_reference: string; transaction_date: string; description: string | null; debit_amount: string; credit_amount: string; match_status: string; duplicate_status: string; }
-export interface DocumentItem { id: string; document_number: string; document_name: string; original_filename: string; document_type: string; version: number; status: string; mime_type: string; file_size: number; checksum: string; }
+
+export interface BankAccountItem {
+  id: string;
+  account_code: string;
+  bank_name: string;
+  account_name: string;
+  account_number_masked: string;
+  currency: string;
+  status: string;
+}
+
+export interface BankTransactionItem {
+  id: string;
+  transaction_reference: string;
+  transaction_date: string | null;
+  description: string | null;
+  debit_amount: string;
+  credit_amount: string;
+  match_status: string;
+  duplicate_status: string;
+}
+
+export interface ReconciliationSessionItem {
+  id: string;
+  session_number: string;
+  bank_account_id: string;
+  period_start: string | null;
+  period_end: string | null;
+  opening_balance: string;
+  closing_balance: string;
+  matched_amount: string;
+  unmatched_amount: string;
+  difference_amount: string;
+  status: string;
+}
+
+export interface ReconciliationSummary {
+  opening_balance: string;
+  total_credit: string;
+  total_debit: string;
+  closing_balance: string;
+  expected_closing_balance: string;
+  difference_amount: string;
+  balance_valid: boolean;
+  total_transactions: number;
+  matched: number;
+  partially_matched: number;
+  unmatched: number;
+  excluded: number;
+  possible_duplicates: number;
+}
+
+export interface DocumentItem {
+  id: string;
+  document_number: string | null;
+  mime_type: string;
+  checksum: string;
+  document_name: string;
+  original_filename: string;
+  document_type: string;
+  category: string | null;
+  extension: string;
+  file_size: number;
+  version: number;
+  visibility: string;
+  status: string;
+  previewable: boolean;
+  created_at: string | null;
+}

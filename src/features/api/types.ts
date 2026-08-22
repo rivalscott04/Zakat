@@ -450,3 +450,57 @@ export interface SettingItem {
   default_value: string | number | boolean;
   source: "DEFAULT" | "GLOBAL" | "ORGANIZATION";
 }
+
+// ---------------------------------------------------------------- modul 16
+
+export type NotificationPriority = "low" | "normal" | "high" | "urgent";
+
+export interface NotificationDeliveryItem {
+  channel: string;
+  status: string;
+  attempt_count: number;
+  max_attempts: number;
+  error_message: string | null;
+  sent_at: string | null;
+}
+
+export interface NotificationItem {
+  id: string;
+  notification_number: string;
+  event_name: string | null;
+  title: string;
+  message: string;
+  data: Record<string, unknown> | null;
+  priority: NotificationPriority;
+  status: string;
+  read_at: string | null;
+  scheduled_at: string | null;
+  sent_at: string | null;
+  created_at: string | null;
+  deliveries?: NotificationDeliveryItem[];
+}
+
+export interface NotificationTemplateItem {
+  id: string;
+  template_code: string;
+  name: string;
+  channel: string;
+  subject: string | null;
+  content: string;
+  locale: string;
+  status: string;
+  variables: string[];
+  updated_at: string | null;
+}
+
+export interface NotificationRuleItem {
+  id: string;
+  event_name: string;
+  template_id: string | null;
+  template_code?: string | null;
+  channels: string[];
+  recipient_strategy: string;
+  recipient_config: Record<string, unknown> | null;
+  priority: NotificationPriority;
+  enabled: boolean;
+}

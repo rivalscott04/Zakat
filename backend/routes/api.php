@@ -13,6 +13,11 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\FundController;
 use App\Http\Controllers\Api\V1\MustahikController;
 use App\Http\Controllers\Api\V1\MuzakiController;
+use App\Http\Controllers\Api\V1\NotificationBatchController;
+use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\NotificationEndpointController;
+use App\Http\Controllers\Api\V1\NotificationRuleController;
+use App\Http\Controllers\Api\V1\NotificationTemplateController;
 use App\Http\Controllers\Api\V1\OrganizationController;
 use App\Http\Controllers\Api\V1\OrganizationMemberController;
 use App\Http\Controllers\Api\V1\PaymentController;
@@ -153,6 +158,62 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
     });
 
     // PRD 17T — audit trail, seluruhnya hanya-baca.
+    // PRD 16U — notification center milik user sendiri, tanpa permission modul
+    // karena PRD 16Y §14 sudah membatasinya ke recipient.
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::post('/read-all', [NotificationController::class, 'readAll']);
+        Route::get('/{id}', [NotificationController::class, 'show']);
+        Route::post('/{id}/read', [NotificationController::class, 'read']);
+        Route::post('/{id}/unread', [NotificationController::class, 'unread']);
+        Route::delete('/{id}', [NotificationController::class, 'destroy']);
+    });
+
+    Route::prefix('notification-preferences')->group(function () {
+        Route::get('/', [NotificationController::class, 'preferences']);
+        Route::patch('/', [NotificationController::class, 'updatePreferences'])
+            ->middleware('permission:notification.preference.manage');
+    });
+
+    Route::prefix('notification-templates')->group(function () {
+        Route::get('/', [NotificationTemplateController::class, 'index'])->middleware('permission:notification.template.view');
+        Route::post('/', [NotificationTemplateController::class, 'store'])->middleware('permission:notification.template.create');
+        Route::get('/{id}', [NotificationTemplateController::class, 'show'])->middleware('permission:notification.template.view');
+        Route::patch('/{id}', [NotificationTemplateController::class, 'update'])->middleware('permission:notification.template.update');
+        Route::post('/{id}/preview', [NotificationTemplateController::class, 'preview'])->middleware('permission:notification.template.view');
+        Route::post('/{id}/activate', [NotificationTemplateController::class, 'activate'])->middleware('permission:notification.template.manage');
+        Route::post('/{id}/deactivate', [NotificationTemplateController::class, 'deactivate'])->middleware('permission:notification.template.manage');
+    });
+
+    Route::prefix('notification-rules')->group(function () {
+        Route::get('/', [NotificationRuleController::class, 'index'])->middleware('permission:notification.rule.view');
+        Route::post('/', [NotificationRuleController::class, 'store'])->middleware('permission:notification.rule.create');
+        Route::patch('/{id}', [NotificationRuleController::class, 'update'])->middleware('permission:notification.rule.update');
+        Route::post('/{id}/enable', [NotificationRuleController::class, 'enable'])->middleware('permission:notification.rule.manage');
+        Route::post('/{id}/disable', [NotificationRuleController::class, 'disable'])->middleware('permission:notification.rule.manage');
+    });
+
+    Route::prefix('notification-batches')->group(function () {
+        Route::get('/', [NotificationBatchController::class, 'index'])->middleware('permission:notification.batch.view');
+        Route::post('/', [NotificationBatchController::class, 'store'])->middleware('permission:notification.batch.create');
+        Route::get('/{id}', [NotificationBatchController::class, 'show'])->middleware('permission:notification.batch.view');
+        Route::post('/{id}/send', [NotificationBatchController::class, 'send'])->middleware('permission:notification.batch.send');
+        Route::post('/{id}/cancel', [NotificationBatchController::class, 'cancel'])->middleware('permission:notification.batch.send');
+    });
+
+    Route::prefix('notification-webhooks')->group(function () {
+        Route::get('/', [NotificationEndpointController::class, 'webhooks'])->middleware('permission:notification.webhook.view');
+        Route::post('/', [NotificationEndpointController::class, 'storeWebhook'])->middleware('permission:notification.webhook.manage');
+        Route::patch('/{id}', [NotificationEndpointController::class, 'updateWebhook'])->middleware('permission:notification.webhook.manage');
+        Route::post('/{id}/rotate-secret', [NotificationEndpointController::class, 'rotateWebhookSecret'])->middleware('permission:notification.webhook.manage');
+    });
+
+    Route::prefix('notification-email-config')->group(function () {
+        Route::get('/', [NotificationEndpointController::class, 'emailConfig'])->middleware('permission:notification.email_config.manage');
+        Route::put('/', [NotificationEndpointController::class, 'saveEmailConfig'])->middleware('permission:notification.email_config.manage');
+    });
+
     // PRD 20 — System Settings.
     Route::prefix('settings')->group(function () {
         Route::get('/', [SettingController::class, 'index'])->middleware('permission:setting.view');

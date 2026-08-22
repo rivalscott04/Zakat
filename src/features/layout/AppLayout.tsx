@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import OrganizationSwitcher from "../components/OrganizationSwitcher";
+import NotificationBell from "../notifications/NotificationBell";
 import { visibleMenu } from "./menu";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
@@ -31,6 +32,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
         <div className="ms-auto d-flex align-items-center gap-3">
           <OrganizationSwitcher />
+          <NotificationBell />
           <span className="text-muted small">{user?.name}</span>
           <button className="btn btn-sm btn-outline-secondary" onClick={() => void logout()}>
             Keluar

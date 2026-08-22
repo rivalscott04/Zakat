@@ -44,6 +44,15 @@ return [
         'expires_minutes' => (int) env('ZAKAT_PASSWORD_RESET_EXPIRES_MINUTES', 60),
     ],
 
+    // PRD 16P §33 — batas retry per channel.
+    'notification' => [
+        'max_attempts' => [
+            'in_app' => 1,
+            'email' => (int) env('ZAKAT_NOTIFICATION_EMAIL_ATTEMPTS', 3),
+            'webhook' => (int) env('ZAKAT_NOTIFICATION_WEBHOOK_ATTEMPTS', 3),
+        ],
+    ],
+
     'pagination' => [
         'per_page' => (int) env('ZAKAT_PER_PAGE', 25),
         'max_per_page' => (int) env('ZAKAT_MAX_PER_PAGE', 100),

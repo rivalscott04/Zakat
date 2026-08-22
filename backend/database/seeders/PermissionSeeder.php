@@ -32,6 +32,16 @@ class PermissionSeeder extends Seeder
                 'merge', 'export', 'view_audit',
             ],
         ],
+        // PRD 16V §48.
+        'notification' => [
+            'notification' => ['view', 'create', 'send', 'delete', 'audit.view'],
+            'notification.template' => ['view', 'create', 'update', 'manage'],
+            'notification.rule' => ['view', 'create', 'update', 'manage'],
+            'notification.preference' => ['manage'],
+            'notification.batch' => ['view', 'create', 'send'],
+            'notification.webhook' => ['view', 'manage'],
+            'notification.email_config' => ['manage'],
+        ],
         // PRD 20.
         'setting' => [
             'setting' => ['view', 'update'],

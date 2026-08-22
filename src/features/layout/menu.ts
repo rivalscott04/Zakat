@@ -33,6 +33,7 @@ export const MENU: MenuItem[] = [
   { to: "/distribution-batches", label: "Batch Penyaluran", permission: "distribution.batch.view" },
   { to: "/bank-reconciliation", label: "Rekonsiliasi Bank", permission: "bank_reconciliation.view" },
   { to: "/documents", label: "Dokumen", permission: "document.view" },
+  { to: "/notifications", label: "Notifikasi", permission: "notification.view" },
   { to: "/audit-logs", label: "Audit Trail", permission: "audit.view" },
   { to: "/settings", label: "Pengaturan Sistem", permission: "setting.view" },
 ];

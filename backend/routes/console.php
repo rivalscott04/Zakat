@@ -13,3 +13,6 @@ Schedule::command('zakat:expire-due-collections')->dailyAt('00:15');
 
 // PRD 13M §25 — payment pending yang lewat masa berlaku ditutup otomatis.
 Schedule::command('zakat:expire-pending-payments')->everyFifteenMinutes();
+
+// PRD 16Q §35 — notification berjadwal dilepas ke antrean oleh scheduler.
+Schedule::command('zakat:dispatch-scheduled-notifications')->everyFiveMinutes();

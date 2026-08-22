@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AuditLog;
+use App\Notifications\NotificationEventBridge;
 use App\Support\AuditEventClassifier;
 use App\Support\OrganizationContext;
 use App\Support\RequestId;
@@ -45,7 +46,7 @@ class AuditService
         $actor = Auth::user();
         $classification = AuditEventClassifier::classify($action, $entity);
 
-        return AuditLog::create([
+        $log = AuditLog::create([
             // PRD 17C §8 — penomoran audit.
             'audit_number' => app(BusinessNumberService::class)->next('AUD'),
             'event_name' => $classification['event_name'],
@@ -72,6 +73,12 @@ class AuditService
             'occurred_at' => now(),
             'created_at' => now(),
         ]);
+
+        // PRD 16B §3 — peristiwa yang sama menjadi domain event bagi modul
+        // notification, tanpa memberi modul lain jalur notifikasi sendiri.
+        app(NotificationEventBridge::class)->handle($log, $entity, $after);
+
+        return $log;
     }
 
     /**

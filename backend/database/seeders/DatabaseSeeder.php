@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             CodeRegistrySeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
+            ReportCatalogSeeder::class,
         ]);
     }
 }

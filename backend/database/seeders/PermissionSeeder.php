@@ -42,6 +42,24 @@ class PermissionSeeder extends Seeder
             'notification.webhook' => ['view', 'manage'],
             'notification.email_config' => ['manage'],
         ],
+        // PRD 19S §49.
+        'report' => [
+            'report' => ['view', 'create', 'update', 'delete', 'run', 'export', 'download'],
+            'report.template' => ['view', 'create', 'update', 'manage'],
+            'report.schedule' => ['view', 'create', 'update', 'manage'],
+            'report.financial' => ['view'],
+            'report.collection' => ['view'],
+            'report.fund' => ['view'],
+            'report.distribution' => ['view'],
+            'report.muzakki' => ['view'],
+            'report.mustahik' => ['view'],
+            'report.assessment' => ['view'],
+            'report.program' => ['view'],
+            'report.banking' => ['view'],
+            'report.audit' => ['view'],
+            'report.confidential' => ['view'],
+            'report.cross_organization' => ['view'],
+        ],
         // PRD 20.
         'setting' => [
             'setting' => ['view', 'update'],

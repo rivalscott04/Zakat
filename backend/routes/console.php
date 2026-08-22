@@ -16,3 +16,6 @@ Schedule::command('zakat:expire-pending-payments')->everyFifteenMinutes();
 
 // PRD 16Q §35 — notification berjadwal dilepas ke antrean oleh scheduler.
 Schedule::command('zakat:dispatch-scheduled-notifications')->everyFiveMinutes();
+
+// PRD 19K §32 — laporan terjadwal dijalankan penjadwal.
+Schedule::command('zakat:run-due-report-schedules')->hourly();

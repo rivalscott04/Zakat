@@ -53,6 +53,11 @@ return [
         ],
     ],
 
+    // PRD 19I §28 — masa berlaku tautan unduhan hasil ekspor.
+    'reporting' => [
+        'export_expires_days' => (int) env('ZAKAT_REPORT_EXPORT_EXPIRES_DAYS', 7),
+    ],
+
     'pagination' => [
         'per_page' => (int) env('ZAKAT_PER_PAGE', 25),
         'max_per_page' => (int) env('ZAKAT_MAX_PER_PAGE', 100),

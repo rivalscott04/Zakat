@@ -25,6 +25,10 @@ use App\Http\Controllers\Api\V1\PaymentProviderController;
 use App\Http\Controllers\Api\V1\PaymentWebhookController;
 use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\ReportRunController;
+use App\Http\Controllers\Api\V1\ReportScheduleController;
+use App\Http\Controllers\Api\V1\ReportTemplateController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\SettingController;
@@ -212,6 +216,53 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
     Route::prefix('notification-email-config')->group(function () {
         Route::get('/', [NotificationEndpointController::class, 'emailConfig'])->middleware('permission:notification.email_config.manage');
         Route::put('/', [NotificationEndpointController::class, 'saveEmailConfig'])->middleware('permission:notification.email_config.manage');
+    });
+
+    // PRD 19R — reporting.
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->middleware('permission:report.view');
+        Route::get('/dashboard', [ReportController::class, 'dashboard'])->middleware('permission:report.view');
+        Route::get('/favorites', [ReportController::class, 'favorites'])->middleware('permission:report.view');
+        Route::post('/', [ReportController::class, 'store'])->middleware('permission:report.create');
+        Route::get('/{id}', [ReportController::class, 'show'])->middleware('permission:report.view');
+        Route::patch('/{id}', [ReportController::class, 'update'])->middleware('permission:report.update');
+        Route::post('/{id}/activate', [ReportController::class, 'activate'])->middleware('permission:report.update');
+        Route::post('/{id}/deactivate', [ReportController::class, 'deactivate'])->middleware('permission:report.update');
+        Route::post('/{id}/run', [ReportController::class, 'run'])->middleware('permission:report.run');
+        Route::post('/{id}/favorite', [ReportController::class, 'favorite'])->middleware('permission:report.view');
+        Route::delete('/{id}/favorite', [ReportController::class, 'unfavorite'])->middleware('permission:report.view');
+    });
+
+    Route::prefix('report-runs')->group(function () {
+        Route::get('/', [ReportRunController::class, 'index'])->middleware('permission:report.view');
+        Route::get('/{id}', [ReportRunController::class, 'show'])->middleware('permission:report.view');
+        Route::post('/{id}/cancel', [ReportRunController::class, 'cancel'])->middleware('permission:report.run');
+        Route::post('/{id}/retry', [ReportRunController::class, 'retry'])->middleware('permission:report.run');
+        Route::post('/{id}/export', [ReportRunController::class, 'export'])->middleware('permission:report.export');
+    });
+
+    Route::prefix('report-exports')->group(function () {
+        Route::get('/{id}', [ReportRunController::class, 'showExport'])->middleware('permission:report.export');
+        Route::get('/{id}/download', [ReportRunController::class, 'download'])->middleware('permission:report.download');
+    });
+
+    Route::prefix('report-templates')->group(function () {
+        Route::get('/', [ReportTemplateController::class, 'index'])->middleware('permission:report.template.view');
+        Route::post('/', [ReportTemplateController::class, 'store'])->middleware('permission:report.template.create');
+        Route::get('/{id}', [ReportTemplateController::class, 'show'])->middleware('permission:report.template.view');
+        Route::patch('/{id}', [ReportTemplateController::class, 'update'])->middleware('permission:report.template.update');
+        Route::post('/{id}/activate', [ReportTemplateController::class, 'activate'])->middleware('permission:report.template.manage');
+        Route::post('/{id}/deactivate', [ReportTemplateController::class, 'deactivate'])->middleware('permission:report.template.manage');
+    });
+
+    Route::prefix('report-schedules')->group(function () {
+        Route::get('/', [ReportScheduleController::class, 'index'])->middleware('permission:report.schedule.view');
+        Route::post('/', [ReportScheduleController::class, 'store'])->middleware('permission:report.schedule.create');
+        Route::get('/{id}', [ReportScheduleController::class, 'show'])->middleware('permission:report.schedule.view');
+        Route::patch('/{id}', [ReportScheduleController::class, 'update'])->middleware('permission:report.schedule.update');
+        Route::post('/{id}/activate', [ReportScheduleController::class, 'activate'])->middleware('permission:report.schedule.manage');
+        Route::post('/{id}/deactivate', [ReportScheduleController::class, 'deactivate'])->middleware('permission:report.schedule.manage');
+        Route::post('/{id}/run-now', [ReportScheduleController::class, 'runNow'])->middleware('permission:report.schedule.manage');
     });
 
     // PRD 20 — System Settings.

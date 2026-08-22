@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Support\OrganizationContext;
 use Database\Seeders\CodeRegistrySeeder;
 use Database\Seeders\PermissionSeeder;
+use Database\Seeders\ReportCatalogSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\RateLimiter;
@@ -22,7 +23,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->seed([CodeRegistrySeeder::class, PermissionSeeder::class, RoleSeeder::class]);
+        $this->seed([CodeRegistrySeeder::class, PermissionSeeder::class, RoleSeeder::class, ReportCatalogSeeder::class]);
 
         OrganizationContext::set(null);
         RateLimiter::clear('test');

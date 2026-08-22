@@ -38,6 +38,8 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'RFD', 'name' => 'Payment Refund', 'entity_type' => 'payment_refunds', 'module' => 'payment'],
             ['code' => 'NTF', 'name' => 'Notification', 'entity_type' => 'notifications', 'module' => 'notification'],
             ['code' => 'NFB', 'name' => 'Notification Batch', 'entity_type' => 'notification_batches', 'module' => 'notification'],
+            ['code' => 'RPT', 'name' => 'Report', 'entity_type' => 'reports', 'module' => 'reporting'],
+            ['code' => 'RPR', 'name' => 'Report Run', 'entity_type' => 'report_runs', 'module' => 'reporting'],
             ['code' => 'AUD', 'name' => 'Audit Log', 'entity_type' => 'audit_logs', 'module' => 'audit'],
         ];
 

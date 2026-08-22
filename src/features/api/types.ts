@@ -504,3 +504,57 @@ export interface NotificationRuleItem {
   priority: NotificationPriority;
   enabled: boolean;
 }
+
+// ---------------------------------------------------------------- modul 19
+
+export interface ReportParameterItem {
+  parameter_code: string;
+  label: string;
+  type: "DATE" | "DATE_RANGE" | "SELECT" | "MULTI_SELECT" | "TEXT" | "NUMBER" | "BOOLEAN";
+  required: boolean;
+  default_value: string | null;
+  options_source: string | null;
+}
+
+export interface ReportItem {
+  id: string;
+  report_number: string;
+  report_code: string;
+  name: string;
+  description: string | null;
+  category: string;
+  report_type: string;
+  visibility: string;
+  status: string;
+  is_system: boolean;
+  parameters?: ReportParameterItem[];
+}
+
+export interface ReportSnapshotColumn {
+  key: string;
+  label: string;
+  type: string;
+}
+
+export interface ReportSnapshot {
+  columns: ReportSnapshotColumn[];
+  rows: Record<string, string | number>[];
+  summary: Record<string, string | number>;
+}
+
+export interface ReportRunItem {
+  id: string;
+  run_number: string;
+  report_id: string;
+  report_name?: string | null;
+  report_code?: string | null;
+  parameters: Record<string, unknown> | null;
+  status: string;
+  row_count: number;
+  generated_at: string | null;
+  completed_at: string | null;
+  failed_at: string | null;
+  error_message: string | null;
+  exports?: { id: string; format: string; file_size: number; expires_at: string | null; download_count: number }[];
+  snapshot?: ReportSnapshot | null;
+}

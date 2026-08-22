@@ -208,3 +208,309 @@
     padding: 4.5rem 0;
   }
 }
+
+/* Kalkulator zakat */
+.landing-calculator {
+  background: #fff;
+}
+.landing-calc-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+  gap: 1px;
+  margin-bottom: 3rem;
+  background: #e4ece9;
+  border: 1px solid #e4ece9;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+.landing-calc-type {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.35rem 1.4rem;
+  text-align: left;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.landing-calc-type:hover {
+  background: #f2f7f5;
+}
+.landing-calc-type.is-active {
+  background: var(--landing-ink);
+}
+.landing-calc-type-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--landing-ink);
+}
+.landing-calc-type-hint {
+  font-size: 0.87rem;
+  line-height: 1.45;
+  color: #61716f;
+}
+.landing-calc-type.is-active .landing-calc-type-name {
+  color: #fff;
+}
+.landing-calc-type.is-active .landing-calc-type-hint {
+  color: rgba(255, 255, 255, 0.68);
+}
+.landing-calc-empty {
+  margin: 0;
+  color: #61716f;
+  font-size: 1.05rem;
+}
+
+/* Kolom kiri: penjelasan dan isian */
+.landing-calc-card h3 {
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: 0.85rem;
+}
+.landing-calc-intro {
+  max-width: 46ch;
+  color: #61716f;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.landing-calc-fields {
+  display: grid;
+  gap: 1.35rem;
+  margin: 2.25rem 0;
+}
+.landing-calc-field {
+  display: grid;
+  gap: 0.4rem;
+}
+.landing-calc-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--landing-ink);
+}
+.landing-calc-label em {
+  font-style: normal;
+  font-weight: 500;
+  color: #96a4a2;
+}
+.landing-calc-input {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35rem 0 0.55rem;
+  border: 0;
+  border-bottom: 1px solid #d9e5e1;
+  background: transparent;
+  transition: border-color 0.2s ease;
+}
+.landing-calc-input:focus-within {
+  border-bottom-color: var(--landing-green);
+}
+.landing-calc-input > span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #96a4a2;
+}
+.landing-calc-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--landing-ink);
+  outline: none;
+}
+.landing-calc-input input::placeholder {
+  color: #c6d3d0;
+  font-weight: 700;
+}
+.landing-calc-hint {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #96a4a2;
+}
+.landing-calc-check {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding-top: 0.3rem;
+  cursor: pointer;
+}
+.landing-calc-check input {
+  margin-top: 0.3rem;
+  accent-color: var(--landing-green);
+}
+.landing-calc-check span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--landing-ink);
+}
+.landing-calc-check em {
+  display: block;
+  margin-top: 0.15rem;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #96a4a2;
+}
+.landing-calc-terms {
+  border-top: 2px solid #b9d9cf;
+  padding-top: 1.3rem;
+}
+.landing-calc-terms h4 {
+  font-size: 0.75rem;
+  letter-spacing: 0.17em;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--landing-green);
+  margin-bottom: 0.85rem;
+}
+.landing-calc-terms ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+}
+.landing-calc-terms li {
+  position: relative;
+  padding-left: 1.15rem;
+  color: #61716f;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.landing-calc-terms li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b9d9cf;
+}
+
+/* Kolom kanan: hasil */
+.landing-calc-result {
+  position: sticky;
+  top: 2rem;
+  padding: 2.25rem;
+  border-radius: 1.25rem;
+  background: #f2f7f5;
+}
+.landing-calc-result .landing-eyebrow {
+  color: #96a4a2;
+  margin-bottom: 1.5rem;
+}
+.landing-calc-waiting {
+  margin: 0;
+  color: #61716f;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.landing-calc-status {
+  margin-bottom: 0.35rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #61716f;
+}
+.landing-calc-amount {
+  margin-bottom: 1.75rem;
+  font-size: clamp(2.1rem, 3.2vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--landing-green);
+}
+.landing-calc-amount.is-tentative {
+  color: var(--landing-ink);
+  opacity: 0.55;
+}
+.landing-calc-notes {
+  margin: 0 0 1.75rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+}
+.landing-calc-notes li {
+  position: relative;
+  padding-left: 1.15rem;
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: #4d5f5d;
+}
+.landing-calc-notes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.landing-calc-notes li.is-baik::before {
+  background: var(--landing-green);
+}
+.landing-calc-notes li.is-perhatian::before {
+  background: var(--landing-gold);
+}
+.landing-calc-notes li.is-info::before {
+  background: #b9d9cf;
+}
+.landing-calc-detail {
+  margin: 0;
+  border-top: 1px solid #dbe7e3;
+}
+.landing-calc-detail > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #dbe7e3;
+}
+.landing-calc-detail dt {
+  font-weight: 500;
+  font-size: 0.93rem;
+  color: #61716f;
+}
+.landing-calc-detail dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  color: var(--landing-ink);
+  text-align: right;
+  white-space: nowrap;
+}
+.landing-calc-action {
+  margin: 1.75rem 0 1.25rem;
+  padding: 0.9rem 1.35rem;
+}
+.landing-calc-disclaimer {
+  margin: 1.5rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: #96a4a2;
+}
+.landing-calc-action + .landing-calc-disclaimer {
+  margin-top: 0;
+}
+
+@media (max-width: 991.98px) {
+  .landing-calc-result {
+    position: static;
+  }
+}

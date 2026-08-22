@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Container } from "reactstrap";
 import logo from "../../assets/images/zetra-logo-light.svg";
 import heroImage from "../../assets/images/landing/zakat-hero.png";
+import ZakatCalculator from "./ZakatCalculator";
 import "./landing.css";
 
 const Icon = ({ name }: { name: "coin" | "safe" | "people" }) => {
@@ -43,7 +44,7 @@ const Icon = ({ name }: { name: "coin" | "safe" | "people" }) => {
 };
 
 const LandingPage = () => {
-  document.title = "ZETRA — Kelola Zakat dengan Amanah";
+  document.title = "ZETRA, Kelola Zakat dengan Amanah";
 
   return (
     <div className="landing-zakat bg-white">
@@ -58,6 +59,9 @@ const LandingPage = () => {
             </a>
             <a href="#alur" className="landing-nav-link d-none d-md-inline">
               Cara kerja
+            </a>
+            <a href="#kalkulator" className="landing-nav-link d-none d-md-inline">
+              Hitung zakat
             </a>
             <Link to="/login" className="landing-nav-button">
               Masuk
@@ -93,8 +97,8 @@ const LandingPage = () => {
                 <Link to="/login" className="landing-primary-button">
                   Mulai kelola zakat <span aria-hidden="true">→</span>
                 </Link>
-                <a href="#manfaat" className="landing-ghost-button">
-                  Lihat manfaat
+                <a href="#kalkulator" className="landing-ghost-button">
+                  Hitung zakat saya
                 </a>
               </div>
             </div>
@@ -191,6 +195,8 @@ const LandingPage = () => {
             </div>
           </Container>
         </section>
+
+        <ZakatCalculator />
 
         <section className="landing-cta">
           <Container className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-4">

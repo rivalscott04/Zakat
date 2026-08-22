@@ -1,4 +1,4 @@
-# AUDIT TEMUAN — MODUL 01 SAMPAI 12
+# AUDIT TEMUAN — MODUL 01 SAMPAI 15
 
 Tanggal audit: 2026-08-20
 Auditor: sesi AI development
@@ -55,6 +55,12 @@ disentuh dan nama test yang menjaga agar tidak kambuh.
 | F-21 | Build | TINGGI | `bun run build` tidak mengompilasi SCSS, produksi tanpa style dan ikon | TEREPRODUKSI | SELESAI |
 | F-22 | Frontend | TINGGI | Enam dari delapan role bawaan mendapat layar kosong setelah login | TEREPRODUKSI | SELESAI |
 | F-23 | Frontend | SEDANG | Menu navigasi tidak menyaring permission, semua link tampil ke semua role | TEREPRODUKSI | SELESAI |
+| F-24 | 15 Document | KRITIS | Disk `private` tidak terdaftar, seluruh unggahan dokumen gagal | TEREPRODUKSI | SELESAI |
+| F-25 | 15 Document | KRITIS | Preview menyajikan MIME dari berkas unggahan, jalur stored XSS | PEMBACAAN KODE | SELESAI |
+| F-26 | 15 Document | TINGGI | Versioning rusak, `created_at` NOT NULL sementara model mematikan timestamps | TEREPRODUKSI | SELESAI |
+| F-27 | 14 Bank | KRITIS | Tidak ada yang mengisi transaksi internal, auto match mustahil cocok | PEMBACAAN KODE | SELESAI |
+| F-28 | 14 Bank | TINGGI | Alur adjustment kosong, tidak ada jembatan ke accounting | PEMBACAAN KODE | SELESAI |
+| F-29 | 14 Bank | SEDANG | Nominal impor lewat float dan kolom uang 18,2 | PEMBACAAN KODE | SELESAI |
 
 ---
 
@@ -786,6 +792,69 @@ PRD 01 §27 menyebut frontend memakai permission justru untuk menyembunyikan men
 **Perbaikan** Menu disaring dengan `visibleMenu(can)` dari `menu.ts`. Link
 "Batch Penyaluran" yang sebelumnya tidak pernah muncul juga ditambahkan.
 Terverifikasi: Super Admin melihat 15 menu, VIEWER hanya 3 (Organisasi, Amil, User).
+
+---
+
+# TEMUAN MODUL 13 SAMPAI 15
+
+Rincian teknisnya tidak tercatat pada riwayat git karena commit `d8a035b`
+memakai pesan singkat, jadi diringkas di sini.
+
+## F-24 — Disk `private` tidak terdaftar
+
+`config/filesystems.php` tidak punya disk `private`, sedangkan seluruh modul
+Document memakainya. Dibuktikan lewat tinker: `Disk [private] does not have a
+configured driver`. Artinya tidak satu pun unggahan dokumen pernah berhasil.
+
+**Perbaikan** Disk didaftarkan dengan root di luar `public/` dan tanpa symlink,
+sesuai PRD 15T §37 yang melarang URL publik permanen untuk berkas privat.
+
+## F-25 — Preview dokumen adalah jalur stored XSS
+
+`preview()` menyajikan berkas apa pun dengan `Content-Type` yang diambil dari
+berkas unggahan. Berkas HTML bernama `.pdf` akan dieksekusi browser sebagai
+halaman. PRD 15S §36 sebenarnya sudah membatasi preview pada PDF, JPG, JPEG,
+PNG, dan WEBP.
+
+**Perbaikan** Content type diambil dari daftar sistem berdasarkan ekstensi
+tersimpan, bukan dari unggahan. Ditambah `X-Content-Type-Options: nosniff`,
+CSP `sandbox`, dan unduhan dipaksa `attachment` dengan `application/octet-stream`.
+Dijaga `DocumentManagementTest::test_preview_memakai_content_type_sistem_dan_menolak_sniffing`
+dan `test_preview_hanya_untuk_tipe_yang_diizinkan`.
+
+Catatan pengujian: `UploadedFile::fake()` menurunkan MIME dari nama berkas,
+bukan isinya, sehingga tidak dapat dipakai menguji penyamaran ekstensi.
+Dibutuhkan berkas sungguhan agar deteksi membaca isi.
+
+## F-26 — Versioning dokumen rusak
+
+`DocumentVersion` menyetel `$timestamps = false` sedangkan kolom `created_at`
+NOT NULL, sehingga setiap `replace()` berakhir 500 dan riwayat versi tidak
+pernah terbentuk. Dijaga
+`DocumentManagementTest::test_penggantian_berkas_menyimpan_versi_lama`.
+
+## F-27 — Transaksi internal tidak pernah terisi
+
+`autoMatch()` mencari pasangan di `reconciliation_transactions`, tetapi tidak
+ada satu pun kode yang menulis ke tabel itu. Rekonsiliasi dijamin tidak pernah
+menemukan pasangan, berapa kali pun dijalankan.
+
+**Perbaikan** `ReconciliationSyncService` menarik payment, collection payment,
+dan fund movement penyaluran sesuai PRD 14H, idempoten lewat unique index.
+
+## F-28 — Alur adjustment kosong
+
+Model `ReconciliationAdjustment` ada tanpa service, endpoint, maupun jembatan ke
+akuntansi, padahal PRD 14S dan 14T mewajibkannya. Kini lengkap dengan maker
+checker, dan persetujuan menerbitkan accounting event `BANKADJUSTMENT` sehingga
+modul Accounting yang membuat jurnalnya.
+
+## F-29 — Nominal impor lewat float dan presisi kolom berbeda
+
+Sama seperti F-06 dan F-07 pada modul Collection: impor mutasi memakai cast
+`(float)` dan kolom uangnya `NUMERIC(18,2)` sementara seluruh modul lain memakai
+`NUMERIC(20,2)`. Dijaga
+`BankReconciliationTest::test_nominal_besar_tidak_kehilangan_presisi`.
 
 ---
 

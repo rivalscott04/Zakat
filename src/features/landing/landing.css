@@ -70,6 +70,9 @@
   font-weight: 800;
 }
 .landing-hero h1 {
+  /* Template Velzon memberi warna sendiri pada h1 sampai h6, jadi tiap judul
+     di landing wajib menyebut warnanya. Tanpa ini judul jatuh ke abu template. */
+  color: #fff;
   letter-spacing: -0.04em;
   line-height: 0.98;
 }
@@ -138,6 +141,7 @@
 }
 .landing-benefit-card h3,
 .landing-step h3 {
+  color: var(--landing-ink);
   font-size: 1.35rem;
   font-weight: 800;
   margin: 1.5rem 0 0.7rem;
@@ -178,6 +182,7 @@
   background: var(--landing-ink);
 }
 .landing-cta h2 {
+  color: #fff;
   font-size: clamp(2rem, 4vw, 3.2rem);
   letter-spacing: -0.04em;
 }
@@ -212,6 +217,14 @@
 /* Kalkulator zakat */
 .landing-calculator {
   background: #fff;
+}
+.landing-calc-step {
+  margin-bottom: 0.9rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.17em;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #96a4a2;
 }
 .landing-calc-types {
   display: grid;
@@ -259,14 +272,77 @@
 .landing-calc-type.is-active .landing-calc-type-hint {
   color: rgba(255, 255, 255, 0.68);
 }
-.landing-calc-empty {
+.landing-calc-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 3rem;
+  align-items: start;
+}
+.landing-calc-guide h3 {
+  color: var(--landing-ink);
+  font-size: clamp(1.5rem, 2.2vw, 1.95rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+.landing-calc-guide > div > p {
   margin: 0;
+  max-width: 38ch;
   color: #61716f;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.landing-calc-guide ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #e4ece9;
+}
+.landing-calc-guide li {
+  border-bottom: 1px solid #e4ece9;
+}
+.landing-calc-guide button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1.1rem 0.25rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: padding 0.2s ease;
+}
+.landing-calc-guide button:hover {
+  padding-left: 0.75rem;
+}
+.landing-calc-guide button span {
   font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--landing-ink);
+}
+.landing-calc-guide button em {
+  flex: none;
+  font-style: normal;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--landing-green);
+  white-space: nowrap;
+}
+
+@media (max-width: 991.98px) {
+  .landing-calc-guide {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
 }
 
 /* Kolom kiri: penjelasan dan isian */
 .landing-calc-card h3 {
+  color: var(--landing-ink);
   font-size: clamp(1.6rem, 2.4vw, 2.1rem);
   font-weight: 800;
   letter-spacing: -0.035em;
@@ -409,8 +485,7 @@
   border-radius: 1.25rem;
   background: #f2f7f5;
 }
-.landing-calc-result .landing-eyebrow {
-  color: #96a4a2;
+.landing-calc-result .landing-calc-step {
   margin-bottom: 1.5rem;
 }
 .landing-calc-waiting {

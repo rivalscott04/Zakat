@@ -350,6 +350,17 @@ const JENIS: JenisZakat[] = [
 
 const HARGA_EMAS_AWAL = "2400000";
 
+/**
+ * Kebanyakan orang tidak hafal istilah maal atau perdagangan, tetapi tahu
+ * keadaannya sendiri. Jadi pintu masuknya lewat situasi, bukan lewat nama jenis.
+ */
+const PANDUAN: { tanya: string; kode: string }[] = [
+  { tanya: "Saya punya gaji atau pemasukan rutin tiap bulan", kode: "penghasilan" },
+  { tanya: "Saya punya tabungan, emas, atau investasi yang mengendap", kode: "maal" },
+  { tanya: "Saya punya usaha, toko, atau barang dagang", kode: "perdagangan" },
+  { tanya: "Sebentar lagi Idulfitri, saya mau menghitung untuk keluarga", kode: "fitrah" },
+];
+
 const ZakatCalculator = () => {
   const [kode, setKode] = useState<string | null>(null);
   const [nilai, setNilai] = useState<Record<string, string>>({});
@@ -397,6 +408,8 @@ const ZakatCalculator = () => {
           </p>
         </div>
 
+        <p className="landing-calc-step">Langkah 1 dari 3 &middot; Pilih jenis zakatnya</p>
+
         <div className="landing-calc-types">
           {JENIS.map((item) => (
             <button
@@ -413,11 +426,34 @@ const ZakatCalculator = () => {
         </div>
 
         {jenis === null ? (
-          <p className="landing-calc-empty">Pilih salah satu jenis zakat di atas untuk mulai menghitung.</p>
+          <div className="landing-calc-guide">
+            <div>
+              <h3>Belum yakin yang mana?</h3>
+              <p>
+                Pilih kalimat yang paling menggambarkan keadaan Anda. Kami arahkan ke jenis zakat yang sesuai, lengkap
+                dengan penjelasan dan syaratnya.
+              </p>
+            </div>
+            <ul>
+              {PANDUAN.map((panduan) => {
+                const tujuan = JENIS.find((item) => item.kode === panduan.kode);
+
+                return (
+                  <li key={panduan.kode}>
+                    <button type="button" onClick={() => (tujuan ? pilih(tujuan) : undefined)}>
+                      <span>{panduan.tanya}</span>
+                      <em>{tujuan?.nama}</em>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         ) : (
           <div className="row g-4 landing-calc-body">
             <div className="col-lg-7">
               <div className="landing-calc-card">
+                <p className="landing-calc-step">Langkah 2 dari 3 &middot; Isi angkanya</p>
                 <h3>{jenis.nama}</h3>
                 <p className="landing-calc-intro">{jenis.penjelasan}</p>
 
@@ -487,7 +523,7 @@ const ZakatCalculator = () => {
 
             <div className="col-lg-5">
               <aside className="landing-calc-result" aria-live="polite">
-                <p className="landing-eyebrow">HASIL PERHITUNGAN</p>
+                <p className="landing-calc-step">Langkah 3 dari 3</p>
 
                 {hasil === null ? (
                   <p className="landing-calc-waiting">

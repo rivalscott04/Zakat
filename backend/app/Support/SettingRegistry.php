@@ -95,6 +95,14 @@ final class SettingRegistry
             'type' => 'string',
             'rules' => ['string', 'size:3', 'uppercase'],
         ],
+        // PRD 18P §25 — dashboard publik hanya aktif bila organisasi mengizinkan.
+        'transparency.public_enabled' => [
+            'scope' => self::ORGANIZATION,
+            'group' => 'transparency',
+            'label' => 'Aktifkan dashboard transparansi publik',
+            'type' => 'boolean',
+            'rules' => ['boolean'],
+        ],
         'pagination.per_page' => [
             'scope' => self::ORGANIZATION,
             'group' => 'locale',

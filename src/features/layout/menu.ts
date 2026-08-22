@@ -34,6 +34,7 @@ export const MENU: MenuItem[] = [
   { to: "/bank-reconciliation", label: "Rekonsiliasi Bank", permission: "bank_reconciliation.view" },
   { to: "/documents", label: "Dokumen", permission: "document.view" },
   { to: "/reports", label: "Laporan", permission: "report.view" },
+  { to: "/transparency", label: "Transparansi", permission: "transparency.view" },
   { to: "/notifications", label: "Notifikasi", permission: "notification.view" },
   { to: "/audit-logs", label: "Audit Trail", permission: "audit.view" },
   { to: "/settings", label: "Pengaturan Sistem", permission: "setting.view" },

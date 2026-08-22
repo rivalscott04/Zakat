@@ -58,6 +58,11 @@ return [
         'export_expires_days' => (int) env('ZAKAT_REPORT_EXPORT_EXPIRES_DAYS', 7),
     ],
 
+    // PRD 18P §25 — organisasi memilih sendiri apakah data agregatnya terbuka.
+    'transparency' => [
+        'public_enabled' => (bool) env('ZAKAT_TRANSPARENCY_PUBLIC_ENABLED', false),
+    ],
+
     'pagination' => [
         'per_page' => (int) env('ZAKAT_PER_PAGE', 25),
         'max_per_page' => (int) env('ZAKAT_MAX_PER_PAGE', 100),

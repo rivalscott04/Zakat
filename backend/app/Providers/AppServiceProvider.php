@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(120)->by($request->user()?->getKey() ?: $request->ip()));
 
         // Operasi yang menggerakkan uang atau menghasilkan dokumen berat.
+        // PRD 18Z §18 — API publik dibatasi per IP karena tanpa autentikasi.
+        RateLimiter::for('public', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+
         RateLimiter::for('financial', fn (Request $request) => Limit::perMinute(30)->by($request->user()?->getKey() ?: $request->ip()));
 
         // PRD 01 §16 dan §45 — tautan reset mengarah ke SPA, bukan ke API.

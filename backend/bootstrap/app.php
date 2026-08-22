@@ -15,6 +15,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -27,6 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api/v1',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function () {
+            // PRD 18V §39 — API publik berada di luar prefix /api/v1.
+            Route::middleware('api')
+                ->prefix('api/public')
+                ->group(base_path('routes/public.php'));
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // PRD 01 §17 — SPA React memakai Sanctum cookie-based authentication.

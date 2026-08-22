@@ -558,3 +558,60 @@ export interface ReportRunItem {
   exports?: { id: string; format: string; file_size: number; expires_at: string | null; download_count: number }[];
   snapshot?: ReportSnapshot | null;
 }
+
+// ---------------------------------------------------------------- modul 18
+
+export interface TransparencyAggregate {
+  organization: { code?: string; name?: string };
+  period: { start: string; end: string };
+  collection: { total_collection: string; transaction_count: number; breakdown: Record<string, string | number>[] };
+  fund: {
+    opening_balance: string;
+    total_inflow: string;
+    total_outflow: string;
+    available_balance: string;
+    by_category: Record<string, string>[];
+  };
+  distribution: {
+    total_distributed: string;
+    distribution_count: number;
+    beneficiary_count: number;
+    program_count: number;
+  };
+  asnaf: { asnaf_code: string; beneficiary_count: number; amount: string; percentage: string }[];
+  regions: { province_code: string; regency_code: string; beneficiary_count: number; amount: string }[];
+  programs: Record<string, string | number>[];
+  metrics: { distribution_rate: string; fund_utilization: string };
+  generated_at: string;
+}
+
+export interface TransparencySnapshotItem {
+  id: string;
+  snapshot_number: string;
+  snapshot_type: string;
+  period_start: string;
+  period_end: string;
+  status: string;
+  verification_status: string | null;
+  verification_notes: { problems: string[]; warnings: string[] } | null;
+  generated_at: string | null;
+  approved_at: string | null;
+  published_at: string | null;
+  revoked_at: string | null;
+  revocation_reason: string | null;
+  snapshot_data?: TransparencyAggregate | null;
+}
+
+export interface TransparencyReportItem {
+  id: string;
+  report_number: string;
+  title: string;
+  report_type: string;
+  period_start: string;
+  period_end: string;
+  snapshot_id: string | null;
+  snapshot_number?: string | null;
+  status: string;
+  notes: string | null;
+  published_at: string | null;
+}

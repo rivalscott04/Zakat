@@ -60,6 +60,16 @@ class PermissionSeeder extends Seeder
             'report.confidential' => ['view'],
             'report.cross_organization' => ['view'],
         ],
+        // PRD 18W §40.
+        'transparency' => [
+            'transparency' => ['view', 'export'],
+            'transparency.dashboard' => ['view'],
+            'transparency.snapshot' => ['view', 'create', 'generate', 'validate', 'submit', 'approve', 'publish', 'revoke'],
+            'transparency.report' => ['view', 'create', 'publish', 'archive'],
+            'transparency.settings' => ['manage'],
+            'transparency.public' => ['manage'],
+            'transparency.audit' => ['view'],
+        ],
         // PRD 20.
         'setting' => [
             'setting' => ['view', 'update'],

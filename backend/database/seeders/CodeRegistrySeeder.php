@@ -40,6 +40,7 @@ class CodeRegistrySeeder extends Seeder
             ['code' => 'NFB', 'name' => 'Notification Batch', 'entity_type' => 'notification_batches', 'module' => 'notification'],
             ['code' => 'RPT', 'name' => 'Report', 'entity_type' => 'reports', 'module' => 'reporting'],
             ['code' => 'RPR', 'name' => 'Report Run', 'entity_type' => 'report_runs', 'module' => 'reporting'],
+            ['code' => 'TRP', 'name' => 'Transparency Snapshot', 'entity_type' => 'transparency_snapshots', 'module' => 'transparency'],
             ['code' => 'AUD', 'name' => 'Audit Log', 'entity_type' => 'audit_logs', 'module' => 'audit'],
         ];
 

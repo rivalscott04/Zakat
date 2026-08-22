@@ -25,6 +25,7 @@ const DistributionBatchesPage = lazy(
 );
 const PaymentsPage = lazy(() => import("../../features/payments"));
 const ReportsPage = lazy(() => import("../../features/reports"));
+const TransparencyPage = lazy(() => import("../../features/transparency"));
 const NotificationsPage = lazy(() => import("../../features/notifications"));
 const AuditLogsPage = lazy(() => import("../../features/audit-logs"));
 const SettingsPage = lazy(() => import("../../features/settings"));
@@ -108,6 +109,7 @@ export const authProtectedRoutes = [
   { path: "/bank-reconciliation", component: <BankReconciliationPage />, permission: "bank_reconciliation.view" },
   { path: "/documents", component: <DocumentsPage />, permission: "document.view" },
   { path: "/reports", component: <ReportsPage />, permission: "report.view" },
+  { path: "/transparency", component: <TransparencyPage />, permission: "transparency.view" },
   { path: "/notifications", component: <NotificationsPage />, permission: "notification.view" },
   { path: "/audit-logs", component: <AuditLogsPage />, permission: "audit.view" },
   { path: "/settings", component: <SettingsPage />, permission: "setting.view" },

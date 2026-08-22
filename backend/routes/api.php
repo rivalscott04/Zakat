@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\V1\ReportTemplateController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\SettingController;
+use App\Http\Controllers\Api\V1\TransparencyController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZakatCalculationController;
 use App\Http\Controllers\Api\V1\ZakatController;
@@ -263,6 +264,31 @@ Route::middleware(['auth:sanctum', 'organization.context', 'throttle:api'])->gro
         Route::post('/{id}/activate', [ReportScheduleController::class, 'activate'])->middleware('permission:report.schedule.manage');
         Route::post('/{id}/deactivate', [ReportScheduleController::class, 'deactivate'])->middleware('permission:report.schedule.manage');
         Route::post('/{id}/run-now', [ReportScheduleController::class, 'runNow'])->middleware('permission:report.schedule.manage');
+    });
+
+    // PRD 18V — transparansi sisi internal.
+    Route::prefix('transparency')->group(function () {
+        Route::get('/dashboard', [TransparencyController::class, 'dashboard'])->middleware('permission:transparency.dashboard.view');
+
+        Route::prefix('snapshots')->group(function () {
+            Route::get('/', [TransparencyController::class, 'index'])->middleware('permission:transparency.snapshot.view');
+            Route::post('/', [TransparencyController::class, 'store'])->middleware('permission:transparency.snapshot.create');
+            Route::get('/{id}', [TransparencyController::class, 'show'])->middleware('permission:transparency.snapshot.view');
+            Route::post('/{id}/generate', [TransparencyController::class, 'generate'])->middleware('permission:transparency.snapshot.generate');
+            Route::post('/{id}/validate', [TransparencyController::class, 'validateSnapshot'])->middleware('permission:transparency.snapshot.validate');
+            Route::post('/{id}/submit', [TransparencyController::class, 'submit'])->middleware('permission:transparency.snapshot.submit');
+            Route::post('/{id}/approve', [TransparencyController::class, 'approve'])->middleware('permission:transparency.snapshot.approve');
+            Route::post('/{id}/publish', [TransparencyController::class, 'publish'])->middleware('permission:transparency.snapshot.publish');
+            Route::post('/{id}/revoke', [TransparencyController::class, 'revoke'])->middleware('permission:transparency.snapshot.revoke');
+        });
+
+        Route::prefix('reports')->group(function () {
+            Route::get('/', [TransparencyController::class, 'reports'])->middleware('permission:transparency.report.view');
+            Route::post('/', [TransparencyController::class, 'storeReport'])->middleware('permission:transparency.report.create');
+            Route::get('/{id}', [TransparencyController::class, 'showReport'])->middleware('permission:transparency.report.view');
+            Route::post('/{id}/publish', [TransparencyController::class, 'publishReport'])->middleware('permission:transparency.report.publish');
+            Route::post('/{id}/archive', [TransparencyController::class, 'archiveReport'])->middleware('permission:transparency.report.archive');
+        });
     });
 
     // PRD 20 — System Settings.
